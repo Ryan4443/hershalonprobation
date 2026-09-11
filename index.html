@@ -1417,7 +1417,7 @@
     const keyLight = new THREE.DirectionalLight(0xfff0f5, 2.2);
     keyLight.position.set(6, 12, 7);
     keyLight.castShadow = true;
-    keyLight.shadow.mapSize.set(1024, 1024);
+    keyLight.shadow.mapSize.set(2048, 2048);
     keyLight.shadow.bias = -0.0001;
     scene.add(keyLight);
 
@@ -1589,22 +1589,25 @@
       if (tier === 'cinematic') {
         skinMat = new THREE.MeshPhysicalMaterial({
           color: new THREE.Color(data.skinColor[0]/255, data.skinColor[1]/255, data.skinColor[2]/255),
-          roughness: 0.35,
-          metalness: 0.05,
-          clearcoat: 0.75,
-          clearcoatRoughness: 0.2
+          roughness: 0.30,
+          metalness: 0.04,
+          clearcoat: 0.85,
+          clearcoatRoughness: 0.15,
+          sheen: 0.9,
+          sheenColor: new THREE.Color(0xf472b6)
         });
         scaleMat = new THREE.MeshPhysicalMaterial({
           map: scaleTex,
-          roughness: 0.4,
-          clearcoat: 0.6,
+          roughness: 0.35,
+          clearcoat: 0.75,
+          clearcoatRoughness: 0.2,
           side: THREE.DoubleSide
         });
         pulpMat = new THREE.MeshPhysicalMaterial({
           map: pulpTex,
-          roughness: 0.45,
-          transmission: 0.2,
-          thickness: 0.5
+          roughness: 0.35,
+          clearcoat: 0.4,
+          clearcoatRoughness: 0.2
         });
       } else if (tier === 'balanced') {
         skinMat = new THREE.MeshPhysicalMaterial({
@@ -1807,17 +1810,22 @@
       if (tier === 'standard') {
         renderer.setPixelRatio(1.0);
         keyLight.castShadow = false;
-        renderer.shadowMap.enabled = false;
+        warmRim.intensity = 1.0;
+        emeraldFill.intensity = 0.6;
+        renderer.toneMappingExposure = 1.15;
       } else if (tier === 'balanced') {
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
         keyLight.castShadow = true;
-        keyLight.shadow.mapSize.set(1024, 1024);
-        renderer.shadowMap.enabled = true;
+        warmRim.intensity = 1.4;
+        emeraldFill.intensity = 0.9;
+        renderer.toneMappingExposure = 1.25;
       } else if (tier === 'cinematic') {
+        // True Cinematic Ultra: Enhanced multi-angle specular rims, maximum resolution, ultra-rich tone mapping
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2.0));
         keyLight.castShadow = true;
-        keyLight.shadow.mapSize.set(4096, 4096);
-        renderer.shadowMap.enabled = true;
+        warmRim.intensity = 1.9;
+        emeraldFill.intensity = 1.2;
+        renderer.toneMappingExposure = 1.35;
       }
 
       buildDragonFruit(currentCropIdx, currentTier);
