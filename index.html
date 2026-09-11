@@ -52,6 +52,7 @@
       color: #fff;
     }
 
+    /* 3D WebGL Canvas */
     #webgl {
       position: fixed;
       top: 0;
@@ -75,7 +76,7 @@
       height: 100vh;
       pointer-events: none;
       z-index: 2;
-      background: radial-gradient(circle at 50% 50%, transparent 42%, rgba(12, 2, 8, 0.8) 100%);
+      background: radial-gradient(circle at 50% 50%, transparent 44%, rgba(12, 2, 8, 0.8) 100%);
     }
 
     /* Spatial HUD Grid */
@@ -90,7 +91,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: clamp(12px, 2vh, 18px) clamp(16px, 2.5vw, 28px);
+      padding: clamp(10px, 1.8vh, 16px) clamp(14px, 2.2vw, 26px);
       box-sizing: border-box;
     }
 
@@ -242,7 +243,7 @@
 
     /* Left Integrated Cultivar Card */
     .left-deck {
-      width: clamp(280px, 24vw, 330px);
+      width: clamp(270px, 23vw, 320px);
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -256,7 +257,7 @@
       border: 1px solid var(--glass-border);
       box-shadow: var(--glass-bevel), var(--glass-3d-shadow);
       border-radius: 20px;
-      padding: clamp(14px, 1.8vh, 18px);
+      padding: clamp(12px, 1.6vh, 16px);
       position: relative;
     }
 
@@ -276,7 +277,7 @@
 
     .cultivar-title {
       font-family: var(--font-heading);
-      font-size: clamp(1.4rem, 2vw, 1.75rem);
+      font-size: clamp(1.35rem, 1.8vw, 1.7rem);
       font-weight: 900;
       line-height: 1.1;
       color: #ffffff;
@@ -292,7 +293,7 @@
     }
 
     .summary-text {
-      font-size: clamp(0.76rem, 1vw, 0.82rem);
+      font-size: clamp(0.74rem, 0.95vw, 0.8rem);
       color: #cbd5e1;
       line-height: 1.45;
       margin-bottom: 10px;
@@ -408,7 +409,7 @@
 
     /* Right Anatomy Inspection Deck */
     .right-deck {
-      width: clamp(260px, 22vw, 300px);
+      width: clamp(250px, 21vw, 290px);
       display: flex;
       flex-direction: column;
       gap: 6px;
@@ -934,7 +935,7 @@
         <div class="glass-card-3d">
           <span class="category-badge" id="cBadge">Most Popular Commercial</span>
           <h1 class="cultivar-title" id="cName">White Pitaya</h1>
-          <p class="botanical-line" id="cScientific">Selenicereus undatus &bull; White Flesh</p>
+          <p class="botanical-line" id="cScientific">Selenicereus undatus &bull; White Pulp</p>
           <p class="summary-text" id="cDesc">
             Vibrant fuchsia-pink rind with emerald-green scales. Mildly sweet, refreshing white pulp packed with edible crunchy black seeds.
           </p>
@@ -993,15 +994,15 @@
           <div class="anatomy-icon">🐉</div>
           <div class="anatomy-texts">
             <h4>Foliaceous Bract Scales</h4>
-            <p>Green-tipped scales on the rind.</p>
+            <p>Triangular green-tipped scales.</p>
           </div>
         </div>
 
         <div class="anatomy-card-3d" onclick="focusHotspot('rind')">
           <div class="anatomy-icon">🌸</div>
           <div class="anatomy-texts">
-            <h4>Exocarp (Pink Rind)</h4>
-            <p>Leathery waxy outer protective peel.</p>
+            <h4>Ribbed Exocarp (Rind)</h4>
+            <p>Undulating waxy protective peel.</p>
           </div>
         </div>
 
@@ -1009,15 +1010,15 @@
           <div class="anatomy-icon">🍨</div>
           <div class="anatomy-texts">
             <h4>Endocarp (Pulp & Seeds)</h4>
-            <p>Sweet pulp embedded with black seeds.</p>
+            <p>Juicy pulp packed with black seeds.</p>
           </div>
         </div>
 
         <div class="anatomy-card-3d" onclick="focusHotspot('calyx')">
           <div class="anatomy-icon">🌼</div>
           <div class="anatomy-texts">
-            <h4>Floral Apex / Calyx</h4>
-            <p>Remnant of the nocturnal moonflower.</p>
+            <h4>Apical Calyx Crown</h4>
+            <p>Remnant of nocturnal moonflower.</p>
           </div>
         </div>
 
@@ -1025,7 +1026,7 @@
           <div class="anatomy-icon">🌵</div>
           <div class="anatomy-texts">
             <h4>Pedicel & Cladode Base</h4>
-            <p>Attachment point to climbing cactus vine.</p>
+            <p>Attachment to climbing cactus vine.</p>
           </div>
         </div>
       </div>
@@ -1247,7 +1248,8 @@
         pollination: "Self-Fertile",
         cycle: "30-35 Days",
         skinColor: [236, 72, 153],       // Bright Fuchsia Pink
-        scaleColor: [34, 197, 94],       // Emerald Green Tips
+        tipColor: [34, 197, 94],         // Emerald Green Tips
+        midColor: [234, 179, 8],         // Chartreuse/Yellow Mid
         pulpColor: [250, 250, 250],      // White Flesh
         radius: 1.15,
         length: 1.65,
@@ -1263,7 +1265,8 @@
         pollination: "Cross-Pollinated",
         cycle: "32-38 Days",
         skinColor: [190, 24, 93],        // Deep Magenta
-        scaleColor: [74, 222, 128],      // Greenish scales
+        tipColor: [74, 222, 128],        // Greenish tips
+        midColor: [202, 138, 4],         // Warm amber mid
         pulpColor: [159, 18, 57],        // Deep Crimson Pulp
         radius: 1.18,
         length: 1.60,
@@ -1279,7 +1282,8 @@
         pollination: "Self-Fertile",
         cycle: "40-45 Days",
         skinColor: [234, 179, 8],        // Golden Yellow
-        scaleColor: [250, 204, 21],      // Yellow/Gold knobs
+        tipColor: [132, 204, 22],        // Lime Yellow Tips
+        midColor: [245, 158, 11],        // Deep Gold Mid
         pulpColor: [255, 255, 255],      // Translucent White
         radius: 1.05,
         length: 1.55,
@@ -1295,7 +1299,8 @@
         pollination: "Self-Fertile",
         cycle: "32-35 Days",
         skinColor: [244, 114, 182],      // Neon Pink
-        scaleColor: [16, 185, 129],      // Jade Green
+        tipColor: [16, 185, 129],        // Jade Green Tips
+        midColor: [250, 204, 21],        // Golden transition
         pulpColor: [244, 63, 94],        // Rose-Pink Pulp
         radius: 1.20,
         length: 1.70,
@@ -1311,7 +1316,8 @@
         pollination: "Self-Fertile",
         cycle: "30-33 Days",
         skinColor: [219, 39, 119],       // Rich Lotus Pink
-        scaleColor: [34, 197, 94],       // Vivid Green Scales
+        tipColor: [34, 197, 94],         // Vivid Green Tips
+        midColor: [234, 179, 8],         // Warm gold
         pulpColor: [248, 248, 250],      // Crisp White
         radius: 1.14,
         length: 1.62,
@@ -1328,20 +1334,20 @@
       },
       'rind': {
         icon: '🌸',
-        title: 'Exocarp (Protective Rind / Peel)',
-        body: 'The thick, leathery outer peel (3–5 mm) rich in pectin and natural betacyanin pigments. Protects the internal succulent pulp from insects and moisture loss.',
+        title: 'Undulating Exocarp (Ribbed Peel)',
+        body: 'The thick, leathery outer peel (3–5 mm) with 5 to 7 distinct vertical ribs. Rich in natural betacyanin pigments that protect the succulent internal pulp from intense tropical sun.',
         exam: '★ Horticultural Value: Peel extract is increasingly researched for food-grade natural colorants and pectin.'
       },
       'pulp': {
         icon: '🍨',
         title: 'Endocarp (Pulp & Crunchy Seeds)',
         body: 'The edible, juicy translucent pulp packed with thousands of tiny black seeds. Offers soluble dietary fiber, Vitamin C, and essential Omega-3/6 fatty acids.',
-        exam: '★ Sugar Metrics: Measured in degrees Brix (12° to 20°), reflecting sucrose and fructose sweetness.'
+        exam: '★ Sugar Metrics: Measured in degrees Brix (12° to 20°), reflecting natural sucrose and fructose sweetness.'
       },
       'calyx': {
         icon: '🌼',
-        title: 'Floral Apex / Calyx Remnant',
-        body: 'The apical cavity at the fruit tip where the massive 30cm nocturnal white flower ("Moonflower") withered after night pollination.',
+        title: 'Apical Calyx & Crown Bracts',
+        body: 'The cluster of arching bracts at the fruit tip where the massive 30cm nocturnal white flower ("Moonflower") withered after night pollination.',
         exam: '★ Post-Harvest: Trimmed cleanly to prevent fungal entry during transport.'
       },
       'stem': {
@@ -1423,7 +1429,7 @@
     emeraldFill.position.set(0, -6, 5);
     scene.add(emeraldFill);
 
-    // Atmospheric Pollen / Spore Particles
+    // Atmospheric Motes
     const particleGeo = new THREE.BufferGeometry();
     const particleCount = 120;
     const posArray = new Float32Array(particleCount * 3);
@@ -1442,7 +1448,7 @@
     const particles = new THREE.Points(particleGeo, particleMat);
     scene.add(particles);
 
-    // Pedestal Platform
+    // Pedestal
     const pedGeo = new THREE.CylinderGeometry(3.6, 4.0, 0.3, 48);
     const pedMat = new THREE.MeshStandardMaterial({ color: 0x180914, roughness: 0.95 });
     const pedestal = new THREE.Mesh(pedGeo, pedMat);
@@ -1457,7 +1463,7 @@
     ring.position.y = -1.44;
     scene.add(ring);
 
-    // 3D Dragon Fruit Assembly
+    // 3D Dragon Fruit Group
     const fruitGroup = new THREE.Group();
     scene.add(fruitGroup);
 
@@ -1467,30 +1473,47 @@
     let partPositions = {};
     const clickableMeshes = [];
 
-    // Procedural Seed-Speckled Pulp Texture Generator
+    // Realistic Scale Gradient Texture (Pink base -> Yellow-green mid -> Lime tip)
+    function generateScaleGradient(skinRGB, midRGB, tipRGB) {
+      const W = 256, H = 256;
+      const c = document.createElement('canvas');
+      c.width = W; c.height = H;
+      const ctx = c.getContext('2d');
+
+      const grad = ctx.createLinearGradient(0, H, 0, 0); // 0 at base (H), 1 at tip (0)
+      grad.addColorStop(0, `rgb(${skinRGB[0]}, ${skinRGB[1]}, ${skinRGB[2]})`);
+      grad.addColorStop(0.35, `rgb(${skinRGB[0]*0.95}, ${skinRGB[1]*0.95}, ${skinRGB[2]*0.95})`);
+      grad.addColorStop(0.65, `rgb(${midRGB[0]}, ${midRGB[1]}, ${midRGB[2]})`);
+      grad.addColorStop(0.9, `rgb(${tipRGB[0]}, ${tipRGB[1]}, ${tipRGB[2]})`);
+      grad.addColorStop(1.0, `rgb(${Math.min(255, tipRGB[0]+30)}, ${Math.min(255, tipRGB[1]+30)}, ${Math.min(255, tipRGB[2]+30)})`);
+      
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, H);
+      return new THREE.CanvasTexture(c);
+    }
+
+    // Procedural Seed-Speckled Pulp Texture
     function generatePulpTexture(pulpRGB) {
       const W = 512, H = 512;
       const c = document.createElement('canvas');
       c.width = W; c.height = H;
       const ctx = c.getContext('2d');
 
-      // Pulp flesh base
       ctx.fillStyle = `rgb(${pulpRGB[0]}, ${pulpRGB[1]}, ${pulpRGB[2]})`;
       ctx.fillRect(0, 0, W, H);
 
-      // Crunchy tiny black seeds scattered evenly
-      const seedCount = 650;
+      const seedCount = 750;
       for (let s = 0; s < seedCount; s++) {
         const x = Math.random() * W;
         const y = Math.random() * H;
-        const sizeX = 1.4 + Math.random() * 1.8;
+        const sizeX = 1.3 + Math.random() * 1.7;
         const sizeY = 2.2 + Math.random() * 2.2;
         const rot = Math.random() * Math.PI;
 
         ctx.save();
         ctx.translate(x, y);
         ctx.rotate(rot);
-        ctx.fillStyle = "#111111"; // True black seed
+        ctx.fillStyle = "#111111";
         ctx.beginPath();
         ctx.ellipse(0, 0, sizeX, sizeY, 0, 0, Math.PI * 2);
         ctx.fill();
@@ -1499,27 +1522,53 @@
       return new THREE.CanvasTexture(c);
     }
 
-    // Procedural Rind Texture with subtle pores
-    function generateRindTexture(skinRGB) {
-      const W = 512, H = 512;
-      const c = document.createElement('canvas');
-      c.width = W; c.height = H;
-      const ctx = c.getContext('2d');
+    // Realistic Dragon Scale Geometry (Curved, Tapered, Fleshy Leaf Ribbon)
+    // Low-poly (only 28 polygons per scale) so it is ultra-smooth on low-end devices!
+    function createFleshyBractGeometry(length, baseWidth, flare, thickness) {
+      const geom = new THREE.BufferGeometry();
+      const rows = 6;
+      const cols = 4;
+      const positions = [];
+      const uvs = [];
+      const indices = [];
 
-      const grad = ctx.createRadialGradient(W/2, H/2, 50, W/2, H/2, W/2);
-      grad.addColorStop(0, `rgb(${Math.min(255, skinRGB[0]+15)}, ${Math.min(255, skinRGB[1]+15)}, ${Math.min(255, skinRGB[2]+15)})`);
-      grad.addColorStop(1, `rgb(${skinRGB[0]*0.88}, ${skinRGB[1]*0.88}, ${skinRGB[2]*0.88})`);
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, W, H);
+      for (let r = 0; r <= rows; r++) {
+        const u = r / rows; // 0 at base, 1 at tip
+        const w = baseWidth * Math.max(0.01, (1 - Math.pow(u, 1.3))); // tapers to a sharp point
+        const curveZ = Math.pow(u, 1.9) * flare; // arches outward gracefully
+        const y = u * length;
 
-      for (let i = 0; i < 300; i++) {
-        ctx.fillStyle = `rgba(255,255,255,0.06)`;
-        ctx.fillRect(Math.random()*W, Math.random()*H, 2, 2);
+        for (let c = 0; c <= cols; c++) {
+          const v = (c / cols) * 2 - 1; // -1 to 1 across width
+          const x = v * w * 0.5;
+          // Fleshy convex cross-section
+          const crossArch = (1 - v * v) * thickness * (1 - u * 0.7);
+          const z = curveZ + crossArch;
+
+          positions.push(x, y, z);
+          uvs.push(c / cols, u); // u goes along length (for color gradient)
+        }
       }
-      return new THREE.CanvasTexture(c);
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const a = r * (cols + 1) + c;
+          const b = (r + 1) * (cols + 1) + c;
+          const c1 = (r + 1) * (cols + 1) + (c + 1);
+          const d = r * (cols + 1) + (c + 1);
+          indices.push(a, b, d);
+          indices.push(b, c1, d);
+        }
+      }
+
+      geom.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+      geom.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+      geom.setIndex(indices);
+      geom.computeVertexNormals();
+      return geom;
     }
 
-    // Build 3D Dragon Fruit
+    // Build Authentic, Ribbed, Non-Egg 3D Dragon Fruit
     function buildDragonFruit(varIdx, tier) {
       while (fruitGroup.children.length > 0) {
         fruitGroup.remove(fruitGroup.children[0]);
@@ -1531,26 +1580,23 @@
       const r = data.radius;
       const len = data.length;
 
-      const rindTex = generateRindTexture(data.skinColor);
+      const scaleTex = generateScaleGradient(data.skinColor, data.midColor, data.tipColor);
       const pulpTex = generatePulpTexture(data.pulpColor);
 
-      // Materials
+      // Materials tuned strictly to tier
       let skinMat, pulpMat, scaleMat;
 
       if (tier === 'cinematic') {
         skinMat = new THREE.MeshPhysicalMaterial({
-          map: rindTex,
           color: new THREE.Color(data.skinColor[0]/255, data.skinColor[1]/255, data.skinColor[2]/255),
-          roughness: 0.32,
+          roughness: 0.35,
           metalness: 0.05,
-          clearcoat: 0.8,
-          clearcoatRoughness: 0.18,
-          sheen: 0.8,
-          sheenColor: new THREE.Color(0xf472b6)
+          clearcoat: 0.75,
+          clearcoatRoughness: 0.2
         });
         scaleMat = new THREE.MeshPhysicalMaterial({
-          color: new THREE.Color(data.scaleColor[0]/255, data.scaleColor[1]/255, data.scaleColor[2]/255),
-          roughness: 0.35,
+          map: scaleTex,
+          roughness: 0.4,
           clearcoat: 0.6,
           side: THREE.DoubleSide
         });
@@ -1562,14 +1608,13 @@
         });
       } else if (tier === 'balanced') {
         skinMat = new THREE.MeshPhysicalMaterial({
-          map: rindTex,
           color: new THREE.Color(data.skinColor[0]/255, data.skinColor[1]/255, data.skinColor[2]/255),
-          roughness: 0.38,
-          clearcoat: 0.6,
-          clearcoatRoughness: 0.25
+          roughness: 0.4,
+          clearcoat: 0.5,
+          clearcoatRoughness: 0.3
         });
         scaleMat = new THREE.MeshStandardMaterial({
-          color: new THREE.Color(data.scaleColor[0]/255, data.scaleColor[1]/255, data.scaleColor[2]/255),
+          map: scaleTex,
           roughness: 0.45,
           side: THREE.DoubleSide
         });
@@ -1578,13 +1623,13 @@
           roughness: 0.5
         });
       } else {
+        // Standard (High FPS on budget laptops)
         skinMat = new THREE.MeshStandardMaterial({
-          map: rindTex,
           color: new THREE.Color(data.skinColor[0]/255, data.skinColor[1]/255, data.skinColor[2]/255),
           roughness: 0.5
         });
         scaleMat = new THREE.MeshStandardMaterial({
-          color: new THREE.Color(data.scaleColor[0]/255, data.scaleColor[1]/255, data.scaleColor[2]/255),
+          map: scaleTex,
           roughness: 0.5,
           side: THREE.DoubleSide
         });
@@ -1594,9 +1639,32 @@
         });
       }
 
-      // 1. Main Prolate Spheroid Fruit Body (Oval Pitaya Shape)
-      const sphereGeo = new THREE.SphereGeometry(r, 48, 36);
-      sphereGeo.scale(1, len / r, 1); // Elongate into prolate oval
+      // 1. Organic Undulating Ribbed Fruit Body (6 prominent fleshy ridges)
+      const ribCount = 6;
+      const sphereGeo = new THREE.SphereGeometry(r, 36, 28);
+      const pos = sphereGeo.attributes.position;
+      const v = new THREE.Vector3();
+
+      for (let i = 0; i < pos.count; i++) {
+        v.fromBufferAttribute(pos, i);
+        const angle = Math.atan2(v.z, v.x);
+        const yNorm = v.y / r; // -1 to 1
+
+        // Length elongation & natural pear-shaped taper
+        v.y *= (len / r);
+
+        // 6 distinct longitudinal ribs with crests & valleys
+        const ribProfile = 1.0 + 0.14 * Math.cos(ribCount * angle);
+
+        // Wider at lower-equator, tapering to apical neck
+        const pearProfile = 1.0 + 0.10 * Math.sin((yNorm + 0.15) * Math.PI * 0.7);
+
+        v.x *= ribProfile * pearProfile;
+        v.z *= ribProfile * pearProfile;
+
+        pos.setXYZ(i, v.x, v.y, v.z);
+      }
+      sphereGeo.computeVertexNormals();
 
       fruitBody = new THREE.Mesh(sphereGeo, skinMat);
       fruitBody.castShadow = true;
@@ -1605,14 +1673,14 @@
       fruitBody.userData = { partKey: 'rind' };
       fruitGroup.add(fruitBody);
       clickableMeshes.push(fruitBody);
-      partPositions['rind'] = new THREE.Vector3(0, 0.3, r);
+      partPositions['rind'] = new THREE.Vector3(0, 0.3, r * 1.1);
 
       // 2. Transverse Cutaway Slice (Interior Seed Pulp Reveal)
       cutawayGroup = new THREE.Group();
       cutawayGroup.position.set(0, 0.3, 0);
 
-      // Quarter-wedge cutaway displaying internal pulp
-      const cutPulpGeo = new THREE.CylinderGeometry(r * 0.92, r * 0.92, 0.45, 36);
+      // Pulp cylinder slice
+      const cutPulpGeo = new THREE.CylinderGeometry(r * 0.94, r * 0.94, 0.55, 36);
       const cutPulpMesh = new THREE.Mesh(cutPulpGeo, pulpMat);
       cutPulpMesh.rotation.x = Math.PI / 2;
       cutPulpMesh.position.z = 0.05;
@@ -1620,46 +1688,57 @@
       cutawayGroup.add(cutPulpMesh);
       clickableMeshes.push(cutPulpMesh);
 
-      // White inner rind rim
-      const rimGeo = new THREE.TorusGeometry(r * 0.93, 0.05, 16, 36);
-      const rimMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.5 });
+      // Outer magenta rind border ring (3mm thickness)
+      const rimGeo = new THREE.TorusGeometry(r * 0.95, 0.07, 16, 36);
+      const rimMat = new THREE.MeshStandardMaterial({
+        color: new THREE.Color(data.skinColor[0]/255, data.skinColor[1]/255, data.skinColor[2]/255),
+        roughness: 0.4
+      });
       const rimMesh = new THREE.Mesh(rimGeo, rimMat);
       cutawayGroup.add(rimMesh);
 
-      cutawayGroup.visible = false; // toggled by dissection
+      cutawayGroup.visible = false;
       fruitGroup.add(cutawayGroup);
       partPositions['pulp'] = new THREE.Vector3(0, 0.3, 0.2);
 
-      // 3. Iconic Foliaceous Bract Scales (Curling Green Dragon Scales)
-      const scaleRows = 5;
-      const scalesPerRow = 6;
-      for (let row = 0; row < scaleRows; row++) {
-        const yNorm = (row / (scaleRows - 1)) * 1.8 - 0.9;
-        const y = yNorm * (len * 0.85);
-        const radiusAtY = Math.sqrt(Math.max(0, 1 - (yNorm * yNorm))) * r;
+      // 3. Fleshy Triangular Bract Scales positioned organically along the 6 ribs
+      // Tiered arrangement matching botanical dragon fruit phyllotaxy:
+      const tiers = [
+        { yNorm: -0.65, length: 0.55, width: 0.38, flare: 0.22, rotZ: 0.35 },  // Basal small scales
+        { yNorm: -0.30, length: 0.72, width: 0.46, flare: 0.34, rotZ: 0.28 },  // Lower mid scales
+        { yNorm:  0.05, length: 0.88, width: 0.52, flare: 0.46, rotZ: 0.18 },  // Equator large scales
+        { yNorm:  0.42, length: 0.78, width: 0.46, flare: 0.36, rotZ: 0.08 },  // Upper mid scales
+        { yNorm:  0.72, length: 0.68, width: 0.38, flare: 0.28, rotZ: -0.05 }  // Upper neck scales
+      ];
 
-        for (let s = 0; s < scalesPerRow; s++) {
-          const angle = (s / scalesPerRow) * Math.PI * 2 + (row % 2) * (Math.PI / scalesPerRow);
-          
-          // Curved tube/petal bract scale
-          const curve = new THREE.CubicBezierCurve3(
-            new THREE.Vector3(0, 0, 0),
-            new THREE.Vector3(0.2, 0.1, 0),
-            new THREE.Vector3(0.45 * data.bractSpread, 0.25, 0),
-            new THREE.Vector3(0.65 * data.bractSpread, 0.45, 0)
+      tiers.forEach((tierConfig, tierIdx) => {
+        const y = tierConfig.yNorm * (len * 0.88);
+        const yNorm = tierConfig.yNorm;
+        const pearProfile = 1.0 + 0.10 * Math.sin((yNorm + 0.15) * Math.PI * 0.7);
+        const baseRadiusAtY = Math.sqrt(Math.max(0.1, 1 - (yNorm * yNorm * 0.75))) * r * pearProfile;
+
+        // One scale per rib (6 ribs) with staggering on alternate tiers
+        for (let rib = 0; rib < ribCount; rib++) {
+          const ribAngle = (rib / ribCount) * Math.PI * 2 + (tierIdx % 2) * (Math.PI / ribCount);
+          const scaleGeom = createFleshyBractGeometry(
+            tierConfig.length * data.bractSpread,
+            tierConfig.width,
+            tierConfig.flare,
+            0.07
           );
-          const scaleGeo = new THREE.TubeGeometry(curve, 16, 0.065, 6, false);
-          const scaleMesh = new THREE.Mesh(scaleGeo, scaleMat);
+          const scaleMesh = new THREE.Mesh(scaleGeom, scaleMat);
           scaleMesh.castShadow = true;
 
           const scalePivot = new THREE.Group();
+          // Sit on rib crest
+          const ribR = baseRadiusAtY * 1.12;
           scalePivot.position.set(
-            Math.cos(angle) * (radiusAtY * 0.98),
+            Math.cos(ribAngle) * ribR,
             y + 0.3,
-            Math.sin(angle) * (radiusAtY * 0.98)
+            Math.sin(ribAngle) * ribR
           );
-          scalePivot.rotation.y = -angle;
-          scalePivot.rotation.z = -0.25 - row * 0.05;
+          scalePivot.rotation.y = -ribAngle + Math.PI / 2;
+          scalePivot.rotation.z = tierConfig.rotZ;
           scalePivot.add(scaleMesh);
 
           scaleMesh.userData = { partKey: 'bract' };
@@ -1667,29 +1746,53 @@
           bractMeshes.push(scalePivot);
           clickableMeshes.push(scaleMesh);
         }
+      });
+      partPositions['bract'] = new THREE.Vector3(r * 1.1, 0.4, 0);
+
+      // 4. Apical Crown of Bracts (Clustered Flame-like Petals around Calyx Neck)
+      const crownBractCount = 8;
+      const crownGroup = new THREE.Group();
+      crownGroup.position.y = len * 0.95 + 0.3;
+
+      for (let cb = 0; cb < crownBractCount; cb++) {
+        const cbAngle = (cb / crownBractCount) * Math.PI * 2;
+        const crownScaleGeom = createFleshyBractGeometry(0.75 * data.bractSpread, 0.32, 0.25, 0.06);
+        const crownMesh = new THREE.Mesh(crownScaleGeom, scaleMat);
+        crownMesh.castShadow = true;
+
+        const cbPivot = new THREE.Group();
+        cbPivot.position.set(Math.cos(cbAngle) * 0.28, 0, Math.sin(cbAngle) * 0.28);
+        cbPivot.rotation.y = -cbAngle + Math.PI / 2;
+        cbPivot.rotation.z = 0.15;
+        cbPivot.add(crownMesh);
+
+        crownMesh.userData = { partKey: 'calyx' };
+        crownGroup.add(cbPivot);
+        clickableMeshes.push(crownMesh);
       }
-      partPositions['bract'] = new THREE.Vector3(r * 0.8, 0.6, 0);
 
-      // 4. Apical Floral Calyx Crown (Top Moonflower Remnant)
-      const calyxGeo = new THREE.ConeGeometry(0.25, 0.45, 16, 1, true);
-      const calyxMat = new THREE.MeshStandardMaterial({ color: 0x84cc16, roughness: 0.6, side: THREE.DoubleSide });
-      const calyxMesh = new THREE.Mesh(calyxGeo, calyxMat);
-      calyxMesh.position.y = len + 0.35;
-      calyxMesh.rotation.x = Math.PI;
-      calyxMesh.userData = { partKey: 'calyx' };
-      fruitGroup.add(calyxMesh);
-      clickableMeshes.push(calyxMesh);
-      partPositions['calyx'] = new THREE.Vector3(0, len + 0.4, 0);
+      // Sunken central calyx aperture
+      const calyxCenterGeo = new THREE.ConeGeometry(0.24, 0.35, 16, 1, true);
+      const calyxCenterMat = new THREE.MeshStandardMaterial({ color: 0x4d7c0f, roughness: 0.7, side: THREE.DoubleSide });
+      const calyxCenter = new THREE.Mesh(calyxCenterGeo, calyxCenterMat);
+      calyxCenter.rotation.x = Math.PI;
+      calyxCenter.position.y = 0.12;
+      calyxCenter.userData = { partKey: 'calyx' };
+      crownGroup.add(calyxCenter);
+      clickableMeshes.push(calyxCenter);
 
-      // 5. Basal Pedicel Stem & Cladode Attachment
-      const stemGeo = new THREE.CylinderGeometry(0.18, 0.22, 0.6, 16);
-      const stemMat = new THREE.MeshStandardMaterial({ color: 0x15803d, roughness: 0.7 });
+      fruitGroup.add(crownGroup);
+      partPositions['calyx'] = new THREE.Vector3(0, len * 0.95 + 0.7, 0);
+
+      // 5. Basal Woody Pedicel Stem & Cladode Attachment
+      const stemGeo = new THREE.CylinderGeometry(0.18, 0.24, 0.55, 16);
+      const stemMat = new THREE.MeshStandardMaterial({ color: 0x166534, roughness: 0.75 });
       const stemMesh = new THREE.Mesh(stemGeo, stemMat);
-      stemMesh.position.y = -len + 0.15;
+      stemMesh.position.y = -len * 0.95 + 0.1;
       stemMesh.userData = { partKey: 'stem' };
       fruitGroup.add(stemMesh);
       clickableMeshes.push(stemMesh);
-      partPositions['stem'] = new THREE.Vector3(0, -len + 0.15, 0);
+      partPositions['stem'] = new THREE.Vector3(0, -len * 0.95 + 0.1, 0);
     }
 
     // Graphics Tier
@@ -1793,7 +1896,7 @@
       displayPartDefinition(partKey);
     }
 
-    // 3D Raycasting
+    // 3D Raycasting: Click ANY Part
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
@@ -2044,7 +2147,6 @@
       requestAnimationFrame(animate);
       const time = clock.getElapsedTime();
 
-      // Subtle particle float
       particles.rotation.y = time * 0.02;
 
       controls.update();
@@ -2078,3 +2180,4 @@
   </script>
 </body>
 </html>
+
