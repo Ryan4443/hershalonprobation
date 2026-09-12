@@ -1504,89 +1504,47 @@
       return tex;
     }
 
-    function createFleshyBractGeometry(length, baseWidth, flare, thickness) {
-      const geom = new THREE.BufferGeometry();
-      const rows = 6;
-      const cols = 4;
-      const positions = [];
-      const uvs = [];
-      const indices = [];
-
-      for (let r = 0; r <= rows; r++) {
-        const u = r / rows;
-        const w = baseWidth * Math.max(0.01, (1 - Math.pow(u, 1.3)));
-        const curveZ = Math.pow(u, 1.9) * flare;
-        const y = u * length;
-
-        for (let col = 0; col <= cols; col++) {
-          const v = (col / cols) * 2 - 1;
-          const x = v * w * 0.5;
-          const crossArch = (1 - v * v) * thickness * (1 - u * 0.7);
-          const z = curveZ + crossArch;
-          positions.push(x, y, z);
-          uvs.push(col / cols, u);
-        }
-      }
-
-      for (let r = 0; r < rows; r++) {
-        for (let col = 0; col < cols; col++) {
-          const a = r * (cols + 1) + col;
-          const b = (r + 1) * (cols + 1) + col;
-          const c1 = (r + 1) * (cols + 1) + (col + 1);
-          const d = r * (cols + 1) + (col + 1);
-          indices.push(a, b, d);
-          indices.push(b, c1, d);
-        }
-      }
-
-      geom.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-      geom.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
-      geom.setIndex(indices);
+    // Rock-Solid Watertight Bract Scale (Zero Degenerate Triangles, Zero Flicker)
+    function createSolidBractGeometry(length, baseWidth, thickness) {
+      // 4-sided tapered pyramid cone: watertight, perfect outward normals
+      const geom = new THREE.ConeGeometry(baseWidth * 0.5, length, 4);
+      // Align tip pointing up +Z and arch outward
+      geom.rotateX(Math.PI / 2);
+      // Flatten thickness so it looks like a fleshy succulent scale
+      geom.scale(1.0, thickness / baseWidth, 1.0);
       geom.computeVertexNormals();
       return geom;
     }
 
-    /* ----------------------------------------------------
-       5. PRE-BUILDING ALL 3 DISTINCT 3D DRAGON FRUIT MODELS
-       (Guarantees Instant 60 FPS Switching & Zero Errors!)
-       ---------------------------------------------------- */
-    const fruitModels = [];
-    const cutawayGroups = [];
-
     function buildSingleModel(config) {
       const modelGroup = new THREE.Group();
-      const r = 1.15;
-      const len = 1.65;
+      const r = 1.12;
+      const len = 1.62;
 
-      const skinMat = new THREE.MeshPhysicalMaterial({
+      // Clean, robust PBR materials without conflicting transmission passes
+      const skinMat = new THREE.MeshStandardMaterial({
         color: config.skinHex,
-        roughness: 0.30,
-        metalness: 0.04,
-        clearcoat: 0.85,
-        clearcoatRoughness: 0.15,
-        sheen: 0.85,
-        sheenColor: new THREE.Color(config.rimHex)
+        roughness: 0.32,
+        metalness: 0.04
       });
 
-      const bractMat = new THREE.MeshPhysicalMaterial({
+      const bractMat = new THREE.MeshStandardMaterial({
         color: config.bractHex,
-        roughness: 0.35,
-        clearcoat: 0.75,
-        clearcoatRoughness: 0.2,
-        side: THREE.DoubleSide
+        roughness: 0.38,
+        metalness: 0.02
       });
 
-      const pulpRGB = config.id === 'red' ? [136, 19, 55] : [248, 250, 252];
+      const pulpRGB = config.id === 'red' ? [145, 15, 60] : config.id === 'yellow' ? [254, 243, 199] : [248, 250, 252];
       const pulpTex = generatePulpTexture(pulpRGB);
-      const pulpMat = new THREE.MeshPhysicalMaterial({
+      const pulpMat = new THREE.MeshStandardMaterial({
         map: pulpTex,
-        roughness: 0.35,
-        clearcoat: 0.4
+        roughness: 0.4,
+        metalness: 0.0
       });
 
-      // 1. Solid Ribbed Fruit Body (6 prominent longitudinal ridges)
+      // 1. Watertight Ribbed Fruit Body
       const ribCount = 6;
-      const sphereGeo = new THREE.SphereGeometry(r, 36, 28);
+      const sphereGeo = new THREE.SphereGeometry(r, 36, 24);
       const pos = sphereGeo.attributes.position;
       const v = new THREE.Vector3();
 
@@ -1596,7 +1554,7 @@
         const yNorm = v.y / r;
 
         v.y *= (len / r);
-        const ribProfile = 1.0 + 0.14 * Math.cos(ribCount * angle);
+        const ribProfile = 1.0 + 0.12 * Math.cos(ribCount * angle);
         const pearProfile = 1.0 + 0.10 * Math.sin((yNorm + 0.15) * Math.PI * 0.7);
 
         v.x *= ribProfile * pearProfile;
@@ -1607,8 +1565,6 @@
       sphereGeo.computeVertexNormals();
 
       const bodyMesh = new THREE.Mesh(sphereGeo, skinMat);
-      bodyMesh.castShadow = true;
-      bodyMesh.receiveShadow = true;
       bodyMesh.position.set(0, 0.2, 0);
       modelGroup.add(bodyMesh);
 
@@ -1616,13 +1572,13 @@
       const cutaway = new THREE.Group();
       cutaway.position.set(0, 0.2, 0);
 
-      const cutPulpGeo = new THREE.CylinderGeometry(r * 0.92, r * 0.92, 0.5, 36);
+      const cutPulpGeo = new THREE.CylinderGeometry(r * 0.90, r * 0.90, 0.45, 36);
       const cutPulpMesh = new THREE.Mesh(cutPulpGeo, pulpMat);
       cutPulpMesh.rotation.x = Math.PI / 2;
       cutPulpMesh.position.z = 0.05;
       cutaway.add(cutPulpMesh);
 
-      const rimGeo = new THREE.TorusGeometry(r * 0.93, 0.08, 16, 36);
+      const rimGeo = new THREE.TorusGeometry(r * 0.91, 0.08, 16, 36);
       const rimMat = new THREE.MeshStandardMaterial({ color: config.skinHex, roughness: 0.4 });
       const rimMesh = new THREE.Mesh(rimGeo, rimMat);
       cutaway.add(rimMesh);
@@ -1631,36 +1587,36 @@
       modelGroup.add(cutaway);
       cutawayGroups.push(cutaway);
 
-      // 3. Fleshy Bract Scales Placed along Ribs
+      // 3. Fleshy Bract Scales Placed along Ribs (Solid, Manifold, Zero Z-Fighting)
       const tiers = [
-        { yNorm: -0.65, length: 0.55, width: 0.38, flare: 0.22, rotZ: 0.35 },
-        { yNorm: -0.30, length: 0.72, width: 0.46, flare: 0.34, rotZ: 0.28 },
-        { yNorm:  0.05, length: 0.88, width: 0.52, flare: 0.46, rotZ: 0.18 },
-        { yNorm:  0.42, length: 0.78, width: 0.46, flare: 0.36, rotZ: 0.08 },
-        { yNorm:  0.72, length: 0.68, width: 0.38, flare: 0.28, rotZ: -0.05 }
+        { yNorm: -0.62, length: 0.65, width: 0.42, thick: 0.16, rotX: -0.45 },
+        { yNorm: -0.28, length: 0.82, width: 0.50, thick: 0.18, rotX: -0.35 },
+        { yNorm:  0.08, length: 0.95, width: 0.56, thick: 0.20, rotX: -0.25 },
+        { yNorm:  0.44, length: 0.86, width: 0.50, thick: 0.18, rotX: -0.15 },
+        { yNorm:  0.74, length: 0.72, width: 0.42, thick: 0.16, rotX: -0.05 }
       ];
 
       tiers.forEach((tierConfig, tierIdx) => {
-        const y = tierConfig.yNorm * (len * 0.88);
+        const y = tierConfig.yNorm * (len * 0.85);
         const yNorm = tierConfig.yNorm;
         const pearProfile = 1.0 + 0.10 * Math.sin((yNorm + 0.15) * Math.PI * 0.7);
         const baseRadiusAtY = Math.sqrt(Math.max(0.1, 1 - (yNorm * yNorm * 0.75))) * r * pearProfile;
 
         for (let rib = 0; rib < ribCount; rib++) {
           const ribAngle = (rib / ribCount) * Math.PI * 2 + (tierIdx % 2) * (Math.PI / ribCount);
-          const scaleGeom = createFleshyBractGeometry(tierConfig.length, tierConfig.width, tierConfig.flare, 0.07);
+          const scaleGeom = createSolidBractGeometry(tierConfig.length, tierConfig.width, tierConfig.thick);
           const scaleMesh = new THREE.Mesh(scaleGeom, bractMat);
-          scaleMesh.castShadow = true;
 
           const scalePivot = new THREE.Group();
-          const ribR = baseRadiusAtY * 1.12;
+          const ribR = baseRadiusAtY * 1.04;
           scalePivot.position.set(
             Math.cos(ribAngle) * ribR,
             y + 0.2,
             Math.sin(ribAngle) * ribR
           );
-          scalePivot.rotation.y = -ribAngle + Math.PI / 2;
-          scalePivot.rotation.z = tierConfig.rotZ;
+          // Orient scale outwards along radius
+          scalePivot.rotation.y = -ribAngle - Math.PI / 2;
+          scalePivot.rotation.x = tierConfig.rotX;
           scalePivot.add(scaleMesh);
           modelGroup.add(scalePivot);
         }
@@ -1668,24 +1624,23 @@
 
       // 4. Apical Crown of Bracts
       const crownGroup = new THREE.Group();
-      crownGroup.position.y = len * 0.95 + 0.2;
+      crownGroup.position.y = len * 0.92 + 0.2;
 
       for (let cb = 0; cb < 8; cb++) {
         const cbAngle = (cb / 8) * Math.PI * 2;
-        const crownScaleGeom = createFleshyBractGeometry(0.75, 0.32, 0.25, 0.06);
+        const crownScaleGeom = createSolidBractGeometry(0.80, 0.36, 0.14);
         const crownMesh = new THREE.Mesh(crownScaleGeom, bractMat);
-        crownMesh.castShadow = true;
 
         const cbPivot = new THREE.Group();
-        cbPivot.position.set(Math.cos(cbAngle) * 0.28, 0, Math.sin(cbAngle) * 0.28);
-        cbPivot.rotation.y = -cbAngle + Math.PI / 2;
-        cbPivot.rotation.z = 0.15;
+        cbPivot.position.set(Math.cos(cbAngle) * 0.26, 0, Math.sin(cbAngle) * 0.26);
+        cbPivot.rotation.y = -cbAngle - Math.PI / 2;
+        cbPivot.rotation.x = -0.22;
         cbPivot.add(crownMesh);
         crownGroup.add(cbPivot);
       }
 
-      const calyxCenterGeo = new THREE.ConeGeometry(0.24, 0.35, 16, 1, true);
-      const calyxCenterMat = new THREE.MeshStandardMaterial({ color: 0x4d7c0f, roughness: 0.7, side: THREE.DoubleSide });
+      const calyxCenterGeo = new THREE.ConeGeometry(0.24, 0.35, 16);
+      const calyxCenterMat = new THREE.MeshStandardMaterial({ color: 0x4d7c0f, roughness: 0.7 });
       const calyxCenter = new THREE.Mesh(calyxCenterGeo, calyxCenterMat);
       calyxCenter.rotation.x = Math.PI;
       calyxCenter.position.y = 0.12;
@@ -1696,7 +1651,7 @@
       const stemGeo = new THREE.CylinderGeometry(0.18, 0.24, 0.55, 16);
       const stemMat = new THREE.MeshStandardMaterial({ color: 0x166534, roughness: 0.75 });
       const stemMesh = new THREE.Mesh(stemGeo, stemMat);
-      stemMesh.position.y = -len * 0.95;
+      stemMesh.position.y = -len * 0.92;
       modelGroup.add(stemMesh);
 
       return modelGroup;
