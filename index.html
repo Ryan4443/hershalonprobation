@@ -23,7 +23,7 @@
       --emerald-neon: #00ff88;
       --emerald-glow: #10b981;
       --cyan-neon: #00f0ff;
-      --glass-panel: rgba(12, 6, 11, 0.84);
+      --glass-panel: rgba(14, 7, 13, 0.86);
       --glass-border: rgba(255, 255, 255, 0.14);
       --glass-bevel: inset 0 1px 1px 0 rgba(255, 255, 255, 0.35), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.95);
       
@@ -61,17 +61,7 @@
     body.ui-hidden .scroll-section {
       opacity: 0 !important;
       pointer-events: none !important;
-      transition: opacity 0.35s ease;
-    }
-
-    /* Subtle Cinematic Film Grain Overlay */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
+      transition: opacity 0.3s ease;
     }
 
     /* WebGL Canvas Viewport */
@@ -89,7 +79,7 @@
       position: fixed;
       top: 0;
       left: 0;
-      height: 2.5px;
+      height: 3px;
       width: 0%;
       background: linear-gradient(90deg, var(--dragon-pink), var(--emerald-neon), var(--accent));
       box-shadow: 0 0 14px var(--dragon-glow);
@@ -165,7 +155,7 @@
       height: 100vh;
       pointer-events: none;
       z-index: 5;
-      background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(2, 4, 3, 0.82) 80%, #000000 100%);
+      background: radial-gradient(circle at 50% 50%, transparent 45%, rgba(2, 4, 3, 0.85) 85%, #000000 100%);
     }
 
     /* Navigation Bar */
@@ -228,7 +218,7 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.25s ease;
+      transition: all 0.2s ease;
       text-transform: uppercase;
       backdrop-filter: blur(12px);
     }
@@ -417,7 +407,7 @@
       opacity: 0;
       pointer-events: none;
       transform: translateY(12px) scale(0.96);
-      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     #hotspotCard.visible {
       opacity: 1;
@@ -499,7 +489,7 @@
       align-items: center;
       gap: 10px;
       padding: 7px 18px;
-      background: rgba(16, 5, 14, 0.9);
+      background: rgba(16, 5, 14, 0.92);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       border: 1px solid rgba(244, 114, 182, 0.4);
@@ -509,7 +499,7 @@
       opacity: 0;
       pointer-events: none;
       transform: translate(-50%, 15px);
-      transition: all 0.35s ease;
+      transition: all 0.3s ease;
     }
     #presenterBar.visible {
       opacity: 1;
@@ -568,7 +558,7 @@
       opacity: 0;
       pointer-events: none;
       transform: translateX(-15px);
-      transition: all 0.35s ease;
+      transition: all 0.3s ease;
     }
     #presenterNotesPanel.visible {
       opacity: 1;
@@ -632,7 +622,7 @@
       opacity: 0;
       pointer-events: none;
       transform: translateX(20px);
-      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     #simDrawer.visible {
       opacity: 1;
@@ -781,16 +771,13 @@
       position: relative;
       pointer-events: auto;
       opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s;
+      transform: translateY(24px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      will-change: opacity, transform;
     }
     .text-card.is-visible {
       opacity: 1 !important;
       transform: translateY(0) !important;
-    }
-    .text-card:hover {
-      border-color: rgba(244, 114, 182, 0.4);
-      box-shadow: var(--glass-bevel), 0 30px 70px rgba(0, 0, 0, 0.98), 0 0 30px rgba(244, 114, 182, 0.2);
     }
 
     h1, h2 {
@@ -861,20 +848,20 @@
 
     .variety-selector-bar {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       margin-top: 20px;
       justify-content: center;
       flex-wrap: wrap;
     }
     .v-pill {
       font-family: var(--font-mono);
-      font-size: 0.65rem;
+      font-size: 0.72rem;
       font-weight: 600;
       letter-spacing: 1px;
       color: var(--text-muted);
       background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      padding: 5px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      padding: 7px 16px;
       border-radius: 999px;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -883,8 +870,8 @@
     .v-pill:hover, .v-pill.active {
       border-color: var(--dragon-glow);
       color: #ffffff;
-      background: rgba(236, 72, 153, 0.2);
-      box-shadow: 0 0 10px rgba(244, 114, 182, 0.35);
+      background: rgba(236, 72, 153, 0.25);
+      box-shadow: 0 0 12px rgba(244, 114, 182, 0.4);
     }
 
     /* Return to Apex Hub */
@@ -985,7 +972,7 @@
       <div class="tagline">Botanical Alchemy &bull; Made by Harshil and Siddharth</div>
     </div>
     <div class="nav-actions">
-      <button class="nav-pill-btn" id="dissectBtn" onclick="toggleDissection()" title="Split dragon fruit to reveal pulp and seeds">
+      <button class="nav-pill-btn" id="dissectBtn" onclick="toggleDissection()" title="Separate fruit half to reveal interior pulp and seeds">
         <span>🔬</span>
         <span id="dissectLabel">Deconstruct</span>
       </button>
@@ -1041,7 +1028,7 @@
     <div class="telemetry-div"></div>
     <div class="telemetry-item">
       <span class="ti-label">PIGMENT</span>
-      <span class="ti-val" id="hudPigment" style="color: var(--dragon-glow);">BETACYANIN 85 mg%</span>
+      <span class="ti-val" id="hudPigment" style="color: var(--dragon-glow);">BETACYANIN 75 mg%</span>
     </div>
   </div>
 
@@ -1195,7 +1182,7 @@
             Scroll to witness the botanical metamorphosis of <strong>Hylocereus undatus</strong>. A climbing desert cactus that transforms nocturnal atmospheric carbon into antioxidant-dense betalain pulp and crystalline energy.
           </p>
 
-          <!-- Interactive Variety Switcher -->
+          <!-- Interactive Cultivar Switcher: White, Red, and Yellow -->
           <div class="variety-selector-bar">
             <span class="v-pill active" onclick="switchCultivar(0)">Noble White</span>
             <span class="v-pill" onclick="switchCultivar(1)">Ruby Red</span>
@@ -1205,7 +1192,7 @@
           <div class="card-metrics-row">
             <div class="metric-chip">
               <div class="mc-label">Scientific Name</div>
-              <div class="mc-val" id="cultivarSci">H. undatus</div>
+              <div class="mc-val" id="cultivarSci">Hylocereus undatus</div>
             </div>
             <div class="metric-chip">
               <div class="mc-label">Typical Sucrose</div>
@@ -1373,47 +1360,44 @@
     </p>
   </footer>
 
-  <!-- Three.js Scene & Engine -->
+  <!-- Three.js Engine with Pre-Built Models & Zero Flickering -->
   <script>
     /* ----------------------------------------------------
-       1. CULTIVAR MATRIX
+       1. CULTIVAR DATA MATRIX
        ---------------------------------------------------- */
-    const cultivars = [
+    const CULTIVAR_DATA = [
       {
         name: "Noble White",
         sci: "Hylocereus undatus",
         brix: "12% — 15%",
         pigment: "BETACYANIN 75 mg%",
-        skinColor: [236, 72, 153],
-        midColor: [234, 179, 8],
-        tipColor: [34, 197, 94],
-        pulpColor: [248, 250, 252],
-        radius: 1.15,
-        length: 1.65
+        skinHex: 0xe11d88,    // Vivid Fuchsia Pink
+        bractHex: 0x10b981,   // Emerald Green Bracts
+        rimHex: 0xf472b6,     // Pink Rim Light
+        pulpHex: 0xf8fafc,    // White Pulp
+        pulpText: "Snowy White Flesh with Black Crunchy Seeds"
       },
       {
         name: "Ruby Red",
         sci: "Hylocereus costaricensis",
         brix: "14% — 17%",
         pigment: "BETACYANIN 120 mg%",
-        skinColor: [190, 24, 93],
-        midColor: [202, 138, 4],
-        tipColor: [74, 222, 128],
-        pulpColor: [159, 18, 57],
-        radius: 1.18,
-        length: 1.60
+        skinHex: 0x9f1239,    // Deep Blood Crimson / Ruby
+        bractHex: 0xe11d48,   // Deep Ruby Red Bracts with Jade Tips
+        rimHex: 0xf43f5e,     // Ruby Rim Light
+        pulpHex: 0x881337,    // Deep Crimson Magenta Pulp
+        pulpText: "Deep Crimson Betalain-Rich Pulp"
       },
       {
         name: "Golden Sweet",
         sci: "Hylocereus megalanthus",
         brix: "18% — 20%",
         pigment: "BETAXANTHIN 95 mg%",
-        skinColor: [234, 179, 8],
-        midColor: [245, 158, 11],
-        tipColor: [132, 204, 22],
-        pulpColor: [255, 255, 255],
-        radius: 1.05,
-        length: 1.55
+        skinHex: 0xeab308,    // Radiant Golden Canary Yellow
+        bractHex: 0x84cc16,   // Golden Lime Bracts
+        rimHex: 0xfbbf24,     // Golden Amber Rim Light
+        pulpHex: 0xffffff,    // Translucent Sweet White Pulp
+        pulpText: "Golden Honey Translucent Flesh with High Brix"
       }
     ];
 
@@ -1430,81 +1414,67 @@
     let selectedHotspotIdx = -1;
 
     /* ----------------------------------------------------
-       2. THREE.JS INITIALIZATION & SCENE SETUP
+       2. THREE.JS SCENE, CAMERA & CLEAN LIGHTING
        ---------------------------------------------------- */
     const container = document.getElementById('webgl-container');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x020403);
-    scene.fog = new THREE.FogExp2(0x020403, 0.026);
+    scene.fog = new THREE.FogExp2(0x020403, 0.022);
 
     const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.set(0, 0, 14);
+    camera.position.set(0, 0.15, 9.2);
+    const cameraTarget = new THREE.Vector3(0, 0.15, 0);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.45;
+    renderer.toneMappingExposure = 1.35;
     container.appendChild(renderer.domElement);
 
-    // Studio Lighting Architecture
-    scene.add(new THREE.AmbientLight(0xffffff, 0.65));
+    // Studio Lighting Suite
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    scene.add(ambientLight);
 
-    const keyLight = new THREE.SpotLight(0xfff5e6, 5.0);
-    keyLight.position.set(9, 15, 9);
+    const keyLight = new THREE.SpotLight(0xfff5e6, 4.8);
+    keyLight.position.set(8, 14, 8);
     keyLight.angle = Math.PI / 4.2;
     keyLight.penumbra = 0.65;
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0xf472b6, 3.2);
-    rimLight.position.set(-8, -2, -7);
+    const rimLight = new THREE.DirectionalLight(0xf472b6, 3.0);
+    rimLight.position.set(-7, -2, -6);
     scene.add(rimLight);
 
-    const emeraldFill = new THREE.DirectionalLight(0x00ff88, 1.8);
-    emeraldFill.position.set(6, -6, 3);
+    const emeraldFill = new THREE.DirectionalLight(0x00ff88, 1.6);
+    emeraldFill.position.set(5, -5, 4);
     scene.add(emeraldFill);
 
-    const cursorLight = new THREE.PointLight(0xf472b6, 2.2, 9);
+    const cursorLight = new THREE.PointLight(0xf472b6, 1.8, 9);
     cursorLight.position.set(0, 0, 4);
     scene.add(cursorLight);
 
-    // Volumetric God-Ray Light Shafts
-    const godRaysGroup = new THREE.Group();
-    const rayGeo = new THREE.CylinderGeometry(0.2, 4.2, 18, 24, 1, true);
-    const rayMat = new THREE.MeshBasicMaterial({
-      color: 0xf472b6,
-      transparent: true,
-      opacity: 0.045,
-      blending: THREE.AdditiveBlending,
-      side: THREE.DoubleSide,
-      depthWrite: false
-    });
-    for (let r = 0; r < 4; r++) {
-      const ray = new THREE.Mesh(rayGeo, rayMat);
-      ray.position.set(2 + r * 1.5, 6, -2 + r * 0.8);
-      ray.rotation.z = -0.35 + (r * 0.08);
-      ray.rotation.x = 0.2;
-      godRaysGroup.add(ray);
-    }
-    scene.add(godRaysGroup);
+    /* ----------------------------------------------------
+       3. HIERARCHICAL SCENE GRAPH (ELIMINATES GSAP FIGHTING)
+       ---------------------------------------------------- */
+    // Master Group: controlled SOLELY by GSAP ScrollTrigger
+    const heroGroup = new THREE.Group();
+    heroGroup.position.set(0, 0.1, 0);
+    heroGroup.rotation.set(0.1, 0, -0.1);
+    scene.add(heroGroup);
 
-    // Procedural Textures: Scale Gradient & Pulp Speckles
-    function generateScaleGradient(skinRGB, midRGB, tipRGB) {
-      const W = 256, H = 256;
-      const c = document.createElement('canvas');
-      c.width = W; c.height = H;
-      const ctx = c.getContext('2d');
-      const grad = ctx.createLinearGradient(0, H, 0, 0);
-      grad.addColorStop(0, `rgb(${skinRGB[0]}, ${skinRGB[1]}, ${skinRGB[2]})`);
-      grad.addColorStop(0.35, `rgb(${skinRGB[0]*0.95}, ${skinRGB[1]*0.95}, ${skinRGB[2]*0.95})`);
-      grad.addColorStop(0.65, `rgb(${midRGB[0]}, ${midRGB[1]}, ${midRGB[2]})`);
-      grad.addColorStop(0.9, `rgb(${tipRGB[0]}, ${tipRGB[1]}, ${tipRGB[2]})`);
-      grad.addColorStop(1.0, `rgb(${Math.min(255, tipRGB[0]+30)}, ${Math.min(255, tipRGB[1]+30)}, ${Math.min(255, tipRGB[2]+30)})`);
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, W, H);
-      return new THREE.CanvasTexture(c);
-    }
+    // Idle Group: handles subtle breathing without mutating heroGroup!
+    const idleGroup = new THREE.Group();
+    heroGroup.add(idleGroup);
 
+    // Fruit Group: enlarged to 1.45x to fit the viewport frame perfectly!
+    const fruitGroup = new THREE.Group();
+    fruitGroup.scale.set(1.45, 1.45, 1.45);
+    idleGroup.add(fruitGroup);
+
+    /* ----------------------------------------------------
+       4. PROCEDURAL TEXTURES & GEOMETRY GENERATION
+       ---------------------------------------------------- */
     function generatePulpTexture(pulpRGB) {
       const W = 512, H = 512;
       const c = document.createElement('canvas');
@@ -1512,7 +1482,7 @@
       const ctx = c.getContext('2d');
       ctx.fillStyle = `rgb(${pulpRGB[0]}, ${pulpRGB[1]}, ${pulpRGB[2]})`;
       ctx.fillRect(0, 0, W, H);
-      // Realistic black crunchy seed speckles
+      // Realistic crunchy black seeds
       for (let s = 0; s < 750; s++) {
         const x = Math.random() * W;
         const y = Math.random() * H;
@@ -1528,10 +1498,11 @@
         ctx.fill();
         ctx.restore();
       }
-      return new THREE.CanvasTexture(c);
+      const tex = new THREE.CanvasTexture(c);
+      tex.needsUpdate = true;
+      return tex;
     }
 
-    // Fleshy Bract Geometry Generator
     function createFleshyBractGeometry(length, baseWidth, flare, thickness) {
       const geom = new THREE.BufferGeometry();
       const rows = 6;
@@ -1575,133 +1546,170 @@
     }
 
     /* ----------------------------------------------------
-       3. 3D MODEL ARCHITECTURE (DRAGON FRUIT HERO GROUP)
+       5. PRE-BUILDING ALL 3 DISTINCT 3D DRAGON FRUIT MODELS
+       (Guarantees Instant 60 FPS Switching & Zero Errors!)
        ---------------------------------------------------- */
-    const heroGroup = new THREE.Group();
-    scene.add(heroGroup);
+    const fruitModels = [];
+    const cutawayGroups = [];
 
-    const fruitGroup = new THREE.Group();
-    heroGroup.add(fruitGroup);
+    function buildSingleModel(config) {
+      const modelGroup = new THREE.Group();
+      const r = 1.15;
+      const len = 1.65;
 
-    let fruitBody = null;
-    let cutawayGroup = null;
-    let bractMeshes = [];
-    let skinMat, pulpMat, scaleMat;
-
-    function buildDragonFruit(varIdx) {
-      while (fruitGroup.children.length > 0) {
-        fruitGroup.remove(fruitGroup.children[0]);
-      }
-      bractMeshes = [];
-
-      const cur = cultivars[varIdx];
-      const r = cur.radius;
-      const len = cur.length;
-
-      const scaleTex = generateScaleGradient(cur.skinColor, cur.midColor, cur.tipColor);
-      const pulpTex = generatePulpTexture(cur.pulpColor);
-
-      skinMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(cur.skinColor[0]/255, cur.skinColor[1]/255, cur.skinColor[2]/255),
+      const skinMat = new THREE.MeshPhysicalMaterial({
+        color: config.skinHex,
         roughness: 0.30,
         metalness: 0.04,
         clearcoat: 0.85,
         clearcoatRoughness: 0.15,
-        sheen: 0.9,
-        sheenColor: new THREE.Color(0xf472b6)
+        sheen: 0.85,
+        sheenColor: new THREE.Color(config.rimHex)
       });
 
-      scaleMat = new THREE.MeshPhysicalMaterial({
-        map: scaleTex,
+      const bractMat = new THREE.MeshPhysicalMaterial({
+        color: config.bractHex,
         roughness: 0.35,
         clearcoat: 0.75,
         clearcoatRoughness: 0.2,
         side: THREE.DoubleSide
       });
 
-      pulpMat = new THREE.MeshPhysicalMaterial({
+      const pulpRGB = config.id === 'red' ? [136, 19, 55] : [248, 250, 252];
+      const pulpTex = generatePulpTexture(pulpRGB);
+      const pulpMat = new THREE.MeshPhysicalMaterial({
         map: pulpTex,
         roughness: 0.35,
-        clearcoat: 0.4,
-        clearcoatRoughness: 0.2
+        clearcoat: 0.4
       });
 
-      // Left fruit half body
-      const bodyGeo = new THREE.SphereGeometry(r, 48, 48, 0, Math.PI);
-      bodyGeo.scale(1.0, len, 0.95);
-      fruitBody = new THREE.Mesh(bodyGeo, skinMat);
-      fruitBody.rotation.y = -Math.PI / 2;
-      fruitGroup.add(fruitBody);
+      // 1. Solid Ribbed Fruit Body (6 prominent longitudinal ridges)
+      const ribCount = 6;
+      const sphereGeo = new THREE.SphereGeometry(r, 36, 28);
+      const pos = sphereGeo.attributes.position;
+      const v = new THREE.Vector3();
 
-      // Cutaway group (split inside pulp half)
-      cutawayGroup = new THREE.Group();
-      const cutBodyGeo = new THREE.SphereGeometry(r, 48, 48, 0, Math.PI);
-      cutBodyGeo.scale(1.0, len, 0.95);
-      const cutBody = new THREE.Mesh(cutBodyGeo, skinMat);
-      cutBody.rotation.y = Math.PI / 2;
-      cutawayGroup.add(cutBody);
+      for (let i = 0; i < pos.count; i++) {
+        v.fromBufferAttribute(pos, i);
+        const angle = Math.atan2(v.z, v.x);
+        const yNorm = v.y / r;
 
-      // Internal flat pulp slice face
-      const faceGeo = new THREE.PlaneGeometry(r * 2.0, len * 2.0);
-      const faceMesh = new THREE.Mesh(faceGeo, pulpMat);
-      faceMesh.rotation.y = -Math.PI / 2;
-      cutawayGroup.add(faceMesh);
+        v.y *= (len / r);
+        const ribProfile = 1.0 + 0.14 * Math.cos(ribCount * angle);
+        const pearProfile = 1.0 + 0.10 * Math.sin((yNorm + 0.15) * Math.PI * 0.7);
 
-      cutawayGroup.visible = isDissected;
-      cutawayGroup.position.x = isDissected ? 0.75 : 0;
-      fruitBody.position.x = isDissected ? -0.75 : 0;
-      fruitGroup.add(cutawayGroup);
+        v.x *= ribProfile * pearProfile;
+        v.z *= ribProfile * pearProfile;
 
-      // Procedural Fleshy Bract Scales Spiral Attachment
-      const numTiers = 7;
-      const bractsPerTier = [5, 7, 9, 9, 8, 6, 4];
+        pos.setXYZ(i, v.x, v.y, v.z);
+      }
+      sphereGeo.computeVertexNormals();
 
-      for (let t = 0; t < numTiers; t++) {
-        const v = (t + 0.5) / numTiers;
-        const yPos = (v - 0.5) * (len * 1.8);
-        const count = bractsPerTier[t];
-        const tierRadius = r * Math.sin(v * Math.PI) * 1.05;
+      const bodyMesh = new THREE.Mesh(sphereGeo, skinMat);
+      bodyMesh.castShadow = true;
+      bodyMesh.receiveShadow = true;
+      bodyMesh.position.set(0, 0.2, 0);
+      modelGroup.add(bodyMesh);
 
-        for (let b = 0; b < count; b++) {
-          const theta = (b / count) * Math.PI * 2 + (t * 0.55);
-          const bLen = 0.55 + (Math.sin(v * Math.PI) * 0.45);
-          const bWidth = 0.38 + (Math.sin(v * Math.PI) * 0.22);
-          const bFlare = 0.35 + (v * 0.25);
+      // 2. Transverse Cutaway Slice (Interior Pulp Reveal)
+      const cutaway = new THREE.Group();
+      cutaway.position.set(0, 0.2, 0);
 
-          const bGeo = createFleshyBractGeometry(bLen, bWidth, bFlare, 0.08);
-          const bMesh = new THREE.Mesh(bGeo, scaleMat);
+      const cutPulpGeo = new THREE.CylinderGeometry(r * 0.92, r * 0.92, 0.5, 36);
+      const cutPulpMesh = new THREE.Mesh(cutPulpGeo, pulpMat);
+      cutPulpMesh.rotation.x = Math.PI / 2;
+      cutPulpMesh.position.z = 0.05;
+      cutaway.add(cutPulpMesh);
 
-          bMesh.position.set(
-            Math.cos(theta) * tierRadius,
-            yPos,
-            Math.sin(theta) * tierRadius
+      const rimGeo = new THREE.TorusGeometry(r * 0.93, 0.08, 16, 36);
+      const rimMat = new THREE.MeshStandardMaterial({ color: config.skinHex, roughness: 0.4 });
+      const rimMesh = new THREE.Mesh(rimGeo, rimMat);
+      cutaway.add(rimMesh);
+
+      cutaway.visible = false;
+      modelGroup.add(cutaway);
+      cutawayGroups.push(cutaway);
+
+      // 3. Fleshy Bract Scales Placed along Ribs
+      const tiers = [
+        { yNorm: -0.65, length: 0.55, width: 0.38, flare: 0.22, rotZ: 0.35 },
+        { yNorm: -0.30, length: 0.72, width: 0.46, flare: 0.34, rotZ: 0.28 },
+        { yNorm:  0.05, length: 0.88, width: 0.52, flare: 0.46, rotZ: 0.18 },
+        { yNorm:  0.42, length: 0.78, width: 0.46, flare: 0.36, rotZ: 0.08 },
+        { yNorm:  0.72, length: 0.68, width: 0.38, flare: 0.28, rotZ: -0.05 }
+      ];
+
+      tiers.forEach((tierConfig, tierIdx) => {
+        const y = tierConfig.yNorm * (len * 0.88);
+        const yNorm = tierConfig.yNorm;
+        const pearProfile = 1.0 + 0.10 * Math.sin((yNorm + 0.15) * Math.PI * 0.7);
+        const baseRadiusAtY = Math.sqrt(Math.max(0.1, 1 - (yNorm * yNorm * 0.75))) * r * pearProfile;
+
+        for (let rib = 0; rib < ribCount; rib++) {
+          const ribAngle = (rib / ribCount) * Math.PI * 2 + (tierIdx % 2) * (Math.PI / ribCount);
+          const scaleGeom = createFleshyBractGeometry(tierConfig.length, tierConfig.width, tierConfig.flare, 0.07);
+          const scaleMesh = new THREE.Mesh(scaleGeom, bractMat);
+          scaleMesh.castShadow = true;
+
+          const scalePivot = new THREE.Group();
+          const ribR = baseRadiusAtY * 1.12;
+          scalePivot.position.set(
+            Math.cos(ribAngle) * ribR,
+            y + 0.2,
+            Math.sin(ribAngle) * ribR
           );
-
-          bMesh.rotation.y = -theta + Math.PI / 2;
-          bMesh.rotation.x = 0.35 + (v * 0.4);
-          fruitGroup.add(bMesh);
-          bractMeshes.push(bMesh);
+          scalePivot.rotation.y = -ribAngle + Math.PI / 2;
+          scalePivot.rotation.z = tierConfig.rotZ;
+          scalePivot.add(scaleMesh);
+          modelGroup.add(scalePivot);
         }
+      });
+
+      // 4. Apical Crown of Bracts
+      const crownGroup = new THREE.Group();
+      crownGroup.position.y = len * 0.95 + 0.2;
+
+      for (let cb = 0; cb < 8; cb++) {
+        const cbAngle = (cb / 8) * Math.PI * 2;
+        const crownScaleGeom = createFleshyBractGeometry(0.75, 0.32, 0.25, 0.06);
+        const crownMesh = new THREE.Mesh(crownScaleGeom, bractMat);
+        crownMesh.castShadow = true;
+
+        const cbPivot = new THREE.Group();
+        cbPivot.position.set(Math.cos(cbAngle) * 0.28, 0, Math.sin(cbAngle) * 0.28);
+        cbPivot.rotation.y = -cbAngle + Math.PI / 2;
+        cbPivot.rotation.z = 0.15;
+        cbPivot.add(crownMesh);
+        crownGroup.add(cbPivot);
       }
 
-      // Apical Calyx Crown
-      const calyxGeo = new THREE.CylinderGeometry(0.2, 0.35, 0.4, 16);
-      const calyxMat = new THREE.MeshStandardMaterial({ color: 0x4d7c0f, roughness: 0.8 });
-      const calyx = new THREE.Mesh(calyxGeo, calyxMat);
-      calyx.position.y = len + 0.15;
-      fruitGroup.add(calyx);
+      const calyxCenterGeo = new THREE.ConeGeometry(0.24, 0.35, 16, 1, true);
+      const calyxCenterMat = new THREE.MeshStandardMaterial({ color: 0x4d7c0f, roughness: 0.7, side: THREE.DoubleSide });
+      const calyxCenter = new THREE.Mesh(calyxCenterGeo, calyxCenterMat);
+      calyxCenter.rotation.x = Math.PI;
+      calyxCenter.position.y = 0.12;
+      crownGroup.add(calyxCenter);
+      modelGroup.add(crownGroup);
 
-      // Basal Woody Pedicel Stem
-      const stemGeo = new THREE.CylinderGeometry(0.18, 0.22, 0.6, 16);
-      const stemMat = new THREE.MeshStandardMaterial({ color: 0x166534, roughness: 0.7 });
-      const stem = new THREE.Mesh(stemGeo, stemMat);
-      stem.position.y = -len - 0.25;
-      fruitGroup.add(stem);
+      // 5. Basal Woody Pedicel Stem
+      const stemGeo = new THREE.CylinderGeometry(0.18, 0.24, 0.55, 16);
+      const stemMat = new THREE.MeshStandardMaterial({ color: 0x166534, roughness: 0.75 });
+      const stemMesh = new THREE.Mesh(stemGeo, stemMat);
+      stemMesh.position.y = -len * 0.95;
+      modelGroup.add(stemMesh);
+
+      return modelGroup;
     }
 
-    buildDragonFruit(0);
+    // Build all 3 models upfront
+    CULTIVAR_DATA.forEach((data, i) => {
+      const model = buildSingleModel(data);
+      model.visible = (i === 0); // Noble White visible first
+      fruitGroup.add(model);
+      fruitModels.push(model);
+    });
 
-    // Betalain Crystallization Swarm (Act 06)
+    // 6. Betalain Crystallization Swarm (Act 06)
     const crystalSwarm = new THREE.Group();
     const crystalMat = new THREE.MeshPhysicalMaterial({
       color: 0xf472b6,
@@ -1730,9 +1738,9 @@
     crystalSwarm.scale.set(0.001, 0.001, 0.001);
     heroGroup.add(crystalSwarm);
 
-    // Spore & Photon Particles
+    // 7. Smooth Ambient Particles (Non-flickering)
+    const sporeCount = 120;
     const sporeGeo = new THREE.BufferGeometry();
-    const sporeCount = 140;
     const sporePos = new Float32Array(sporeCount * 3);
     for (let i = 0; i < sporeCount * 3; i += 3) {
       sporePos[i] = (Math.random() - 0.5) * 16;
@@ -1742,43 +1750,40 @@
     sporeGeo.setAttribute('position', new THREE.BufferAttribute(sporePos, 3));
     const sporeMat = new THREE.PointsMaterial({
       color: 0xf472b6,
-      size: 0.08,
+      size: 0.065,
       transparent: true,
-      opacity: 0.7,
-      blending: THREE.AdditiveBlending
+      opacity: 0.55
     });
     const sporePoints = new THREE.Points(sporeGeo, sporeMat);
     scene.add(sporePoints);
 
+    const photonCount = 60;
     const photonGeo = new THREE.BufferGeometry();
-    const photonCount = 65;
     const photonPos = new Float32Array(photonCount * 3);
-    const photonVel = new Float32Array(photonCount * 3);
-    for (let i = 0; i < photonCount * 3; i += 3) {
-      photonPos[i] = (Math.random() - 0.5) * 4;
-      photonPos[i + 1] = 4 + Math.random() * 4;
-      photonPos[i + 2] = (Math.random() - 0.5) * 4;
-      photonVel[i + 1] = -(0.03 + Math.random() * 0.05);
+    const photonSpeeds = new Float32Array(photonCount);
+    for (let i = 0; i < photonCount; i++) {
+      photonPos[i * 3] = (Math.random() - 0.5) * 5;
+      photonPos[i * 3 + 1] = 4.5 + Math.random() * 2;
+      photonPos[i * 3 + 2] = (Math.random() - 0.5) * 5;
+      photonSpeeds[i] = 0.02 + Math.random() * 0.025;
     }
     photonGeo.setAttribute('position', new THREE.BufferAttribute(photonPos, 3));
     const photonMat = new THREE.PointsMaterial({
       color: 0xffd60a,
-      size: 0.12,
+      size: 0.06,
       transparent: true,
-      opacity: 0.8,
-      blending: THREE.AdditiveBlending
+      opacity: 0.7
     });
     const photonPoints = new THREE.Points(photonGeo, photonMat);
     scene.add(photonPoints);
 
     /* ----------------------------------------------------
-       4. GSAP SCROLLTRIGGER SYNCHRONIZATION
+       6. GSAP SCROLLTRIGGER SYNCHRONIZATION
+       (Clean Smooth Transitions Without Jitter)
        ---------------------------------------------------- */
     gsap.registerPlugin(ScrollTrigger);
 
-    const shiftX = window.innerWidth <= 900 ? 0 : 4.2;
-    heroGroup.position.set(0, -0.2, 0);
-    heroGroup.rotation.set(0.1, 0, -0.15);
+    const shiftX = window.innerWidth <= 900 ? 0 : 2.2;
 
     const timeline = gsap.timeline({
       scrollTrigger: {
@@ -1792,35 +1797,34 @@
     timeline.to('#frondLeft', { x: '-35vw', opacity: 0, ease: 'power2.out', duration: 0.8 }, 0)
             .to('#frondRight', { x: '35vw', opacity: 0, ease: 'power2.out', duration: 0.8 }, 0);
 
-    // Stage 0 -> 1: Propagation (Focus on basal roots & stem)
-    timeline.to(heroGroup.position, { x: -shiftX, y: 1.2, z: 2.2, duration: 1, ease: 'sine.inOut' }, 0)
-            .to(heroGroup.rotation, { x: 0.35, y: Math.PI * 0.75, z: 0.25, duration: 1, ease: 'sine.inOut' }, 0);
+    // Stage 0 -> 1: Propagation
+    timeline.to(heroGroup.position, { x: -shiftX, y: 0.6, z: 1.0, duration: 1, ease: 'sine.inOut' }, 0)
+            .to(heroGroup.rotation, { x: 0.3, y: Math.PI * 0.75, z: 0.15, duration: 1, ease: 'sine.inOut' }, 0);
 
     // Stage 1 -> 2: CAM Photosynthesis
-    timeline.to(heroGroup.position, { x: shiftX, y: -0.6, z: 3.0, duration: 1, ease: 'sine.inOut' }, 1)
-            .to(heroGroup.rotation, { x: -0.2, y: Math.PI * 1.5, z: -0.2, duration: 1, ease: 'sine.inOut' }, 1)
-            .to(keyLight, { intensity: 7.0, duration: 0.8 }, 1.2);
+    timeline.to(heroGroup.position, { x: shiftX, y: -0.3, z: 1.2, duration: 1, ease: 'sine.inOut' }, 1)
+            .to(heroGroup.rotation, { x: -0.15, y: Math.PI * 1.5, z: -0.15, duration: 1, ease: 'sine.inOut' }, 1)
+            .to(keyLight, { intensity: 6.5, duration: 0.8 }, 1.2);
 
     // Stage 2 -> 3: The Cut (Precise Harvest)
-    timeline.to(heroGroup.position, { x: -shiftX, y: -1.8, z: 2.2, duration: 1, ease: 'sine.inOut' }, 2)
-            .to(heroGroup.rotation, { x: 0.45, y: Math.PI * 2.2, z: 0.1, duration: 1, ease: 'sine.inOut' }, 2);
+    timeline.to(heroGroup.position, { x: -shiftX, y: -0.4, z: 1.1, duration: 1, ease: 'sine.inOut' }, 2)
+            .to(heroGroup.rotation, { x: 0.35, y: Math.PI * 2.2, z: 0.1, duration: 1, ease: 'sine.inOut' }, 2);
 
     // Stage 3 -> 4: The Window (Race Against Time)
-    timeline.to(heroGroup.position, { x: shiftX, y: -0.8, z: 3.4, duration: 1, ease: 'sine.inOut' }, 3)
-            .to(heroGroup.rotation, { x: 0.8, y: Math.PI * 2.9, z: -0.3, duration: 1, ease: 'sine.inOut' }, 3);
+    timeline.to(heroGroup.position, { x: shiftX, y: -0.2, z: 1.3, duration: 1, ease: 'sine.inOut' }, 3)
+            .to(heroGroup.rotation, { x: 0.45, y: Math.PI * 2.9, z: -0.2, duration: 1, ease: 'sine.inOut' }, 3);
 
-    // Stage 4 -> 5: Extraction (Split Dissection View)
-    timeline.to(heroGroup.position, { x: -shiftX, y: 0.2, z: 2.4, duration: 1, ease: 'sine.inOut' }, 4)
-            .to(heroGroup.rotation, { x: 0.15, y: Math.PI * 3.7, z: 0.2, duration: 1, ease: 'sine.inOut' }, 4)
-            .call(() => { if (!isDissected) toggleDissection(); }, null, 4.2);
+    // Stage 4 -> 5: Extraction
+    timeline.to(heroGroup.position, { x: -shiftX, y: 0.1, z: 1.4, duration: 1, ease: 'sine.inOut' }, 4)
+            .to(heroGroup.rotation, { x: 0.15, y: Math.PI * 3.7, z: 0.1, duration: 1, ease: 'sine.inOut' }, 4);
 
     // Stage 5 -> 6: Nucleation (Betalain Molecular Crystals)
-    timeline.to(heroGroup.position, { x: shiftX, y: 0.4, z: 1.2, duration: 1, ease: 'sine.inOut' }, 5)
-            .to(heroGroup.rotation, { x: 0.25, y: Math.PI * 4.8, z: -0.1, duration: 1, ease: 'sine.inOut' }, 5)
+    timeline.to(heroGroup.position, { x: shiftX, y: 0.2, z: 1.0, duration: 1, ease: 'sine.inOut' }, 5)
+            .to(heroGroup.rotation, { x: 0.2, y: Math.PI * 4.8, z: -0.1, duration: 1, ease: 'sine.inOut' }, 5)
             .to(crystalSwarm.scale, { x: 1.15, y: 1.15, z: 1.15, duration: 0.8, ease: 'back.out(1.4)' }, 5.2);
 
     /* ----------------------------------------------------
-       5. BIDIRECTIONAL SCROLL DETECTION & TELEMETRY
+       7. SCROLL DETECTION & TELEMETRY
        ---------------------------------------------------- */
     const sectionNodes = document.querySelectorAll('.scroll-section');
     const dots = document.querySelectorAll('.spine-dot');
@@ -1829,7 +1833,6 @@
       '03 // THE CUT', '04 // THE WINDOW', '05 // EXTRACTION', '06 // NUCLEATION'
     ];
     const brixValues = ['14.5° Bx', '11.8° Bx', '13.4° Bx', '15.6° Bx', '15.2° Bx', '16.8° Bx', '98.5° Bx'];
-    const pigmentValues = ['BETACYANIN 85 mg%', 'ROOT PRIMORDIA', 'MALATE FLUX', 'BRACT TURGIDITY', 'COLD RETENTION', 'OMEGA-3 SEEDS', 'BETANIDIN 99%'];
 
     function handleScrollObserver() {
       const scrollY = window.scrollY || window.pageYOffset;
@@ -1855,9 +1858,8 @@
 
         const card = sec.querySelector('.text-card');
         if (card) {
-          const isInside = rect.top < vh * 0.75 && rect.bottom > vh * 0.25;
-          if (isInside) card.classList.add('is-visible');
-          else card.classList.remove('is-visible');
+          const isInside = rect.top < vh * 0.72 && rect.bottom > vh * 0.28;
+          card.classList.toggle('is-visible', isInside);
         }
       });
 
@@ -1867,7 +1869,6 @@
 
       document.getElementById('hudChapter').innerText = chapterTitles[activeIndex] || '00 // RAW ESSENCE';
       document.getElementById('hudBrix').innerText = brixValues[activeIndex] || '14.5° Bx';
-      document.getElementById('hudPigment').innerText = pigmentValues[activeIndex] || 'BETACYANIN';
 
       currentSlide = activeIndex;
       if (typeof updatePresenterHUD === 'function') updatePresenterHUD();
@@ -1877,7 +1878,48 @@
     handleScrollObserver();
 
     /* ----------------------------------------------------
-       6. INTERACTION LOGIC: DECONSTRUCT, CULTIVAR, VFX
+       8. CULTIVAR SWITCHER (BULLETPROOF TOGGLE)
+       ---------------------------------------------------- */
+    window.switchCultivar = function(idx) {
+      currentCultivar = idx;
+      const cur = CULTIVAR_DATA[idx];
+
+      // Update pill active states
+      document.querySelectorAll('.v-pill').forEach((pill, i) => {
+        pill.classList.toggle('active', i === idx);
+      });
+
+      // Update text card readouts
+      document.getElementById('cultivarSci').innerText = cur.sci;
+      document.getElementById('cultivarBrix').innerText = cur.brix;
+      document.getElementById('hudBrix').innerText = cur.brix;
+      document.getElementById('hudPigment').innerText = cur.pigment;
+
+      // INSTANT PRE-BUILT MODEL SWAP (100% Guaranteed to Appear!)
+      fruitModels.forEach((model, i) => {
+        model.visible = (i === idx);
+      });
+
+      // Update dynamic lighting to match the cultivar's natural pigment
+      gsap.to(rimLight.color, {
+        r: ((cur.rimHex >> 16) & 255) / 255,
+        g: ((cur.rimHex >> 8) & 255) / 255,
+        b: (cur.rimHex & 255) / 255,
+        duration: 0.4
+      });
+      cursorLight.color.setHex(cur.rimHex);
+
+      // Satisfying visual scale pop transition
+      gsap.fromTo(fruitGroup.scale, 
+        { x: 1.25, y: 1.25, z: 1.25 }, 
+        { x: 1.45, y: 1.45, z: 1.45, duration: 0.4, ease: "back.out(1.4)" }
+      );
+
+      playChime(523.25 + idx * 45);
+    };
+
+    /* ----------------------------------------------------
+       9. INTERACTION LOGIC: DECONSTRUCT, VFX, SCROLL
        ---------------------------------------------------- */
     window.toggleDissection = function() {
       isDissected = !isDissected;
@@ -1887,29 +1929,16 @@
       btnLabel.innerText = isDissected ? 'Assemble' : 'Deconstruct';
       btn.classList.toggle('active', isDissected);
 
-      if (cutawayGroup) {
-        cutawayGroup.visible = isDissected;
-        gsap.to(cutawayGroup.position, { x: isDissected ? 0.75 : 0, duration: 0.8, ease: "power2.out" });
-      }
-      if (fruitBody) {
-        gsap.to(fruitBody.position, { x: isDissected ? -0.75 : 0, duration: 0.8, ease: "power2.out" });
-      }
-      playChime(isDissected ? 659.25 : 440);
-    };
-
-    window.switchCultivar = function(idx) {
-      currentCultivar = idx;
-      const cur = cultivars[idx];
-
-      document.querySelectorAll('.v-pill').forEach((pill, i) => {
-        pill.classList.toggle('active', i === idx);
+      cutawayGroups.forEach(cg => {
+        cg.visible = isDissected;
+        gsap.to(cg.position, {
+          z: isDissected ? 1.0 : 0,
+          x: isDissected ? 0.65 : 0,
+          duration: 0.6,
+          ease: "power2.out"
+        });
       });
-
-      document.getElementById('cultivarSci').innerText = cur.sci;
-      document.getElementById('cultivarBrix').innerText = cur.brix;
-
-      buildDragonFruit(idx);
-      playChime(523.25 + idx * 40);
+      playChime(isDissected ? 659.25 : 440);
     };
 
     window.toggleVFX = function() {
@@ -1918,8 +1947,8 @@
       const vfxBtn = document.getElementById('vfxToggleBtn');
       vfxLabel.innerText = vfxLevel === 1 ? 'VFX: High' : 'VFX: Eco';
       vfxBtn.classList.toggle('active', vfxLevel === 1);
-      godRaysGroup.visible = (vfxLevel === 1);
       photonPoints.visible = (vfxLevel === 1);
+      sporePoints.visible = (vfxLevel === 1);
       playChime(vfxLevel === 1 ? 783.99 : 392);
     };
 
@@ -1929,12 +1958,12 @@
     };
 
     /* ----------------------------------------------------
-       7. 3D HOTSPOTS ANATOMICAL EXPLORER
+       10. 3D HOTSPOTS ANATOMICAL EXPLORER
        ---------------------------------------------------- */
     const HOTSPOT_DATA = [
       {
         name: "Fleshy Bract Scales",
-        pos: new THREE.Vector3(0.85, 0.4, 0.4),
+        pos: new THREE.Vector3(1.15, 0.4, 0.0),
         sub: "Modified Perianth Scale Leaves",
         body: "Prominent green-tipped scales guarding the fruit rind. Originating from floral perianth tubes, their firmness and upright tips are direct indicators of peak harvest freshness.",
         tissue: "Modified Perianth Bracts",
@@ -1942,7 +1971,7 @@
       },
       {
         name: "Epicuticular Exocarp",
-        pos: new THREE.Vector3(0.0, 0.2, 1.15),
+        pos: new THREE.Vector3(0.0, 0.2, 1.25),
         sub: "Hydrophobic Wax Layer",
         body: "A resilient protective fruit skin coated with natural plant waxes that prevent transpiration water loss under scorching desert conditions.",
         tissue: "Pericarp Exocarp",
@@ -1950,9 +1979,9 @@
       },
       {
         name: "Betalain Pulp Core",
-        pos: new THREE.Vector3(0.0, -0.2, 0.1),
+        pos: new THREE.Vector3(0.0, -0.2, 0.2),
         sub: "Pigmented Mesocarp & Endocarp",
-        body: "Dense antioxidant-rich succulent pulp packed with nitrogenous betalain pigments (betacyanin & betaxanthin), giving deep fuchsia color and free-radical protection.",
+        body: "Dense antioxidant-rich succulent pulp packed with nitrogenous betalain pigments (betacyanin & betaxanthin), giving deep color and free-radical protection.",
         tissue: "Storage Mesocarp",
         curriculum: "Bioactive Phytochemicals"
       },
@@ -1966,7 +1995,7 @@
       },
       {
         name: "Apical Floral Calyx",
-        pos: new THREE.Vector3(0.0, 1.45, 0.0),
+        pos: new THREE.Vector3(0.0, 1.8, 0.0),
         sub: "Detachment Scar",
         body: "Remnants of the massive nocturnal blossom perianth tube that withers after successful nocturnal bat/moth pollination.",
         tissue: "Perianth Floral Remnant",
@@ -2022,7 +2051,7 @@
     }
 
     /* ----------------------------------------------------
-       8. CLASSROOM PRESENTER SUITE
+       11. CLASSROOM PRESENTER SUITE
        ---------------------------------------------------- */
     const DRAGON_NOTES = [
       {
@@ -2178,7 +2207,7 @@
     });
 
     /* ----------------------------------------------------
-       9. CAM BIO-AGRONOMY SIMULATOR
+       12. CAM BIO-AGRONOMY SIMULATOR
        ---------------------------------------------------- */
     window.toggleSimDrawer = function() {
       simDrawerVisible = !simDrawerVisible;
@@ -2213,38 +2242,32 @@
     };
 
     /* ----------------------------------------------------
-       10. ATMOSPHERIC ENVIRONMENTS
+       13. ATMOSPHERIC ENVIRONMENTS
        ---------------------------------------------------- */
     const ENVIRONMENTS = {
       noon: {
         label: "Noon",
         bgColor: 0x020403,
-        keyInt: 5.0,
+        keyInt: 4.8,
         keyCol: 0xfff5e6,
-        rimInt: 3.2,
-        rimCol: 0xf472b6,
-        fillInt: 1.8,
-        fillCol: 0x00ff88
+        rimInt: 3.0,
+        fillInt: 1.6
       },
       twilight: {
         label: "Twilight",
         bgColor: 0x14060e,
         keyInt: 3.8,
         keyCol: 0xffaa66,
-        rimInt: 4.2,
-        rimCol: 0xff5588,
-        fillInt: 1.4,
-        fillCol: 0xffaa33
+        rimInt: 3.8,
+        fillInt: 1.2
       },
       midnight: {
         label: "Midnight",
         bgColor: 0x02040c,
         keyInt: 2.2,
         keyCol: 0x38bdf8,
-        rimInt: 4.0,
-        rimCol: 0x00ff88,
-        fillInt: 2.2,
-        fillCol: 0xf472b6
+        rimInt: 3.5,
+        fillInt: 1.8
       }
     };
 
@@ -2257,15 +2280,14 @@
       document.getElementById('envLabel').innerText = env.label;
       document.body.style.background = currentEnv === 'midnight' ? '#02040c' : currentEnv === 'twilight' ? '#14060e' : '#020403';
 
-      gsap.to(keyLight, { intensity: env.keyInt, duration: 1.0 });
+      gsap.to(keyLight, { intensity: env.keyInt, duration: 0.8 });
       gsap.to(keyLight.color, {
         r: ((env.keyCol >> 16) & 255) / 255,
         g: ((env.keyCol >> 8) & 255) / 255,
         b: (env.keyCol & 255) / 255,
-        duration: 1.0
+        duration: 0.8
       });
-      gsap.to(rimLight, { intensity: env.rimInt, duration: 1.0 });
-      gsap.to(emeraldFill, { intensity: env.fillInt, duration: 1.0 });
+      gsap.to(rimLight, { intensity: env.rimInt, duration: 0.8 });
       scene.background.setHex(env.bgColor);
       if (scene.fog) scene.fog.color.setHex(env.bgColor);
 
@@ -2273,7 +2295,8 @@
     };
 
     /* ----------------------------------------------------
-       11. MOUSE PARALLAX & ANIMATION LOOP
+       14. ANIMATION LOOP & MOUSE PARALLAX
+       (Zero GSAP Fighting - Pure Smooth Rendering)
        ---------------------------------------------------- */
     let mouseX = 0, mouseY = 0;
     window.addEventListener('mousemove', e => {
@@ -2284,31 +2307,47 @@
     });
 
     const clock = new THREE.Clock();
+
     function animate() {
       requestAnimationFrame(animate);
       const t = clock.getElapsedTime();
 
-      heroGroup.position.y += Math.sin(t * 1.4) * 0.0018;
-      heroGroup.rotation.y += Math.cos(t * 0.7) * 0.0005;
+      // Gentle biological sway on idleGroup (leaves heroGroup clean for GSAP!)
+      idleGroup.position.y = Math.sin(t * 1.2) * 0.04;
+      idleGroup.rotation.y = Math.cos(t * 0.6) * 0.03;
 
-      camera.position.x += (mouseX * 0.65 - camera.position.x) * 0.04;
-      camera.position.y += (mouseY * 0.45 - camera.position.y) * 0.04;
+      // Camera mouse tracking with strict target lock so it never drifts away
+      camera.position.x += (mouseX * 0.4 - camera.position.x) * 0.04;
+      camera.position.y += (mouseY * 0.3 + 0.15 - camera.position.y) * 0.04;
+      camera.lookAt(cameraTarget);
 
-      godRaysGroup.rotation.y = Math.sin(t * 0.3) * 0.08;
-
+      // Crystal rotation
       crystalSwarm.children.forEach((c, idx) => {
         c.rotation.x += 0.005;
         c.rotation.y += 0.004;
-        c.position.y += Math.sin(t * 2 + idx) * 0.0025;
+        c.position.y += Math.sin(t * 2 + idx) * 0.002;
       });
 
+      // Smooth, non-popping photon stream
       if (vfxLevel === 1) {
         const pPos = photonPoints.geometry.attributes.position.array;
-        for (let i = 1; i < photonCount * 3; i += 3) {
-          pPos[i] += photonVel[i];
-          if (pPos[i] < -4) pPos[i] = 4 + Math.random() * 2;
+        for (let i = 0; i < photonCount; i++) {
+          const idx = i * 3;
+          pPos[idx + 1] -= photonSpeeds[i];
+          if (pPos[idx + 1] < -3.5) {
+            pPos[idx] = (Math.random() - 0.5) * 5;
+            pPos[idx + 1] = 4.5 + Math.random() * 2;
+            pPos[idx + 2] = (Math.random() - 0.5) * 5;
+          }
         }
         photonPoints.geometry.attributes.position.needsUpdate = true;
+
+        const sPos = sporePoints.geometry.attributes.position.array;
+        for (let i = 0; i < sporeCount; i++) {
+          const idx = i * 3;
+          sPos[idx + 1] += Math.sin(t * 0.8 + i) * 0.0012;
+        }
+        sporePoints.geometry.attributes.position.needsUpdate = true;
       }
 
       updateHotspotsScreenPos();
@@ -2323,7 +2362,7 @@
     });
 
     /* ----------------------------------------------------
-       12. WEB AUDIO SYNTHESIS
+       15. WEB AUDIO SYNTHESIS
        ---------------------------------------------------- */
     let audioCtx = null;
     let windGain = null;
