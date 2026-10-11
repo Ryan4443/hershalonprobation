@@ -1,2198 +1,2248 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
-<meta name="theme-color" content="#050608">
-<title>Apex Hypercars — Zonda R & 911 GT3 RS 3D Experience</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --primary: #ffd500;
-  --primary-accent: #d5001c;
-  --primary-glow: rgba(255, 213, 0, 0.4);
-  --bg: #050608;
-  --bg-card: rgba(13, 15, 21, 0.88);
-  --card-border: rgba(255, 255, 255, 0.12);
-  --fg: #f5f6fa;
-  --muted: #9fa2b0;
-  --font-display: 'Big Shoulders Display', sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
-  --font-mono: 'Space Grotesk', monospace;
-  color-scheme: dark;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { background: var(--bg); scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--font-body);
-  font-weight: 400;
-  line-height: 1.6;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#070709">
+  <title>PORSCHE 911 GT3 RS — Cinematic 3D Experience</title>
+  
+  <!-- High-end Automotive Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-/* Fixed WebGL Canvas Container */
-#webgl-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  height: 100svh;
-  z-index: 1;
-  pointer-events: none;
-}
-#webgl-container.interactive {
-  pointer-events: auto;
-}
-canvas#c {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
+  <style>
+    :root {
+      --primary: #e60026; /* Porsche Guards Red */
+      --primary-glow: rgba(230, 0, 38, 0.45);
+      --accent-cyan: #00e5ff;
+      --accent-gold: #ffd000;
+      --bg-dark: #070709;
+      --bg-surface: rgba(14, 15, 20, 0.75);
+      --border-light: rgba(255, 255, 255, 0.12);
+      --border-active: rgba(230, 0, 38, 0.8);
+      --text-main: #f5f5f7;
+      --text-muted: #8e909a;
+      --font-display: 'Big Shoulders Display', sans-serif;
+      --font-sans: 'Hanken Grotesk', system-ui, -apple-system, sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
 
-/* Top Navigation Bar */
-header.apex-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 50;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: calc(14px + env(safe-area-inset-top, 0px)) 28px 14px;
-  background: linear-gradient(180deg, rgba(5,6,8,0.95) 0%, rgba(5,6,8,0.7) 75%, rgba(5,6,8,0) 100%);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-}
-.brand-group {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.brand-badge {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 900;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: #fff;
-}
-.model-pill {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 4px;
-  background: rgba(255, 213, 0, 0.15);
-  border: 1px solid var(--primary);
-  color: #ffd500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.price-pill {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #dcdde8;
-}
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  list-style: none;
-}
-.nav-links a {
-  color: var(--muted);
-  text-decoration: none;
-  font-size: 12.5px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  transition: color 0.25s;
-  text-transform: uppercase;
-}
-.nav-links a:hover {
-  color: #fff;
-}
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.btn-sound {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--card-border);
-  border-radius: 20px;
-  color: var(--fg);
-  padding: 6px 14px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.25s;
-}
-.btn-sound.playing {
-  border-color: var(--primary);
-  color: #ffd500;
-  background: rgba(255, 213, 0, 0.2);
-}
-.sound-bars {
-  display: inline-flex;
-  gap: 2px;
-  height: 12px;
-  align-items: flex-end;
-}
-.sound-bars span {
-  width: 2px;
-  height: 4px;
-  background: currentColor;
-  border-radius: 1px;
-}
-.btn-sound.playing .sound-bars span {
-  animation: soundWave 0.8s ease-in-out infinite alternate;
-}
-.btn-sound.playing .sound-bars span:nth-child(2) { animation-delay: 0.2s; }
-.btn-sound.playing .sound-bars span:nth-child(3) { animation-delay: 0.4s; }
-@keyframes soundWave {
-  0% { height: 3px; }
-  100% { height: 12px; }
-}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-user-select: none;
+      user-select: none;
+    }
 
-.btn-cta {
-  background: var(--primary);
-  border: none;
-  border-radius: 20px;
-  color: #000;
-  padding: 7px 18px;
-  font-family: var(--font-display);
-  font-size: 15px;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  cursor: pointer;
-  box-shadow: 0 4px 16px var(--primary-glow);
-  transition: all 0.25s;
-}
-.btn-cta:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.1);
-}
+    html, body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow-x: hidden;
+      width: 100%;
+      height: 100%;
+      scroll-behavior: auto;
+    }
 
-/* Progress bar */
-#scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 3px;
-  width: 0%;
-  background: linear-gradient(90deg, #ffd500, #ff2a4b);
-  z-index: 100;
-  box-shadow: 0 0 10px rgba(255, 213, 0, 0.8);
-}
+    /* Fixed WebGL Canvas Container */
+    #canvas-container {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+    #canvas-container.interactive {
+      pointer-events: auto;
+    }
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
 
-/* Content Sections */
-.section-stage {
-  position: relative;
-  z-index: 10;
-  min-height: 100vh;
-  min-height: 100svh;
-  display: flex;
-  align-items: center;
-  padding: 0 8vw;
-  pointer-events: none;
-}
-.section-stage > * {
-  pointer-events: auto;
-}
-.stage-center {
-  justify-content: center;
-  text-align: center;
-}
-.stage-right {
-  justify-content: flex-end;
-}
-.stage-left {
-  justify-content: flex-start;
-}
+    /* Atmospheric Vignette & Film Grain Overlay */
+    .vignette {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(5,5,7,0.85) 100%);
+    }
 
-/* Editorial Glass Card */
-.editorial-card {
-  max-width: 480px;
-  background: var(--bg-card);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid var(--card-border);
-  border-radius: 20px;
-  padding: 34px 38px;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
-  opacity: 1;
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-@media (min-width: 768px) {
-  .editorial-card {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  .editorial-card.in-view {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+    /* Top Global Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: linear-gradient(180deg, rgba(7,7,9,0.85) 0%, rgba(7,7,9,0.2) 80%, transparent 100%);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: transform 0.4s ease, background 0.4s ease;
+    }
 
-.tagline {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--primary);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.tagline::before {
-  content: '';
-  width: 14px;
-  height: 2px;
-  background: var(--primary);
-}
-h2.title-display {
-  font-family: var(--font-display);
-  font-size: clamp(38px, 5.5vw, 68px);
-  font-weight: 900;
-  line-height: 0.92;
-  text-transform: uppercase;
-  color: #fff;
-  margin-bottom: 16px;
-  letter-spacing: 0.02em;
-}
-p.card-desc {
-  font-size: 14.5px;
-  color: var(--muted);
-  line-height: 1.7;
-  margin-bottom: 22px;
-}
-.spec-mini-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 18px;
-}
-.spec-mini-item span {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.spec-mini-item strong {
-  font-family: var(--font-display);
-  font-size: 26px;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: 0.02em;
-}
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #fff;
+    }
+    .porsche-crest {
+      width: 28px;
+      height: 36px;
+      fill: #fff;
+    }
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .model-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(230, 0, 38, 0.15);
+      border: 1px solid var(--primary);
+      padding: 4px 10px;
+      border-radius: 99px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #ff6b81;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #00ff88;
+      box-shadow: 0 0 8px #00ff88;
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
 
-/* HERO SECTION */
-#hero {
-  min-height: 100vh;
-  min-height: 100svh;
-  flex-direction: column;
-  justify-content: space-between;
-  padding-top: 15vh;
-  padding-bottom: 7vh;
-  text-align: center;
-}
-.hero-watermark {
-  font-family: var(--font-display);
-  font-size: clamp(56px, 15vw, 210px);
-  font-weight: 900;
-  line-height: 0.85;
-  color: #ffffff;
-  text-shadow: 0 0 35px var(--primary-glow), 0 4px 20px rgba(0,0,0,0.9);
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  user-select: none;
-}
-.hero-subtitle {
-  font-family: var(--font-mono);
-  font-size: clamp(12px, 1.4vw, 16px);
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: #e2e4ec;
-  margin-top: 10px;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.9);
-}
-.hero-pills {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 18px;
-  flex-wrap: wrap;
-}
-.pill {
-  background: rgba(13, 15, 21, 0.88);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 6px 16px;
-  border-radius: 99px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--muted);
-}
-.pill b {
-  color: #fff;
-  font-weight: 700;
-}
-.scroll-cue {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.cue-indicator {
-  width: 1px;
-  height: 42px;
-  background: linear-gradient(180deg, var(--primary), transparent);
-  animation: cueBounce 2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-}
-@keyframes cueBounce {
-  0% { transform: scaleY(0); transform-origin: top; }
-  50% { transform: scaleY(1); transform-origin: top; }
-  51% { transform: scaleY(1); transform-origin: bottom; }
-  100% { transform: scaleY(0); transform-origin: bottom; }
-}
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-link {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      cursor: pointer;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: #fff;
+    }
 
-/* TECH SPEC BARS */
-.tech-spec-bar {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  padding: 10px 14px;
-  margin-top: 12px;
-}
-.tech-spec-bar .icon {
-  font-size: 20px;
-}
-.tech-spec-bar div {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: #d2d5e2;
-}
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
 
-/* PERFORMANCE DASHBOARD */
-#perf {
-  min-height: 110vh;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-.perf-grid {
-  display: flex;
-  justify-content: center;
-  gap: clamp(16px, 4vw, 50px);
-  flex-wrap: wrap;
-  max-width: 1100px;
-  width: 100%;
-}
-.perf-item {
-  background: rgba(13, 15, 21, 0.88);
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--card-border);
-  border-radius: 16px;
-  padding: 24px 28px;
-  min-width: 160px;
-  box-shadow: 0 16px 40px rgba(0,0,0,0.5);
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.25s;
-}
-.perf-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--primary), transparent);
-}
-.perf-num {
-  font-family: var(--font-display);
-  font-size: clamp(48px, 7vw, 84px);
-  font-weight: 900;
-  line-height: 0.9;
-  color: #fff;
-  display: inline-block;
-}
-.perf-unit {
-  font-family: var(--font-display);
-  font-size: clamp(18px, 2.8vw, 28px);
-  font-weight: 700;
-  color: var(--primary);
-  margin-left: 4px;
-}
-.perf-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-top: 8px;
-}
+    /* Sound FX Toggle */
+    .btn-sound {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border-light);
+      padding: 8px 14px;
+      border-radius: 99px;
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn-sound:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.3);
+    }
+    .sound-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 12px;
+    }
+    .sound-bar {
+      width: 2px;
+      height: 4px;
+      background: var(--text-muted);
+      border-radius: 1px;
+      transition: height 0.2s, background 0.2s;
+    }
+    .btn-sound.playing .sound-bar {
+      background: var(--primary);
+      animation: sound-eq 0.8s ease-in-out infinite alternate;
+    }
+    .btn-sound.playing .sound-bar:nth-child(2) { animation-delay: 0.2s; }
+    .btn-sound.playing .sound-bar:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes sound-eq {
+      0% { height: 3px; }
+      100% { height: 12px; }
+    }
 
-/* INTERACTIVE STUDIO & CONFIGURATOR */
-#studio {
-  min-height: 120vh;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
-  align-items: center;
-}
-.studio-dock {
-  width: 100%;
-  max-width: 980px;
-  background: rgba(10, 12, 17, 0.94);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 22px;
-  padding: 24px 30px;
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85);
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-.studio-dock-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  padding-bottom: 12px;
-}
-.dock-title {
-  font-family: var(--font-display);
-  font-size: 24px;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #fff;
-}
-.dock-hint {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 0.05em;
-}
-.dock-controls-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 18px;
-}
-.control-block {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.control-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--muted);
-  display: flex;
-  justify-content: space-between;
-}
-.control-label span.val {
-  color: #fff;
-}
-.color-swatches {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.swatch {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.18);
-  cursor: pointer;
-  transition: all 0.2s;
-  outline: none;
-}
-.swatch.active {
-  border-color: #fff;
-  transform: scale(1.2);
-  box-shadow: 0 0 12px currentColor;
-}
-.toggle-btn-group {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.tgl-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #dcdde6;
-  padding: 8px 12px;
-  border-radius: 10px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: all 0.2s;
-}
-.tgl-btn.active {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: #000;
-  font-weight: 700;
-  box-shadow: 0 0 12px var(--primary-glow);
-}
-.model-picker-tabs {
-  display: flex;
-  gap: 6px;
-  background: rgba(0, 0, 0, 0.4);
-  padding: 4px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  overflow-x: auto;
-}
-.model-tab {
-  flex: 1;
-  background: none;
-  border: none;
-  padding: 8px 12px;
-  color: var(--muted);
-  font-family: var(--font-display);
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  border-radius: 8px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s;
-}
-.model-tab.active {
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
-}
-#rev-gauge {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 6px;
-}
-.gauge-bar {
-  flex: 1;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 3px;
-  overflow: hidden;
-}
-.gauge-fill {
-  height: 100%;
-  width: 15%;
-  background: linear-gradient(90deg, #ffd500, #ff1a35);
-  border-radius: 3px;
-  transition: width 0.1s linear;
-}
-.btn-rev {
-  background: linear-gradient(135deg, #ffd500, #ff9500);
-  border: none;
-  color: #000;
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 7px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow: 0 4px 14px rgba(255, 213, 0, 0.35);
-}
+    .btn-cta {
+      background: var(--primary);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 10px 24px;
+      border-radius: 99px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 24px var(--primary-glow);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .btn-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px rgba(230,0,38,0.7);
+    }
 
-/* Mobile specific layout tweaks */
-@media (max-width: 768px) {
-  header.apex-nav { padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 10px; }
-  .nav-links { display: none; }
-  .section-stage { padding: 0 5vw; }
-  .section-stage:not(#hero):not(#studio) { align-items: flex-end; padding-bottom: 8vh; }
-  .stage-right { justify-content: flex-start; }
-  .editorial-card { padding: 24px 20px; max-width: 100%; }
-  .studio-dock { padding: 18px 16px; border-radius: 18px; }
-}
-</style>
+    /* Top Progress Bar */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), #ff6b81, var(--accent-cyan));
+      box-shadow: 0 0 12px var(--primary);
+      z-index: 100;
+      transition: width 0.08s linear;
+    }
+
+    /* Scroll Experience Container */
+    .scroll-container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+    }
+
+    /* Story Sections */
+    .story-section {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 8vw;
+      pointer-events: none;
+    }
+
+    .story-card {
+      pointer-events: auto;
+      max-width: 540px;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .story-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--primary);
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 6.5vw, 88px);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      text-shadow: 0 4px 30px rgba(0,0,0,0.8);
+    }
+
+    .section-desc {
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+      max-width: 44ch;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+    }
+
+    /* Section Alignments */
+    .align-right {
+      justify-content: flex-end;
+      text-align: left;
+    }
+    .align-center {
+      justify-content: center;
+      text-align: center;
+    }
+    .align-center .section-eyebrow {
+      justify-content: center;
+    }
+    .align-center .section-eyebrow::after {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--primary);
+    }
+    .align-center .section-desc {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Hero Section Specifics */
+    #hero-section {
+      min-height: 120vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding-top: 14vh;
+    }
+    .hero-title-giant {
+      font-family: var(--font-display);
+      font-size: clamp(68px, 14vw, 190px);
+      font-weight: 900;
+      line-height: 0.82;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      background: linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.4) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 10px 40px rgba(230,0,38,0.3));
+      margin-bottom: 12px;
+    }
+    .hero-tagline {
+      font-family: var(--font-mono);
+      font-size: clamp(13px, 1.8vw, 18px);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #ff4d6a;
+      margin-bottom: 30px;
+    }
+    .scroll-cue {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 40px;
+    }
+    .scroll-cue span {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .scroll-pill {
+      width: 22px;
+      height: 38px;
+      border: 1.5px solid rgba(255,255,255,0.25);
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      padding-top: 6px;
+    }
+    .scroll-pill-wheel {
+      width: 3px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 2px;
+      animation: wheel-bounce 2s infinite ease-in-out;
+    }
+    @keyframes wheel-bounce {
+      0% { transform: translateY(0); opacity: 1; }
+      50% { transform: translateY(12px); opacity: 0.2; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Fixed Hero Telemetry Dock (Video 0:06 Match!) */
+    #hero-telemetry {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      gap: clamp(16px, 3.5vw, 48px);
+      padding: 14px 34px;
+      background: rgba(10, 11, 16, 0.75);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 99px;
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      pointer-events: auto;
+    }
+    #hero-telemetry.hidden {
+      opacity: 0;
+      transform: translate(-50%, 30px);
+      pointer-events: none;
+    }
+    .telemetry-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .telemetry-val {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 900;
+      line-height: 1;
+      color: #fff;
+      display: flex;
+      align-items: baseline;
+      gap: 3px;
+    }
+    .telemetry-unit {
+      font-size: 0.45em;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+    }
+    .telemetry-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+    .telemetry-divider {
+      width: 1px;
+      height: 32px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* Technical Spec Grids & Cards */
+    .spec-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .spec-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 16px;
+      backdrop-filter: blur(10px);
+      transition: border-color 0.3s;
+    }
+    .spec-box:hover {
+      border-color: var(--border-active);
+    }
+    .spec-box-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .spec-box-desc {
+      font-size: 14px;
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    /* Floating Feature Badge (HUD Style) */
+    .hud-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 229, 255, 0.1);
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      letter-spacing: 0.1em;
+    }
+    .hud-chip.red {
+      background: rgba(230, 0, 38, 0.1);
+      border-color: var(--primary);
+      color: #ff4d6a;
+    }
+
+    /* Interactive Configurator Section */
+    #studio-section {
+      min-height: 140vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 80px;
+    }
+    .studio-panel {
+      pointer-events: auto;
+      background: rgba(12, 13, 18, 0.85);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px;
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      padding: 32px;
+      max-width: 900px;
+      margin: 0 auto;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+    }
+    .studio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .studio-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .studio-controls-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+    }
+    .control-group-title {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    /* Color Swatches */
+    .color-swatches {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .swatch {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .swatch::after {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      border: 1.5px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .swatch:hover {
+      transform: scale(1.1);
+    }
+    .swatch.active::after {
+      border-color: #fff;
+    }
+
+    /* Option Toggle Buttons */
+    .pill-toggles {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .pill-btn {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 99px;
+      padding: 8px 16px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .pill-btn:hover {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+    .pill-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+      box-shadow: 0 0 16px var(--primary-glow);
+    }
+
+    /* Slider Row */
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .slider-input {
+      flex: 1;
+      height: 6px;
+      -webkit-appearance: none;
+      background: rgba(255,255,255,0.15);
+      border-radius: 3px;
+      outline: none;
+    }
+    .slider-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--primary);
+    }
+
+    /* Floating Studio Orbit Helper */
+    .orbit-helper {
+      position: fixed;
+      right: 28px;
+      bottom: 28px;
+      z-index: 45;
+      background: rgba(10, 11, 16, 0.8);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(20px);
+      border-radius: 99px;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .orbit-helper:hover {
+      border-color: var(--primary);
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+    .orbit-icon {
+      width: 14px;
+      height: 14px;
+      border: 2px dashed var(--primary);
+      border-radius: 50%;
+      animation: spin-slow 8s linear infinite;
+    }
+    @keyframes spin-slow {
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Modal Checkout/Order Window */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(20px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-card {
+      background: #0d0e14;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 28px;
+      padding: 40px;
+      max-width: 580px;
+      width: 100%;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.9);
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .modal-close:hover { color: #fff; }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      header { padding: 16px 20px; }
+      .nav-links { display: none; }
+      .story-section { padding: 100px 6vw; }
+      #hero-telemetry {
+        padding: 10px 20px;
+        gap: 16px;
+        bottom: 16px;
+      }
+      .spec-grid { grid-template-columns: 1fr; }
+      .orbit-helper { display: none; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- WebGL Background Scene -->
-<div id="webgl-container">
-  <canvas id="c"></canvas>
-</div>
-
-<!-- Scroll Progress Bar -->
-<div id="scroll-progress"></div>
-
-<!-- Apex Global Navigation -->
-<header class="apex-nav">
-  <div class="brand-group">
-    <span class="brand-badge" id="nav-brand">Pagani</span>
-    <span class="model-pill" id="nav-model-name">Zonda R</span>
-    <span class="price-pill" id="nav-price">€ 1,500,000</span>
+  <!-- Three.js Canvas Container -->
+  <div id="canvas-container">
+    <canvas id="webgl-canvas"></canvas>
   </div>
+  
+  <div class="vignette"></div>
+  <div id="progress-bar"></div>
 
-  <ul class="nav-links">
-    <li><a href="#hero">Overview</a></li>
-    <li><a href="#design">Design</a></li>
-    <li><a href="#engine">Engine</a></li>
-    <li><a href="#arch">Architecture</a></li>
-    <li><a href="#chassis">Anatomy</a></li>
-    <li><a href="#perf">Performance</a></li>
-    <li><a href="#studio">3D Studio</a></li>
-  </ul>
-
-  <div class="nav-actions">
-    <button class="btn-sound" id="btn-engine-sound" title="Toggle V12 / Flat-6 Sound">
-      <div class="sound-bars"><span></span><span></span><span></span></div>
-      <span id="sound-label">Audio</span>
-    </button>
-    <button class="btn-cta" onclick="document.getElementById('studio').scrollIntoView({behavior: 'smooth'})">Discover Now</button>
-  </div>
-</header>
-
-<!-- SECTION 1: HERO OVERVIEW (Matching Video 1 & 2) -->
-<section class="section-stage stage-center" id="hero">
-  <div class="hero-headline-wrap">
-    <h1 class="hero-watermark" id="hero-title">Pagani Zonda R</h1>
-    <p class="hero-subtitle" id="hero-subtitle">Carbon-Titanium Track Apex</p>
-    <div class="hero-pills">
-      <div class="pill"><span>Power:</span> <b id="hero-hp">750 hp</b></div>
-      <div class="pill"><span>0–100 km/h:</span> <b id="hero-accel">2.7 s</b></div>
-      <div class="pill"><span>Top Speed:</span> <b id="hero-speed">350+ km/h</b></div>
-      <div class="pill"><span>Weight:</span> <b id="hero-weight">1,070 kg</b></div>
-    </div>
-  </div>
-
-  <div class="scroll-cue">
-    <span>Scroll to Explore</span>
-    <div class="cue-indicator"></div>
-  </div>
-</section>
-
-<!-- SECTION 2: DESIGN & REAR QUAD EXHAUST (Matching Video 2 "Design") -->
-<section class="section-stage stage-left" id="design">
-  <div class="editorial-card in-view" id="card-design">
-    <div class="tagline">Aerodynamic Purity</div>
-    <h2 class="title-display">Sculpted<br>Design</h2>
-    <p class="card-desc">
-      Every millimeter is formed from autoclaved carbon-titanium. The iconic circular quad exhaust cluster, massive underbody venturi tunnels, and dual-element carbon wing create a symphony of downforce and acoustics.
-    </p>
-    <div class="spec-mini-grid">
-      <div class="spec-mini-item">
-        <span>Exhaust Architecture</span>
-        <strong>Quad Titanium</strong>
-      </div>
-      <div class="spec-mini-item">
-        <span>Downforce @ 300 km/h</span>
-        <strong>1,500 kg</strong>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 3: CLAMSHELL ENGINE REVEAL (Matching Video 2 "Engine" with Hood Open!) -->
-<section class="section-stage stage-right" id="engine">
-  <div class="editorial-card in-view" id="card-engine">
-    <div class="tagline">The Beating Heart — Hood Open</div>
-    <h2 class="title-display">The V12<br>Engine</h2>
-    <p class="card-desc">
-      The entire rear clamshell lifts to expose raw mechanical sculpture: Mercedes-AMG 6.0L naturally aspirated V12 producing 750 horsepower at 8,500 rpm, paired with carbon intake plenums and Inconel hydroformed manifolds.
-    </p>
-    <div class="tech-spec-bar">
-      <span class="icon">⚡</span>
-      <div><strong>X-Trac 6-Speed Sequential</strong><br>Magnesium cased gearbox with 20ms paddle-shift actuation.</div>
-    </div>
-    <div class="tech-spec-bar">
-      <span class="icon">🏎️</span>
-      <div><strong>Pushrod Inboard Suspension</strong><br>Horizontal coilover dampers with forged aluminum rocker arms.</div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 4: ARCHITECTURE & TOP-DOWN (Matching Video 1 "Built for those who lead") -->
-<section class="section-stage stage-left" id="arch">
-  <div class="editorial-card in-view" id="card-arch">
-    <div class="tagline">Roof Air Intake & Stance</div>
-    <h2 class="title-display">Built for<br>Those who lead</h2>
-    <p class="card-desc">
-      A menacing overhead profile defined by the roof-mounted carbon ram-air snorkel feeding the 12 throttles, a teardrop glasshouse canopy, and widened track widths engineered for high-speed stability.
-    </p>
-    <div class="spec-mini-grid">
-      <div class="spec-mini-item">
-        <span>Chassis Construction</span>
-        <strong>Carbo-Titanium</strong>
-      </div>
-      <div class="spec-mini-item">
-        <span>Torsional Rigidity</span>
-        <strong>52,000 Nm/deg</strong>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 5: UNDER THE SKIN / ANATOMY (Matching Video 1 "See What You Drive") -->
-<section class="section-stage stage-right" id="chassis">
-  <div class="editorial-card in-view" id="card-chassis">
-    <div class="tagline">Monocoque & X-Ray Blueprint</div>
-    <h2 class="title-display">See What<br>You Drive</h2>
-    <p class="card-desc">
-      Beneath the surface lies a structural carbon-titanium monocoque tub woven with titanium threads for maximum impact energy absorption, Brembo CCM carbon-ceramic discs, and integrated aeronautical wiring conduits.
-    </p>
-    <div class="tech-spec-bar">
-      <span class="icon">🔬</span>
-      <div><strong>Carbon-Titanium Tub</strong><br>Combining tensile strength with featherweight composite shell.</div>
-    </div>
-    <div class="tech-spec-bar">
-      <span class="icon">🛑</span>
-      <div><strong>Brembo CCM Brakes</strong><br>380 mm carbon-ceramic rotors with 6-piston monobloc calipers.</div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 6: PERFORMANCE MATRIX (Matching Video 1 & 2 High-Impact Specs) -->
-<section class="section-stage" id="perf">
-  <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-    <div class="editorial-card in-view" style="max-width: 600px; text-align: center; margin-bottom: 30px; background: transparent; border: none; box-shadow: none;">
-      <div class="tagline" style="justify-content: center;">Track Dominance Telemetry</div>
-      <h2 class="title-display">Relentless Velocity</h2>
-      <p class="card-desc" style="margin: 0 auto;">Nürburgring Nordschleife record holder at 6:47. Zero compromises, pure racing pedigree.</p>
+  <!-- Header -->
+  <header>
+    <div class="brand-group">
+      <a href="#" class="brand-logo">
+        <svg class="porsche-crest" viewBox="0 0 24 30">
+          <path d="M12 2 L22 5 L22 18 C22 24 16 28 12 30 C8 28 2 24 2 18 L2 5 Z" fill="#ffd000" stroke="#000" stroke-width="0.8"/>
+          <path d="M12 4 L20 6.5 L20 17 C20 22.5 15 26 12 27.8 C9 26 4 22.5 4 17 L4 6.5 Z" fill="#c8102e"/>
+          <path d="M12 6 L12 25 M6 15 L18 15" stroke="#ffd000" stroke-width="1.5"/>
+        </svg>
+        <span class="brand-name">PORSCHE</span>
+      </a>
+      <span class="model-badge"><span class="status-dot"></span> 911 GT3 RS</span>
     </div>
 
-    <div class="perf-grid">
-      <div class="perf-item">
-        <span class="perf-num" id="stat-hp">750</span>
-        <span class="perf-unit">hp</span>
-        <div class="perf-label">Maximum Output</div>
-      </div>
-      <div class="perf-item">
-        <span class="perf-num" id="stat-accel">2.7</span>
-        <span class="perf-unit">s</span>
-        <div class="perf-label">0–100 km/h Launch</div>
-      </div>
-      <div class="perf-item">
-        <span class="perf-num" id="stat-speed">350</span>
-        <span class="perf-unit">km/h</span>
-        <div class="perf-label">Top Velocity</div>
-      </div>
-      <div class="perf-item">
-        <span class="perf-num" id="stat-rpm">8,500</span>
-        <span class="perf-unit">rpm</span>
-        <div class="perf-label">Rev Limiter</div>
-      </div>
-    </div>
-  </div>
-</section>
+    <ul class="nav-links">
+      <li><a class="nav-link active" onclick="scrollToSection('hero-section')">Overview</a></li>
+      <li><a class="nav-link" onclick="scrollToSection('aero-section')">Aerodynamics</a></li>
+      <li><a class="nav-link" onclick="scrollToSection('chassis-section')">Anatomy</a></li>
+      <li><a class="nav-link" onclick="scrollToSection('power-section')">Telemetry</a></li>
+      <li><a class="nav-link" onclick="scrollToSection('studio-section')">Configurator</a></li>
+    </ul>
 
-<!-- SECTION 7: INTERACTIVE 3D SHOWROOM & CONFIGURATOR -->
-<section class="section-stage" id="studio">
-  <div class="studio-dock">
-    <div class="studio-dock-header">
-      <div class="dock-title">
-        <span>3D Design Showroom</span>
-      </div>
-      <div class="dock-hint">
-        Drag to Orbit 360° • Pinch to Zoom
-      </div>
-    </div>
-
-    <!-- Model Switcher -->
-    <div class="model-picker-tabs">
-      <button class="model-tab active" data-model="0">Pagani Zonda R</button>
-      <button class="model-tab" data-model="1">Porsche 911 GT3 RS</button>
-      <button class="model-tab" data-model="2">Porsche 911 Turbo S</button>
-      <button class="model-tab" data-model="3">Koenigsegg Jesko</button>
-    </div>
-
-    <div class="dock-controls-grid">
-      <!-- Exterior Paint -->
-      <div class="control-block">
-        <div class="control-label">
-          <span>Carbon & Paint Finish</span>
-          <span class="val" id="label-color-name">Carbon Weave Black</span>
+    <div class="header-actions">
+      <button class="btn-sound" id="btn-sound-toggle" title="Toggle flat-six engine acoustics">
+        <div class="sound-bars">
+          <div class="sound-bar"></div>
+          <div class="sound-bar"></div>
+          <div class="sound-bar"></div>
         </div>
-        <div class="color-swatches">
-          <button class="swatch active" style="background:#111216; color:#ffd500;" data-color="#111216" data-name="Carbon Weave Black" title="Carbon Black"></button>
-          <button class="swatch" style="background:#d5001c; color:#d5001c;" data-color="#d5001c" data-name="Rosso Corsa Red" title="Red"></button>
-          <button class="swatch" style="background:#ffd500; color:#ffd500;" data-color="#ffd500" data-name="Giallo Modena Yellow" title="Yellow"></button>
-          <button class="swatch" style="background:#b0b3b8; color:#b0b3b8;" data-color="#b0b3b8" data-name="Argento Silver" title="Silver"></button>
-          <button class="swatch" style="background:#009fe3; color:#009fe3;" data-color="#009fe3" data-name="Blu Francia" title="Miami Blue"></button>
-          <button class="swatch" style="background:#16a84d; color:#16a84d;" data-color="#16a84d" data-name="Verde Hydra Green" title="Green"></button>
+        <span id="sound-label">AUDIO REV</span>
+      </button>
+      <button class="btn-cta" onclick="openOrderModal()">Order 2027</button>
+    </div>
+  </header>
+
+  <!-- Hero Telemetry Dock (Matching Video 0:06) -->
+  <div id="hero-telemetry">
+    <div class="telemetry-item">
+      <div class="telemetry-val"><span class="counter" data-target="525">0</span><span class="telemetry-unit">HP</span></div>
+      <div class="telemetry-label">Naturally Aspirated</div>
+    </div>
+    <div class="telemetry-divider"></div>
+    <div class="telemetry-item">
+      <div class="telemetry-val"><span class="counter" data-target="3.2" data-decimals="1">0.0</span><span class="telemetry-unit">S</span></div>
+      <div class="telemetry-label">0–100 km/h</div>
+    </div>
+    <div class="telemetry-divider"></div>
+    <div class="telemetry-item">
+      <div class="telemetry-val"><span class="counter" data-target="296">0</span><span class="telemetry-unit">KM/H</span></div>
+      <div class="telemetry-label">Top Track Speed</div>
+    </div>
+    <div class="telemetry-divider"></div>
+    <div class="telemetry-item">
+      <div class="telemetry-val"><span class="counter" data-target="860">0</span><span class="telemetry-unit">KG</span></div>
+      <div class="telemetry-label">Downforce @ 285 km/h</div>
+    </div>
+  </div>
+
+  <!-- Free Orbit Mode Floating Helper -->
+  <div class="orbit-helper" id="btn-free-orbit" onclick="toggleFreeOrbit()">
+    <div class="orbit-icon"></div>
+    <span id="orbit-text">INSPECT 360°</span>
+  </div>
+
+  <!-- Scrollable Story Presentation -->
+  <main class="scroll-container">
+
+    <!-- 1. The Veil / Hero Unveil -->
+    <section class="story-section align-center" id="hero-section">
+      <div class="story-card visible">
+        <div class="section-eyebrow">Motor Racing DNA</div>
+        <h1 class="hero-title-giant">911 GT3 RS</h1>
+        <p class="hero-tagline">Engineered for Supremacy • Weissach Tested</p>
+        <div class="scroll-cue">
+          <div class="scroll-pill"><div class="scroll-pill-wheel"></div></div>
+          <span>SCROLL TO UNVEIL & EXPLORE</span>
         </div>
       </div>
+    </section>
 
-      <!-- Wheels Finish -->
-      <div class="control-block">
-        <div class="control-label">
-          <span>Forged Wheel Finish</span>
-          <span class="val" id="label-wheel-name">Forged Gold (Zonda R Spec)</span>
-        </div>
-        <div class="toggle-btn-group">
-          <button class="tgl-btn active" data-wheel="gold">Forged Gold</button>
-          <button class="tgl-btn" data-wheel="black">Satin Black</button>
-          <button class="tgl-btn" data-wheel="silver">Titanium Silver</button>
+    <!-- 2. Aerodynamics (Top-Down Bird's-Eye View - Matching Video 0:07 "BUILT FOR THOSE WHO LEAD") -->
+    <section class="story-section align-center" id="aero-section">
+      <div class="story-card">
+        <div class="hud-chip">ACTIVE DRS AERODYNAMICS</div>
+        <h2 class="section-title">BUILT FOR THOSE WHO LEAD</h2>
+        <p class="section-desc">
+          Single central radiator concept replaces the traditional three-cooler layout, freeing space for active side underbody aero elements and twin front hood air extraction nostrils.
+        </p>
+        <div class="spec-grid" style="max-width: 620px; margin: 0 auto; text-align: left;">
+          <div class="spec-box">
+            <div class="spec-box-title">Swan-Neck Wing</div>
+            <div class="spec-box-desc">DRS hydraulic wing flap opens automatically to minimize drag at high speed.</div>
+          </div>
+          <div class="spec-box">
+            <div class="spec-box-title">Roof Aerofoils</div>
+            <div class="spec-box-desc">Roof fins channel hot central radiator exhaust air outward, ensuring icy engine intake.</div>
+          </div>
         </div>
       </div>
+    </section>
 
-      <!-- Supercar Mechanics Toggles (Matching Video 2) -->
-      <div class="control-block">
-        <div class="control-label">
-          <span>Interactive Mechanics</span>
-        </div>
-        <div class="toggle-btn-group">
-          <button class="tgl-btn" id="btn-toggle-clamshell">🏎️ Clamshell Hood</button>
-          <button class="tgl-btn" id="btn-toggle-doors">🚪 Gullwing Doors</button>
-          <button class="tgl-btn" id="btn-toggle-lights">💡 Headlights</button>
-          <button class="tgl-btn" id="btn-toggle-wing">🪽 DRS Wing</button>
-          <button class="tgl-btn" id="btn-toggle-xray">🔬 X-Ray Chassis</button>
-          <button class="tgl-btn" id="btn-toggle-aero">💨 Wind Tunnel</button>
+    <!-- 3. Anatomy & X-Ray (Matching Video 0:08 "SEE WHAT YOU DRIVE") -->
+    <section class="story-section align-right" id="chassis-section">
+      <div class="story-card">
+        <div class="hud-chip red">X-RAY BLUEPRINT DECONSTRUCTION</div>
+        <h2 class="section-title">SEE WHAT YOU DRIVE</h2>
+        <p class="section-desc">
+          Underneath the ultra-lightweight carbon composite body lies an uncompromising motorsport skeleton. High-tensile forged aluminum double wishbones with teardrop aerodynamic profiling maintain negative camber through high-G corners.
+        </p>
+        <div class="spec-grid">
+          <div class="spec-box">
+            <div class="spec-box-title">Flat-Six Powertrain</div>
+            <div class="spec-box-desc">4.0L Boxer revving to 9,000 RPM with six individual throttle bodies.</div>
+          </div>
+          <div class="spec-box">
+            <div class="spec-box-title">PCCB Ceramic Brakes</div>
+            <div class="spec-box-desc">410mm front ventilated carbon-ceramic rotors with 6-piston fixed monobloc calipers.</div>
+          </div>
         </div>
       </div>
+    </section>
 
-      <!-- Engine Audio Rev Station -->
-      <div class="control-block">
-        <div class="control-label">
-          <span>Acoustic Telemetry</span>
-          <span class="val" id="engine-rpm-val">900 RPM (Idle)</span>
-        </div>
-        <div id="rev-gauge">
-          <div class="gauge-bar"><div class="gauge-fill" id="gauge-fill"></div></div>
-          <button class="btn-rev" id="btn-rev-pedal">Rev V12 Engine</button>
+    <!-- 4. Powertrain & Rear Ecosystem (Matching Video 0:09) -->
+    <section class="story-section align-left" id="power-section">
+      <div class="story-card">
+        <div class="section-eyebrow">Acoustic Symphony</div>
+        <h2 class="section-title">THE 9,000 RPM ECOSYSTEM</h2>
+        <p class="section-desc">
+          A rigid valvetrain with DLC-coated finger followers, dry-sump lubrication with a dedicated centrifugal oil separator, and titanium sport exhaust delivering the purest mechanical soundtrack on Earth.
+        </p>
+        <div class="spec-grid">
+          <div class="spec-box">
+            <div class="spec-box-title">Transmission</div>
+            <div class="spec-box-desc">7-speed dual-clutch PDK with shorter final drive ratios than GT3.</div>
+          </div>
+          <div class="spec-box">
+            <div class="spec-box-title">Rear Diffuser</div>
+            <div class="spec-box-desc">Full underfloor venturi tunnels generating over 400kg downforce alone.</div>
+          </div>
         </div>
       </div>
+    </section>
+
+    <!-- 5. Studio Configurator & Free Inspection -->
+    <section class="story-section align-center" id="studio-section">
+      <div class="studio-panel">
+        <div class="studio-header">
+          <div>
+            <div class="section-eyebrow" style="margin-bottom:4px">Porsche Exclusive Manufaktur</div>
+            <h3 class="studio-title">Interactive Design Studio</h3>
+          </div>
+          <button class="btn-cta" onclick="openOrderModal()">Save Configuration</button>
+        </div>
+
+        <div class="studio-controls-row">
+          <!-- Paint Finishes -->
+          <div>
+            <div class="control-group-title">Exterior Paintwork</div>
+            <div class="color-swatches">
+              <div class="swatch active" style="background:#c8102e" onclick="setPaintColor('#c8102e', 'Guards Red', this)" title="Guards Red"></div>
+              <div class="swatch" style="background:#0066cc" onclick="setPaintColor('#0066cc', 'Shark Blue', this)" title="Shark Blue"></div>
+              <div class="swatch" style="background:#f5be18" onclick="setPaintColor('#f5be18', 'Racing Yellow', this)" title="Racing Yellow"></div>
+              <div class="swatch" style="background:#d8dad6" onclick="setPaintColor('#d8dad6', 'Crayon / Chalk', this)" title="Chalk"></div>
+              <div class="swatch" style="background:#009944" onclick="setPaintColor('#009944', 'Python Green', this)" title="Python Green"></div>
+              <div class="swatch" style="background:#0a0b0d" onclick="setPaintColor('#0a0b0d', 'Jet Black Metallic', this)" title="Jet Black"></div>
+              <div class="swatch" style="background:#a0a4ad" onclick="setPaintColor('#a0a4ad', 'GT Silver Metallic', this)" title="GT Silver"></div>
+            </div>
+            <div id="paint-name-display" style="margin-top:8px; font-family:var(--font-mono); font-size:12px; color:var(--text-muted)">Guards Red</div>
+          </div>
+
+          <!-- Wheel Finish -->
+          <div>
+            <div class="control-group-title">Forged Magnesium Wheels</div>
+            <div class="pill-toggles">
+              <button class="pill-btn active" onclick="setWheelFinish(0x181818, this)">Satin Black</button>
+              <button class="pill-btn" onclick="setWheelFinish(0xbfa268, this)">Neodyme Gold</button>
+              <button class="pill-btn" onclick="setWheelFinish(0xd2d5dc, this)">Brilliant Silver</button>
+              <button class="pill-btn" onclick="setWheelFinish(0xc8102e, this)">Pyro Red</button>
+            </div>
+          </div>
+
+          <!-- Weissach Package & Explode Controls -->
+          <div>
+            <div class="control-group-title">Package & X-Ray Explode</div>
+            <div class="pill-toggles">
+              <button class="pill-btn active" id="btn-weissach" onclick="toggleWeissach(this)">Weissach Carbon: ON</button>
+              <button class="pill-btn" id="btn-lights" onclick="toggleHeadlights(this)">LED Lights: ON</button>
+            </div>
+            <div class="slider-row" style="margin-top: 14px;">
+              <span style="font-family:var(--font-mono); font-size:11px; color:var(--text-muted);">Deconstruct:</span>
+              <input type="range" min="0" max="100" value="0" class="slider-input" id="explode-slider" oninput="setExplodeManual(this.value)">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Order / Allocation Modal -->
+  <div class="modal-overlay" id="order-modal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeOrderModal()">&times;</button>
+      <div class="section-eyebrow">Allocation Reservation</div>
+      <h3 style="font-family:var(--font-display); font-size:38px; text-transform:uppercase; margin-bottom:12px">2027 Porsche 911 GT3 RS</h3>
+      <p style="color:var(--text-muted); font-size:15px; margin-bottom:24px">
+        Your bespoke Weissach-specification build has been registered. Production slot allocation queue is active.
+      </p>
+      <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px; margin-bottom:24px; font-family:var(--font-mono); font-size:12px; line-height:1.8">
+        <div>• SPECIFICATION: 911 GT3 RS (992.2)</div>
+        <div>• FINISH: <span id="modal-paint">Guards Red</span> (High Gloss Clearcoat)</div>
+        <div>• AERO: Weissach Package Carbon Package</div>
+        <div>• TRANSMISSION: 7-Speed Porsche Doppelkupplung (PDK)</div>
+        <div>• ENGINE: 4.0-Litre Naturally Aspirated Boxer-6 (525 HP)</div>
+      </div>
+      <button class="btn-cta" style="width:100%" onclick="closeOrderModal()">Confirm Build Allocation</button>
     </div>
   </div>
-</section>
 
-<!-- Three.js r128 Library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-<script>
-/* =========================================================================
-   APEX HYPERCARS ENGINE — DUAL VIDEO ACCURACY & ZERO-BLACK-SCREEN GUARANTEE
-   ========================================================================= */
-
-const VEHICLES = [
-  {
-    id: 'zonda',
-    brand: 'Pagani',
-    name: 'Zonda R',
-    price: '€ 1,500,000',
-    subtitle: 'Carbon-Titanium Track Apex',
-    engineType: 'Mercedes-AMG 6.0L V12',
-    hp: 750,
-    accel: 2.7,
-    speed: 350,
-    rpm: 8500,
-    weight: '1,070 kg',
-    paint: '#111216',
-    wheelFinish: 'gold',
-    exhaustStyle: 'quad-circle',
-    hasSnorkel: true,
-    hasBigWing: true,
-    isGullwing: true,
-    scale: [1.02, 0.95, 1.05]
-  },
-  {
-    id: 'gt3rs',
-    brand: 'Porsche',
-    name: '911 GT3 RS',
-    price: '€ 248,000',
-    subtitle: 'Track-Born Aero Weapon',
-    engineType: '4.0L Naturally Aspirated Boxer-6',
-    hp: 518,
-    accel: 3.2,
-    speed: 296,
-    rpm: 9000,
-    weight: '1,450 kg',
-    paint: '#d5001c',
-    wheelFinish: 'black',
-    exhaustStyle: 'center-dual',
-    hasSnorkel: false,
-    hasBigWing: true,
-    isGullwing: false,
-    scale: [1, 1, 1]
-  },
-  {
-    id: 'turboS',
-    brand: 'Porsche',
-    name: '911 Turbo S',
-    price: '€ 245,000',
-    subtitle: 'Twin-Turbo Supercar Benchmark',
-    engineType: '3.8L Twin-Turbo Boxer-6',
-    hp: 640,
-    accel: 2.6,
-    speed: 330,
-    rpm: 7200,
-    weight: '1,640 kg',
-    paint: '#b0b3b8',
-    wheelFinish: 'silver',
-    exhaustStyle: 'quad-titanium',
-    hasSnorkel: false,
-    hasBigWing: false,
-    isGullwing: false,
-    scale: [1, 1, 1]
-  },
-  {
-    id: 'jesko',
-    brand: 'Koenigsegg',
-    name: 'Jesko Attack',
-    price: '€ 3,000,000',
-    subtitle: '1,600 HP Track Monster',
-    engineType: '5.0L Twin-Turbo Flat-Plane V8',
-    hp: 1600,
-    accel: 2.5,
-    speed: 480,
-    rpm: 8500,
-    weight: '1,420 kg',
-    paint: '#009fe3',
-    wheelFinish: 'black',
-    exhaustStyle: 'center-giant',
-    hasSnorkel: true,
-    hasBigWing: true,
-    isGullwing: true,
-    scale: [1.06, 0.96, 1.06]
-  }
-];
-
-let currentVehicleIndex = 0;
-let scene, camera, renderer;
-let carGroup, doorLeftGroup, doorRightGroup, rearClamshellGroup, activeWingGroup, wheelsGroup;
-let lightBeamLeft, lightBeamRight;
-let windTunnelParticles, windTunnelGeometry;
-let studioEnvironmentTexture;
-
-// States
-let isHeadlightsOn = false;
-let isWingRaised = false;
-let isDoorsOpen = false;
-let isClamshellOpen = false;
-let isXRayMode = false;
-let isAeroActive = false;
-let isStudioInteractive = false;
-let currentWheelFinish = 'gold';
-
-// 6-Stage Cinematic Scroll Camera Positions
-const CAMERA_KEYFRAMES = [
-  // 0: Hero Angle (Front 3/4 Low dramatic supercar pose)
-  { az: 32, el: 10, dist: 7.2, tx: 0.1, ty: 0.45, fov: 34 },
-  // 1: Design Section (Rear 3/4 showing iconic quad exhaust & diffuser - Video 2)
-  { az: -140, el: 12, dist: 6.8, tx: -0.2, ty: 0.52, fov: 33 },
-  // 2: Engine Clamshell Reveal (High rear angle looking into open engine bay - Video 2)
-  { az: -165, el: 32, dist: 6.2, tx: -0.3, ty: 0.72, fov: 36 },
-  // 3: Architecture & Top-Down (75° high aerial view - Video 1)
-  { az: 160, el: 72, dist: 8.5, tx: 0.0, ty: 0.25, fov: 36 },
-  // 4: Under the skin / Chassis Anatomy (Front 3/4 high X-Ray - Video 1)
-  { az: 45, el: 26, dist: 7.4, tx: 0.0, ty: 0.55, fov: 35 },
-  // 5: Performance Matrix (Low front angle)
-  { az: 15, el: 8, dist: 7.0, tx: 0.1, ty: 0.45, fov: 34 },
-  // 6: Studio Configurator (Dynamic orbital readiness)
-  { az: 42, el: 16, dist: 7.5, tx: 0.0, ty: 0.52, fov: 35 }
-];
-
-let scrollProgress = 0;
-let smoothScrollY = 0;
-let sectionTops = [];
-let mouseX = 0, mouseY = 0;
-let orbitAzimuth = 42 * (Math.PI / 180);
-let orbitElevation = 16 * (Math.PI / 180);
-let orbitDistance = 7.5;
-let isDraggingOrbit = false;
-let previousPointerPosition = { x: 0, y: 0 };
-
-/* =========================================================================
-   1. BULLETPROOF PMREM STUDIO ENVIRONMENT
-   ========================================================================= */
-function generateStudioEnvironment(rend) {
-  const envScene = new THREE.Scene();
-  const boxMat = (intensity, side = THREE.FrontSide) => new THREE.MeshBasicMaterial({
-    color: new THREE.Color(intensity, intensity, intensity),
-    side: side
-  });
-
-  const sky = new THREE.Mesh(new THREE.SphereGeometry(30, 24, 16), boxMat(0.06, THREE.BackSide));
-  envScene.add(sky);
-
-  // Softbox panels in studio
-  const softboxes = [
-    [0, 10, -5, 24, 0.3, 1.4, 9.0],
-    [0, 10, 0, 24, 0.3, 2.2, 12.0],
-    [0, 10, 5, 24, 0.3, 1.4, 9.0],
-    [-8, 4, 0, 0.4, 6, 14, 5.0],
-    [8, 4, 0, 0.4, 6, 14, 5.0],
-    [0, 4, -12, 18, 5, 0.4, 4.0],
-    [0, 4, 12, 18, 5, 0.4, 4.0]
-  ];
-  softboxes.forEach(s => {
-    const box = new THREE.Mesh(new THREE.BoxGeometry(s[3], s[4], s[5]), boxMat(s[6]));
-    box.position.set(s[0], s[1], s[2]);
-    envScene.add(box);
-  });
-
-  const pmrem = new THREE.PMREMGenerator(rend);
-  const texture = pmrem.fromScene(envScene, 0.04).texture;
-  pmrem.dispose();
-  return texture;
-}
-
-/* =========================================================================
-   2. PROCEDURAL GROUND SHADOW TEXTURE
-   ========================================================================= */
-function generateGroundShadowTexture() {
-  const canvas = document.createElement('canvas');
-  canvas.width = 512;
-  canvas.height = 256;
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, 512, 256);
-
-  const mainShadow = ctx.createRadialGradient(256, 128, 20, 256, 128, 180);
-  mainShadow.addColorStop(0, 'rgba(0, 0, 0, 0.95)');
-  mainShadow.addColorStop(0.5, 'rgba(0, 0, 0, 0.7)');
-  mainShadow.addColorStop(1, 'rgba(0, 0, 0, 0)');
-  ctx.fillStyle = mainShadow;
-  ctx.beginPath();
-  ctx.ellipse(256, 128, 225, 100, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  const tireShadows = [
-    { x: 145, y: 68 },
-    { x: 145, y: 188 },
-    { x: 375, y: 62 },
-    { x: 375, y: 194 }
-  ];
-  tireShadows.forEach(t => {
-    const ts = ctx.createRadialGradient(t.x, t.y, 5, t.x, t.y, 45);
-    ts.addColorStop(0, 'rgba(0, 0, 0, 0.98)');
-    ts.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    ctx.fillStyle = ts;
-    ctx.beginPath();
-    ctx.ellipse(t.x, t.y, 45, 26, 0, 0, Math.PI * 2);
-    ctx.fill();
-  });
-
-  return new THREE.CanvasTexture(canvas);
-}
-
-/* =========================================================================
-   3. HYPER-REALISTIC SCULPTED 3D HYPERCAR MODEL
-   ========================================================================= */
-function createHypercar(vehicleData) {
-  const car = new THREE.Group();
-  car.name = 'HypercarVehicle';
-
-  // High-Grade Materials
-  const paintMaterial = new THREE.MeshPhysicalMaterial({
-    color: new THREE.Color(vehicleData.paint),
-    metalness: 0.70,
-    roughness: 0.18,
-    clearcoat: 1.0,
-    clearcoatRoughness: 0.03,
-    reflectivity: 0.92,
-    envMap: studioEnvironmentTexture,
-    envMapIntensity: 2.2,
-    transparent: true,
-    opacity: 1.0
-  });
-
-  const carbonFiberMaterial = new THREE.MeshStandardMaterial({
-    color: 0x111317,
-    metalness: 0.45,
-    roughness: 0.32,
-    envMap: studioEnvironmentTexture,
-    envMapIntensity: 1.4
-  });
-
-  const glassMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x121720,
-    metalness: 0.1,
-    roughness: 0.06,
-    clearcoat: 1.0,
-    clearcoatRoughness: 0.02,
-    transparent: true,
-    opacity: 0.62,
-    envMap: studioEnvironmentTexture,
-    envMapIntensity: 2.4,
-    depthWrite: false
-  });
-
-  const goldForgedMaterial = new THREE.MeshStandardMaterial({
-    color: 0xd4af37, // Pagani Zonda R Signature Gold Rims!
-    metalness: 0.95,
-    roughness: 0.20,
-    envMap: studioEnvironmentTexture,
-    envMapIntensity: 2.6
-  });
-
-  const wheelMaterial = currentWheelFinish === 'gold' ? goldForgedMaterial : new THREE.MeshStandardMaterial({
-    color: currentWheelFinish === 'silver' ? 0xd0d4de : 0x15161a,
-    metalness: 0.9,
-    roughness: 0.22,
-    envMap: studioEnvironmentTexture,
-    envMapIntensity: 2.0
-  });
-
-  const titaniumExhaustMaterial = new THREE.MeshStandardMaterial({
-    color: 0x485566,
-    metalness: 0.95,
-    roughness: 0.15,
-    envMap: studioEnvironmentTexture,
-    envMapIntensity: 2.2
-  });
-
-  const engineChromeMaterial = new THREE.MeshStandardMaterial({
-    color: 0xedf0f5,
-    metalness: 0.98,
-    roughness: 0.15
-  });
-
-  const blackTrimMaterial = new THREE.MeshStandardMaterial({ color: 0x090a0d, roughness: 0.8 });
-  const tireMaterial = new THREE.MeshStandardMaterial({ color: 0x121316, roughness: 0.92 });
-  const brakeRotorMaterial = new THREE.MeshStandardMaterial({ color: 0x858892, metalness: 0.85, roughness: 0.3 });
-  const brakeCaliperMaterial = new THREE.MeshStandardMaterial({ color: 0xd5001c, metalness: 0.3, roughness: 0.25 });
-  const ledLightMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xd8eeff, emissiveIntensity: 1.2 });
-  const taillightMaterial = new THREE.MeshStandardMaterial({ color: 0xff0020, emissive: 0xff0020, emissiveIntensity: 2.4 });
-
-  // Main Assembly Hierarchy
-  const mainChassisGroup = new THREE.Group();
-  doorLeftGroup = new THREE.Group();
-  doorRightGroup = new THREE.Group();
-  rearClamshellGroup = new THREE.Group(); // Hinged Rear Engine Clamshell!
-  activeWingGroup = new THREE.Group();
-  wheelsGroup = new THREE.Group();
-  const engineBayGroup = new THREE.Group();
-  const aeroGroup = new THREE.Group();
-
-  /* -----------------------------------------------------------------------
-     A. MAIN CHASSIS & FRONT CLIP
-     ----------------------------------------------------------------------- */
-  // 1. Carbon Monocoque Floor Pan & Front Splitter
-  const undertray = new THREE.Mesh(new THREE.BoxGeometry(4.55, 0.07, 1.84), carbonFiberMaterial);
-  undertray.position.set(0, 0.16, 0);
-  mainChassisGroup.add(undertray);
-
-  // Front Splitter with Aggressive Aero Canards (Pagani / GT3 RS style)
-  const splitter = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.035, 1.94), carbonFiberMaterial);
-  splitter.position.set(2.10, 0.12, 0);
-  mainChassisGroup.add(splitter);
-
-  [-0.96, 0.96].forEach(zPos => {
-    const canard = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.14, 0.02), carbonFiberMaterial);
-    canard.position.set(2.05, 0.24, zPos);
-    canard.rotation.y = zPos > 0 ? 0.35 : -0.35;
-    mainChassisGroup.add(canard);
-  });
-
-  // 2. Front Nose & Radiator Intakes
-  const noseShape = new THREE.Shape();
-  noseShape.moveTo(0, 0);
-  noseShape.lineTo(0.75, 0.06);
-  noseShape.quadraticCurveTo(1.05, 0.28, 0.98, 0.48);
-  noseShape.quadraticCurveTo(0.75, 0.58, 0, 0.58);
-  noseShape.lineTo(0, 0);
-
-  const frontNoseGeo = new THREE.ExtrudeGeometry(noseShape, {
-    steps: 2,
-    depth: 1.76,
-    bevelEnabled: true,
-    bevelThickness: 0.08,
-    bevelSize: 0.06,
-    bevelSegments: 4
-  });
-  frontNoseGeo.center();
-  const frontNose = new THREE.Mesh(frontNoseGeo, paintMaterial);
-  frontNose.position.set(1.82, 0.35, 0);
-  mainChassisGroup.add(frontNose);
-
-  // Radiator Grilles
-  const centerGrille = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.22, 0.92), blackTrimMaterial);
-  centerGrille.position.set(2.22, 0.25, 0);
-  mainChassisGroup.add(centerGrille);
-
-  // Front Hood with Aero Channels & Extraction Vents
-  const hoodGeo = new THREE.CylinderGeometry(0.85, 0.98, 1.35, 24, 4, false, 0, Math.PI);
-  hoodGeo.rotateZ(Math.PI / 2);
-  hoodGeo.scale.set(0.24, 1.0, 0.94);
-  const hood = new THREE.Mesh(hoodGeo, paintMaterial);
-  hood.position.set(1.22, 0.72, 0);
-  mainChassisGroup.add(hood);
-
-  // Pontoon Front Fenders
-  [-0.74, 0.74].forEach(zPos => {
-    const fenderGeo = new THREE.CylinderGeometry(0.22, 0.22, 1.35, 24);
-    fenderGeo.rotateZ(Math.PI / 2);
-    const fender = new THREE.Mesh(fenderGeo, paintMaterial);
-    fender.position.set(1.28, 0.66, zPos);
-    fender.scale.set(1.0, 0.85, 0.88);
-    mainChassisGroup.add(fender);
-  });
-
-  // Four-Point Projector Headlights
-  [-0.70, 0.70].forEach((zPos, idx) => {
-    const hlGroup = new THREE.Group();
-    hlGroup.position.set(1.80, 0.72, zPos);
-    hlGroup.rotation.y = idx === 0 ? 0.20 : -0.20;
-    hlGroup.rotation.z = -0.22;
-
-    const hlHousing = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.11, 0.08, 18), blackTrimMaterial);
-    hlHousing.rotation.z = Math.PI / 2;
-    hlGroup.add(hlHousing);
-
-    [-0.045, 0.045].forEach(yOff => {
-      [-0.045, 0.045].forEach(zOff => {
-        const led = new THREE.Mesh(new THREE.BoxGeometry(0.024, 0.024, 0.024), ledLightMaterial);
-        led.position.set(0.04, yOff, zOff);
-        hlGroup.add(led);
-      });
-    });
-
-    const hlGlass = new THREE.Mesh(new THREE.SphereGeometry(0.13, 18, 14), glassMaterial);
-    hlGlass.scale.set(0.45, 1.0, 0.95);
-    hlGroup.add(hlGlass);
-    mainChassisGroup.add(hlGroup);
-  });
-
-  // Volumetric Headlight Beams
-  const beamGeo = new THREE.ConeGeometry(1.2, 8.0, 20, 1, true);
-  beamGeo.rotateZ(-Math.PI / 2);
-  beamGeo.translate(4.0, 0, 0);
-  const beamMat = new THREE.MeshBasicMaterial({
-    color: 0xcae6ff,
-    transparent: true,
-    opacity: 0,
-    blending: THREE.AdditiveBlending,
-    side: THREE.DoubleSide,
-    depthWrite: false
-  });
-  lightBeamLeft = new THREE.Mesh(beamGeo, beamMat);
-  lightBeamLeft.position.set(1.85, 0.72, -0.70);
-  mainChassisGroup.add(lightBeamLeft);
-
-  lightBeamRight = new THREE.Mesh(beamGeo, beamMat.clone());
-  lightBeamRight.position.set(1.85, 0.72, 0.70);
-  mainChassisGroup.add(lightBeamRight);
-
-  // 3. Cabin Cockpit Greenhouse (Curved Windshield & Roof Snorkel)
-  const windshield = new THREE.Mesh(new THREE.PlaneGeometry(1.15, 1.4), glassMaterial);
-  windshield.rotateY(Math.PI / 2);
-  windshield.rotateZ(0.65);
-  windshield.position.set(0.42, 1.05, 0);
-  mainChassisGroup.add(windshield);
-
-  // Carbon Fiber Canopy Roof
-  const roof = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.85, 1.15, 24, 2, false, 0, Math.PI), carbonFiberMaterial);
-  roof.rotateZ(Math.PI / 2);
-  roof.scale.set(0.18, 1.0, 0.78);
-  roof.position.set(-0.25, 1.25, 0);
-  mainChassisGroup.add(roof);
-
-  // Roof-Mounted Ram-Air Snorkel (Signature Pagani Zonda R / Jesko feature!)
-  if (vehicleData.hasSnorkel) {
-    const snorkel = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.16, 0.28), carbonFiberMaterial);
-    snorkel.position.set(-0.45, 1.34, 0);
-    snorkel.rotation.z = -0.15;
-    mainChassisGroup.add(snorkel);
-
-    const scoopHole = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.10, 0.22), blackTrimMaterial);
-    scoopHole.position.set(-0.10, 1.38, 0);
-    mainChassisGroup.add(scoopHole);
-  }
-
-  // 4. Cockpit Interior (Carbon Bucket Seats, Steering Wheel, Shifter)
-  [-0.32, 0.32].forEach(zPos => {
-    const seatGroup = new THREE.Group();
-    seatGroup.position.set(-0.25, 0.52, zPos);
-    seatGroup.add(new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.12, 0.46), blackTrimMaterial));
-    const seatBack = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.65, 0.46), blackTrimMaterial);
-    seatBack.position.set(-0.24, 0.35, 0);
-    seatBack.rotation.z = 0.22;
-    seatGroup.add(seatBack);
-    mainChassisGroup.add(seatGroup);
-  });
-
-  const dashMesh = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.26, 1.45), blackTrimMaterial);
-  dashMesh.position.set(0.52, 0.76, 0);
-  dashMesh.rotation.z = -0.25;
-  mainChassisGroup.add(dashMesh);
-
-  const steeringWheel = new THREE.Mesh(new THREE.TorusGeometry(0.18, 0.022, 10, 24), carbonFiberMaterial);
-  steeringWheel.position.set(0.32, 0.82, -0.32);
-  steeringWheel.rotation.y = Math.PI / 2;
-  steeringWheel.rotation.x = -0.28;
-  mainChassisGroup.add(steeringWheel);
-
-  // 5. Gullwing / Dihedral Opening Doors (Hinged Groups!)
-  const doorGeo = new THREE.BoxGeometry(1.45, 0.58, 0.12);
-  // Left Door
-  const doorLeftMesh = new THREE.Mesh(doorGeo, paintMaterial);
-  doorLeftMesh.position.set(-0.72, 0, 0);
-  doorLeftGroup.position.set(0.62, 0.54, -0.74);
-  doorLeftGroup.add(doorLeftMesh);
-  doorLeftGroup.add(new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.1, 0.16), carbonFiberMaterial));
-  mainChassisGroup.add(doorLeftGroup);
-
-  // Right Door
-  const doorRightMesh = new THREE.Mesh(doorGeo, paintMaterial);
-  doorRightMesh.position.set(-0.72, 0, 0);
-  doorRightGroup.position.set(0.62, 0.54, 0.74);
-  doorRightGroup.add(doorRightMesh);
-  doorRightGroup.add(new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.1, 0.16), carbonFiberMaterial));
-  mainChassisGroup.add(doorRightGroup);
-
-  /* -----------------------------------------------------------------------
-     B. INTERNAL MECHANICAL ENGINE BAY (Revealed when Clamshell Opens!)
-     ----------------------------------------------------------------------- */
-  // 1. Mercedes-AMG V12 Engine Block / Flat-Six Block
-  const engineBlock = new THREE.Mesh(new THREE.BoxGeometry(1.10, 0.42, 0.82), new THREE.MeshStandardMaterial({
-    color: 0x22262e,
-    metalness: 0.95,
-    roughness: 0.22
-  }));
-  engineBlock.position.set(-1.25, 0.44, 0);
-  engineBayGroup.add(engineBlock);
-
-  // Chrome V12 Twin Intake Runner Plenums
-  [-0.26, 0.26].forEach(zPos => {
-    const plenum = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.95, 20), engineChromeMaterial);
-    plenum.rotation.z = Math.PI / 2;
-    plenum.position.set(-1.25, 0.68, zPos);
-    engineBayGroup.add(plenum);
-
-    // Intake Velocity Stacks / Runners
-    for (let r = -0.38; r <= 0.38; r += 0.15) {
-      const runner = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.18, 12), engineChromeMaterial);
-      runner.position.set(-1.25 + r, 0.58, zPos * 0.75);
-      engineBayGroup.add(runner);
-    }
-  });
-
-  // Inboard Pushrod Coilover Suspension Springs (Signature Pagani / F1 engineering!)
-  [-0.35, 0.35].forEach(zPos => {
-    const spring = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.38, 14), new THREE.MeshStandardMaterial({
-      color: 0xffd500, // Gold racing coilovers
-      metalness: 0.8,
-      roughness: 0.2
-    }));
-    spring.rotation.z = Math.PI / 2.3;
-    spring.position.set(-0.75, 0.62, zPos);
-    engineBayGroup.add(spring);
-  });
-
-  // Hydroformed Titanium Exhaust Headers
-  [-0.42, 0.42].forEach(zPos => {
-    const header = new THREE.Mesh(new THREE.TorusGeometry(0.18, 0.045, 12, 18), titaniumExhaustMaterial);
-    header.position.set(-1.62, 0.40, zPos);
-    header.rotation.y = Math.PI / 2;
-    engineBayGroup.add(header);
-  });
-
-  // Carbon-Titanium Subframe Strut Braces
-  const braceMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.9, roughness: 0.2 });
-  const strut1 = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 1.2, 10), braceMat);
-  strut1.rotation.z = 0.5;
-  strut1.rotation.y = 0.6;
-  strut1.position.set(-1.15, 0.60, 0);
-  engineBayGroup.add(strut1);
-
-  mainChassisGroup.add(engineBayGroup);
-
-  /* -----------------------------------------------------------------------
-     C. REAR CLAMSHELL ENGINE HOOD (Rotates open backward like in Video 2!)
-     ----------------------------------------------------------------------- */
-  // The clamshell pivot is at the rear bumper (x: -2.15, y: 0.35, z: 0)
-  rearClamshellGroup.position.set(-2.15, 0.35, 0);
-
-  const clamContent = new THREE.Group();
-  clamContent.position.set(2.15, -0.35, 0); // Offset to local coordinates
-
-  // Rear Engine Deck & Aerodynamic Fastback Cover
-  const rearDeck = new THREE.Mesh(new THREE.BoxGeometry(1.65, 0.12, 1.62), paintMaterial);
-  rearDeck.position.set(-1.35, 0.78, 0);
-  clamContent.add(rearDeck);
-
-  // Clear Engine Bay Viewport Glass (Lets you see the V12 even when closed!)
-  const engineGlass = new THREE.Mesh(new THREE.PlaneGeometry(0.95, 0.85), glassMaterial);
-  engineGlass.rotateX(-Math.PI / 2);
-  engineGlass.position.set(-1.32, 0.85, 0);
-  clamContent.add(engineGlass);
-
-  // Muscular Rear Haunches
-  [-0.84, 0.84].forEach(zPos => {
-    const haunchGeo = new THREE.CylinderGeometry(0.28, 0.28, 1.55, 24);
-    haunchGeo.rotateZ(Math.PI / 2);
-    const haunch = new THREE.Mesh(haunchGeo, paintMaterial);
-    haunch.position.set(-1.25, 0.68, zPos);
-    haunch.scale.set(1.0, 0.92, 0.95);
-    clamContent.add(haunch);
-
-    // Carbon Aero Flicks
-    const flick = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.08, 0.18), carbonFiberMaterial);
-    flick.position.set(-0.85, 0.65, zPos * 1.05);
-    clamContent.add(flick);
-  });
-
-  // Rear Bumper & Continuous OLED Taillight Strip
-  const rearBumper = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.45, 1.84), paintMaterial);
-  rearBumper.position.set(-2.14, 0.48, 0);
-  clamContent.add(rearBumper);
-
-  const taillights = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.065, 1.76), taillightMaterial);
-  taillights.position.set(-2.22, 0.74, 0);
-  clamContent.add(taillights);
-
-  // Carbon Diffuser with 4 Deep Vertical Venturi Fins
-  const diffuser = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.16, 1.82), carbonFiberMaterial);
-  diffuser.position.set(-2.08, 0.20, 0);
-  diffuser.rotation.z = -0.15;
-  clamContent.add(diffuser);
-
-  [-0.55, -0.20, 0.20, 0.55].forEach(zPos => {
-    const fin = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.22, 0.03), carbonFiberMaterial);
-    fin.position.set(-2.12, 0.20, zPos);
-    fin.rotation.z = -0.15;
-    clamContent.add(fin);
-  });
-
-  // THE ICONIC CIRCULAR QUAD EXHAUST (Signature Pagani Zonda R - Video 2!)
-  if (vehicleData.exhaustStyle === 'quad-circle') {
-    const quadCluster = new THREE.Group();
-    quadCluster.position.set(-2.28, 0.65, 0);
-
-    const quadShield = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.04, 24), carbonFiberMaterial);
-    quadShield.rotation.z = Math.PI / 2;
-    quadCluster.add(quadShield);
-
-    const exhaustOffsets = [
-      { y: 0.055, z: -0.055 },
-      { y: 0.055, z: 0.055 },
-      { y: -0.055, z: -0.055 },
-      { y: -0.055, z: 0.055 }
+  <!-- Three.js r128 Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <script>
+    /* =========================================================================
+       1. GLOBAL STATE & UTILITIES
+       ========================================================================= */
+    const $ = s => document.querySelector(s);
+    const $$ = s => [...document.querySelectorAll(s)];
+    const lerp = (a, b, t) => a + (b - a) * t;
+
+    let scene, camera, renderer;
+    let carGroup, partsList = [];
+    let clothMesh;
+    let studioLights = {};
+    let headlightMeshes = [];
+    let taillightMesh;
+    let aeroStreamlines;
+    let groundGrid, groundShadow;
+
+    // Materials dictionary for real-time config
+    const materials = {
+      paint: null,
+      carbon: null,
+      glass: null,
+      brakeDisc: null,
+      caliper: null,
+      wheelRim: null,
+      rubberTire: null,
+      headlightGlass: null,
+      ledEmitter: null,
+      taillightEmitter: null,
+      engineCore: null,
+      chassisWireframe: null
+    };
+
+    let isFreeOrbit = false;
+    let isWeissach = true;
+    let isLightsOn = true;
+    let manualExplode = 0;
+    let currentPaintColor = '#c8102e';
+    let currentWheelColor = 0x181818;
+
+    // Orbit controls manual variables
+    let isDragging = false;
+    let prevMouseX = 0, prevMouseY = 0;
+    let orbitAzimuth = 35 * Math.PI / 180;
+    let orbitElevation = 14 * Math.PI / 180;
+    let orbitDistance = 8.5;
+    let orbitTarget = new THREE.Vector3(0, 0.65, 0);
+
+    // Virtual Smooth Inertia Scroll State
+    let scrollPos = 0;
+    let targetScrollPos = 0;
+    let maxScroll = 1;
+    let scrollPercent = 0;
+
+    // Camera keyframes along the narrative scroll
+    // [azimuthDeg, elevationDeg, distance, targetX, targetY, targetZ, fov]
+    const CAMERA_KEYFRAMES = [
+      // 0: Hero Unveil (Cover lifting, low aggressive front 3/4)
+      { az: 32, el: 10, dist: 8.6, tx: 0, ty: 0.65, tz: 0, fov: 36 },
+      // 1: Hero Orbit sweep (front quarter glides to side flank)
+      { az: 75, el: 6, dist: 7.8, tx: 0.3, ty: 0.60, tz: 0, fov: 34 },
+      // 2: Aerodynamics "BUILT FOR THOSE WHO LEAD" (Top-down bird's-eye view, video 0:07)
+      { az: 90, el: 84, dist: 6.8, tx: 0, ty: 0.55, tz: 0, fov: 38 },
+      // 3: Anatomy & X-Ray "SEE WHAT YOU DRIVE" (Elevated 3/4 isometric cutaway, video 0:08)
+      { az: 215, el: 30, dist: 8.8, tx: 0, ty: 0.85, tz: 0, fov: 36 },
+      // 4: Powertrain & Rear Ecosystem (Low muscular rear end with glowing lightbar, video 0:09)
+      { az: 330, el: 8, dist: 6.2, tx: -1.2, ty: 0.55, tz: 0, fov: 38 },
+      // 5: Studio Configurator (Open wide beauty angle)
+      { az: 400, el: 15, dist: 8.8, tx: 0, ty: 0.65, tz: 0, fov: 36 }
     ];
-    exhaustOffsets.forEach(pt => {
-      const tip = new THREE.Mesh(new THREE.CylinderGeometry(0.042, 0.042, 0.15, 16), titaniumExhaustMaterial);
-      tip.rotation.z = Math.PI / 2;
-      tip.position.set(-0.06, pt.y, pt.z);
-      quadCluster.add(tip);
-    });
-    clamContent.add(quadCluster);
-  } else if (vehicleData.exhaustStyle === 'center-dual') {
-    [-0.14, 0.14].forEach(zPos => {
-      const tip = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.065, 0.22, 20), titaniumExhaustMaterial);
-      tip.rotation.z = Math.PI / 2;
-      tip.position.set(-2.26, 0.32, zPos);
-      clamContent.add(tip);
-    });
-  }
 
-  // Active Aerodynamic DRS Rear Wing (Mounted on Clamshell!)
-  activeWingGroup.position.set(-1.85, 0.92, 0);
-  if (vehicleData.hasBigWing) {
-    [-0.48, 0.48].forEach(zPos => {
-      const pylon = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.52, 0.035), carbonFiberMaterial);
-      pylon.position.set(-0.12, 0.26, zPos);
-      pylon.rotation.z = -0.18;
-      activeWingGroup.add(pylon);
-    });
+    /* =========================================================================
+       2. THREE.JS INITIALIZATION & SCENE SETUP
+       ========================================================================= */
+    function initThree() {
+      const container = $('#canvas-container');
+      const canvas = $('#webgl-canvas');
 
-    const wingBlade = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.04, 1.96), carbonFiberMaterial);
-    wingBlade.position.set(-0.28, 0.54, 0);
-    wingBlade.rotation.z = 0.08;
-    activeWingGroup.add(wingBlade);
+      renderer = new THREE.WebGLRenderer({
+        canvas: canvas,
+        antialias: true,
+        alpha: false,
+        powerPreference: 'high-performance'
+      });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.25;
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-    [-0.98, 0.98].forEach(zPos => {
-      const endplate = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.26, 0.025), carbonFiberMaterial);
-      endplate.position.set(-0.28, 0.54, zPos);
-      activeWingGroup.add(endplate);
-    });
-  }
-  clamContent.add(activeWingGroup);
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x070709);
+      scene.fog = new THREE.FogExp2(0x070709, 0.038);
 
-  rearClamshellGroup.add(clamContent);
-  mainChassisGroup.add(rearClamshellGroup);
+      camera = new THREE.PerspectiveCamera(36, window.innerWidth / window.innerHeight, 0.1, 100);
 
-  /* -----------------------------------------------------------------------
-     D. FORGED WHEELS, TIRES & BRAKES (Gold Zonda R Spec!)
-     ----------------------------------------------------------------------- */
-  const wheelLocations = [
-    { x: 1.25, z: -0.90, r: 0.35, w: 0.28, isLeft: true },
-    { x: 1.25, z: 0.90, r: 0.35, w: 0.28, isLeft: false },
-    { x: -1.25, z: -0.94, r: 0.37, w: 0.34, isLeft: true },
-    { x: -1.25, z: 0.94, r: 0.37, w: 0.34, isLeft: false }
-  ];
+      // Environment Map via Virtual Studio Lightboxes
+      const envScene = new THREE.Scene();
+      const whiteMat = s => new THREE.MeshBasicMaterial({ color: 0xffffff, side: s });
 
-  wheelLocations.forEach(loc => {
-    const wheelAssembly = new THREE.Group();
-    wheelAssembly.position.set(loc.x, loc.r, loc.z);
+      // Sky and ground domes for reflections
+      envScene.add(new THREE.Mesh(new THREE.SphereGeometry(40, 24, 16), new THREE.MeshBasicMaterial({ color: 0x070709, side: THREE.BackSide })));
 
-    const tireGroup = new THREE.Group();
-    const tireCyl = new THREE.Mesh(new THREE.CylinderGeometry(loc.r, loc.r, loc.w * 0.9, 32), tireMaterial);
-    tireCyl.rotation.x = Math.PI / 2;
-    tireGroup.add(tireCyl);
+      // Long overhead studio strip lights (create signature automotive paint highlights)
+      const strip1 = new THREE.Mesh(new THREE.BoxGeometry(24, 0.4, 3.5), whiteMat(THREE.FrontSide));
+      strip1.position.set(0, 8, 0);
+      envScene.add(strip1);
 
-    [-loc.w * 0.42, loc.w * 0.42].forEach(zOffset => {
-      const shoulder = new THREE.Mesh(new THREE.TorusGeometry(loc.r * 0.85, loc.r * 0.15, 12, 28), tireMaterial);
-      shoulder.position.z = zOffset;
-      tireGroup.add(shoulder);
-    });
-    wheelAssembly.add(tireGroup);
+      const strip2 = new THREE.Mesh(new THREE.BoxGeometry(24, 0.2, 1.5), whiteMat(THREE.FrontSide));
+      strip2.position.set(0, 7.5, -4.5);
+      envScene.add(strip2);
 
-    const rimGroup = new THREE.Group();
-    const barrel = new THREE.Mesh(new THREE.CylinderGeometry(loc.r * 0.72, loc.r * 0.72, loc.w * 0.92, 24, 1, true), wheelMaterial);
-    barrel.rotation.x = Math.PI / 2;
-    rimGroup.add(barrel);
+      const strip3 = new THREE.Mesh(new THREE.BoxGeometry(24, 0.2, 1.5), whiteMat(THREE.FrontSide));
+      strip3.position.set(0, 7.5, 4.5);
+      envScene.add(strip3);
 
-    const spokeCount = 10;
-    const rimFaceZ = loc.isLeft ? -loc.w * 0.44 : loc.w * 0.44;
-    for (let s = 0; s < spokeCount; s++) {
-      const angle = (s / spokeCount) * Math.PI * 2;
-      const spoke = new THREE.Mesh(new THREE.BoxGeometry(loc.r * 0.68, 0.038, 0.05), wheelMaterial);
-      spoke.rotation.z = angle;
-      spoke.position.z = rimFaceZ * 0.75;
-      rimGroup.add(spoke);
+      // Horizon softbox panels
+      const sideWall1 = new THREE.Mesh(new THREE.PlaneGeometry(16, 6), whiteMat(THREE.DoubleSide));
+      sideWall1.position.set(0, 3, -9);
+      envScene.add(sideWall1);
+
+      const sideWall2 = new THREE.Mesh(new THREE.PlaneGeometry(16, 6), whiteMat(THREE.DoubleSide));
+      sideWall2.position.set(0, 3, 9);
+      envScene.add(sideWall2);
+
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      const envTexture = pmrem.fromScene(envScene, 0.04).texture;
+      scene.environment = envTexture;
+
+      // Realistic Direct Lighting
+      const hemiLight = new THREE.HemisphereLight(0xa5b8d0, 0x070709, 0.7);
+      scene.add(hemiLight);
+
+      // Main overhead directional key light
+      const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
+      keyLight.position.set(5, 12, 6);
+      scene.add(keyLight);
+
+      // Back rim light (accents the wide rear haunches and spoiler)
+      const rimLight = new THREE.DirectionalLight(0xdde8ff, 2.8);
+      rimLight.position.set(-8, 5, -7);
+      scene.add(rimLight);
+
+      // Front low accent light
+      const frontFill = new THREE.DirectionalLight(0xffe6e6, 1.2);
+      frontFill.position.set(8, 2, 2);
+      scene.add(frontFill);
+
+      // Underbody mood glow (shifts with car color)
+      const underGlow = new THREE.PointLight(0xe60026, 3.5, 7, 1.8);
+      underGlow.position.set(0, 0.15, 0);
+      scene.add(underGlow);
+      studioLights.underGlow = underGlow;
+
+      // Floor & Ground Shadows
+      setupFloor();
+
+      // Build the 3D Porsche 911 GT3 RS Model
+      buildPorscheModel();
+
+      // Build Silk Veil / Cloth Mesh (Matching video 0:00)
+      buildSilkCover();
+
+      // Build Aerodynamic Wind-Tunnel Streamlines
+      buildAeroStreamlines();
+
+      // Event Listeners for Interaction & Drag Orbit
+      setupInteraction();
+
+      window.addEventListener('resize', onWindowResize);
+      onWindowResize();
     }
 
-    const centerNut = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.065, 0.05, 16), wheelMaterial);
-    centerNut.rotation.x = Math.PI / 2;
-    centerNut.position.z = rimFaceZ * 0.9;
-    rimGroup.add(centerNut);
-    wheelAssembly.add(rimGroup);
+    /* =========================================================================
+       3. GROUND & SHADOW SETUP
+       ========================================================================= */
+    function setupFloor() {
+      // 1. Soft Contact Shadow Canvas
+      const shadowCanvas = document.createElement('canvas');
+      shadowCanvas.width = 256;
+      shadowCanvas.height = 256;
+      const ctx = shadowCanvas.getContext('2d');
+      const grad = ctx.createRadialGradient(128, 128, 20, 128, 128, 120);
+      grad.addColorStop(0, 'rgba(0,0,0,0.95)');
+      grad.addColorStop(0.3, 'rgba(0,0,0,0.8)');
+      grad.addColorStop(0.7, 'rgba(0,0,0,0.3)');
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 256, 256);
 
-    const brakeGroup = new THREE.Group();
-    const rotor = new THREE.Mesh(new THREE.CylinderGeometry(loc.r * 0.64, loc.r * 0.64, 0.03, 24), brakeRotorMaterial);
-    rotor.rotation.x = Math.PI / 2;
-    brakeGroup.add(rotor);
+      const shadowTex = new THREE.CanvasTexture(shadowCanvas);
+      const shadowGeo = new THREE.PlaneGeometry(6.4, 3.2);
+      const shadowMat = new THREE.MeshBasicMaterial({
+        map: shadowTex,
+        transparent: true,
+        opacity: 0.85,
+        depthWrite: false
+      });
+      groundShadow = new THREE.Mesh(shadowGeo, shadowMat);
+      groundShadow.rotation.x = -Math.PI / 2;
+      groundShadow.position.y = 0.008;
+      scene.add(groundShadow);
 
-    const caliper = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.18, 0.08), brakeCaliperMaterial);
-    caliper.position.set(0.04, loc.r * 0.42, 0);
-    brakeGroup.add(caliper);
-    wheelAssembly.add(brakeGroup);
+      // 2. High-Tech Reflective Studio Floor Plane
+      const floorGeo = new THREE.PlaneGeometry(80, 80);
+      const floorMat = new THREE.MeshStandardMaterial({
+        color: 0x090a0d,
+        metalness: 0.85,
+        roughness: 0.28,
+        envMapIntensity: 0.8
+      });
+      const floorMesh = new THREE.Mesh(floorGeo, floorMat);
+      floorMesh.rotation.x = -Math.PI / 2;
+      floorMesh.position.y = 0;
+      scene.add(floorMesh);
 
-    wheelsGroup.add(wheelAssembly);
-  });
+      // 3. Subtle Circular Concentric Stage Rings
+      const ringMat1 = new THREE.MeshBasicMaterial({ color: 0x222530, transparent: true, opacity: 0.35 });
+      const ring1 = new THREE.Mesh(new THREE.RingGeometry(3.6, 3.63, 96), ringMat1);
+      ring1.rotation.x = -Math.PI / 2;
+      ring1.position.y = 0.005;
+      scene.add(ring1);
 
-  /* -----------------------------------------------------------------------
-     E. WIND TUNNEL PARTICLES (Aerodynamic Streamlines)
-     ----------------------------------------------------------------------- */
-  const streamlineCount = 32;
-  const particleCount = streamlineCount * 50;
-  windTunnelGeometry = new THREE.BufferGeometry();
-  const particlePositions = new Float32Array(particleCount * 3);
-
-  for (let i = 0; i < particleCount; i++) {
-    const streamIdx = Math.floor(i / 50);
-    const pointIdx = i % 50;
-    const progress = pointIdx / 50;
-    const streamZ = (streamIdx / (streamlineCount - 1) - 0.5) * 1.8;
-    const xPos = 2.8 - progress * 5.6;
-
-    let yPos = 0.25;
-    if (xPos > 1.8) yPos = 0.25 + (2.8 - xPos) * 0.45;
-    else if (xPos > 0.6) yPos = 0.70 + (1.8 - xPos) * 0.25;
-    else if (xPos > -0.4) yPos = 1.00 + (0.6 - xPos) * 0.28;
-    else if (xPos > -1.5) yPos = 1.28 - (-0.4 - xPos) * 0.38;
-    else yPos = 0.86 - (-1.5 - xPos) * 0.25;
-
-    particlePositions[i * 3] = xPos;
-    particlePositions[i * 3 + 1] = yPos;
-    particlePositions[i * 3 + 2] = streamZ;
-  }
-  windTunnelGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-
-  windTunnelParticles = new THREE.Points(windTunnelGeometry, new THREE.PointsMaterial({
-    color: 0x00f0ff,
-    size: 0.06,
-    transparent: true,
-    opacity: 0.8,
-    blending: THREE.AdditiveBlending
-  }));
-  windTunnelParticles.visible = false;
-  aeroGroup.add(windTunnelParticles);
-
-  car.add(mainChassisGroup);
-  car.add(wheelsGroup);
-  car.add(aeroGroup);
-  car.scale.set(vehicleData.scale[0], vehicleData.scale[1], vehicleData.scale[2]);
-
-  return {
-    group: car,
-    paintMaterial,
-    wheelMaterial,
-    wheelsGroup,
-    doorLeftGroup,
-    doorRightGroup,
-    rearClamshellGroup,
-    activeWingGroup,
-    windTunnelParticles
-  };
-}
-
-/* =========================================================================
-   4. SCENE INITIALIZATION & SETUP
-   ========================================================================= */
-function initScene() {
-  const canvas = document.getElementById('c');
-  if (!canvas) return;
-
-  const w = Math.max(window.innerWidth, 320);
-  const h = Math.max(window.innerHeight, 480);
-
-  renderer = new THREE.WebGLRenderer({
-    canvas: canvas,
-    antialias: true,
-    powerPreference: 'high-performance',
-    alpha: false
-  });
-  renderer.setSize(w, h, false);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  renderer.outputEncoding = THREE.sRGBEncoding;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.35;
-
-  scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x050608);
-  scene.fog = new THREE.FogExp2(0x050608, 0.018);
-
-  camera = new THREE.PerspectiveCamera(36, w / h, 0.1, 100);
-
-  // Guaranteed Native PMREM Studio Environment
-  studioEnvironmentTexture = generateStudioEnvironment(renderer);
-  scene.environment = studioEnvironmentTexture;
-
-  // Floor
-  const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(60, 60),
-    new THREE.MeshStandardMaterial({
-      color: 0x07080b,
-      roughness: 0.35,
-      metalness: 0.85,
-      envMap: studioEnvironmentTexture,
-      envMapIntensity: 0.4
-    })
-  );
-  floor.rotation.x = -Math.PI / 2;
-  scene.add(floor);
-
-  // Ambient Halo Ring
-  const halo = new THREE.Mesh(
-    new THREE.RingGeometry(3.6, 3.65, 96),
-    new THREE.MeshBasicMaterial({ color: 0xffd500, transparent: true, opacity: 0.65, side: THREE.DoubleSide })
-  );
-  halo.rotation.x = -Math.PI / 2;
-  halo.position.y = 0.005;
-  scene.add(halo);
-
-  // Ground Contact Shadow
-  const shadowMesh = new THREE.Mesh(
-    new THREE.PlaneGeometry(6.8, 3.5),
-    new THREE.MeshBasicMaterial({
-      map: generateGroundShadowTexture(),
-      transparent: true,
-      opacity: 0.92,
-      depthWrite: false
-    })
-  );
-  shadowMesh.rotation.x = -Math.PI / 2;
-  shadowMesh.position.y = 0.01;
-  scene.add(shadowMesh);
-
-  // High-Brightness Lighting (Zero black screen on all mobile displays)
-  scene.add(new THREE.AmbientLight(0xffffff, 1.4));
-
-  const keyLight = new THREE.DirectionalLight(0xffffff, 2.5);
-  keyLight.position.set(8, 12, 6);
-  scene.add(keyLight);
-
-  const rimLight = new THREE.DirectionalLight(0xaaccff, 2.0);
-  rimLight.position.set(-8, 7, -6);
-  scene.add(rimLight);
-
-  const kickerLight = new THREE.PointLight(0xff9900, 1.4, 16, 2);
-  kickerLight.position.set(0, 0.4, 0);
-  scene.add(kickerLight);
-
-  // Build First Supercar
-  buildVehicle(VEHICLES[0]);
-
-  // Event Listeners
-  window.addEventListener('resize', onWindowResize);
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('pointermove', onPointerMove, { passive: true });
-  setupInteractiveOrbit();
-  setupUIInteractions();
-
-  calculateSectionOffsets();
-  updateScrollProgress();
-
-  requestAnimationFrame(renderLoop);
-}
-
-function buildVehicle(vehicleData) {
-  if (carGroup) {
-    scene.remove(carGroup);
-    carGroup.traverse(node => {
-      if (node.geometry) node.geometry.dispose();
-    });
-  }
-
-  currentWheelFinish = vehicleData.wheelFinish;
-  const built = createHypercar(vehicleData);
-  carGroup = built.group;
-  window.activeHypercar = built;
-  scene.add(carGroup);
-
-  // UI updates
-  document.getElementById('nav-brand').textContent = vehicleData.brand;
-  document.getElementById('nav-model-name').textContent = vehicleData.name;
-  document.getElementById('nav-price').textContent = vehicleData.price;
-  document.getElementById('hero-title').textContent = vehicleData.brand + ' ' + vehicleData.name;
-  document.getElementById('hero-subtitle').textContent = vehicleData.subtitle;
-  document.getElementById('hero-hp').textContent = vehicleData.hp + ' hp';
-  document.getElementById('hero-accel').textContent = vehicleData.accel + ' s';
-  document.getElementById('hero-speed').textContent = vehicleData.speed + ' km/h';
-  document.getElementById('hero-weight').textContent = vehicleData.weight;
-
-  animateCounter('stat-hp', vehicleData.hp, 0);
-  animateCounter('stat-accel', vehicleData.accel, 1);
-  animateCounter('stat-speed', vehicleData.speed, 0);
-  animateCounter('stat-rpm', vehicleData.rpm, 0);
-}
-
-function calculateSectionOffsets() {
-  const sections = ['hero', 'design', 'engine', 'arch', 'chassis', 'perf', 'studio'];
-  sectionTops = sections.map(id => {
-    const el = document.getElementById(id);
-    return el ? el.offsetTop : 0;
-  });
-}
-
-function onWindowResize() {
-  const w = Math.max(window.innerWidth, 320);
-  const h = Math.max(window.innerHeight, 480);
-  camera.aspect = w / h;
-  camera.updateProjectionMatrix();
-  renderer.setSize(w, h, false);
-  calculateSectionOffsets();
-}
-
-function onScroll() {
-  updateScrollProgress();
-}
-
-function updateScrollProgress() {
-  const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-  scrollProgress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
-  document.getElementById('scroll-progress').style.width = (scrollProgress * 100) + '%';
-
-  const studioTop = sectionTops[6] || 999999;
-  const isAtStudio = window.scrollY >= (studioTop - window.innerHeight * 0.5);
-  const container = document.getElementById('webgl-container');
-  if (isAtStudio !== isStudioInteractive) {
-    isStudioInteractive = isAtStudio;
-    container.classList.toggle('interactive', isStudioInteractive);
-  }
-
-  const cards = document.querySelectorAll('.editorial-card');
-  cards.forEach(card => {
-    const rect = card.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 0.85 && rect.bottom > 0) {
-      card.classList.add('in-view');
-    }
-  });
-}
-
-function onPointerMove(e) {
-  mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-  mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-}
-
-/* =========================================================================
-   5. 360 TOUCH & POINTER ORBIT (Safe for Mobile)
-   ========================================================================= */
-function setupInteractiveOrbit() {
-  const container = document.getElementById('webgl-container');
-
-  container.addEventListener('pointerdown', e => {
-    if (!isStudioInteractive) return;
-    isDraggingOrbit = true;
-    previousPointerPosition = { x: e.clientX, y: e.clientY };
-  });
-
-  window.addEventListener('pointermove', e => {
-    if (!isDraggingOrbit || !isStudioInteractive) return;
-    const deltaX = e.clientX - previousPointerPosition.x;
-    const deltaY = e.clientY - previousPointerPosition.y;
-
-    orbitAzimuth -= deltaX * 0.007;
-    orbitElevation = Math.max(0.08, Math.min(Math.PI / 2.2, orbitElevation + deltaY * 0.007));
-    previousPointerPosition = { x: e.clientX, y: e.clientY };
-  });
-
-  window.addEventListener('pointerup', () => { isDraggingOrbit = false; });
-  window.addEventListener('pointercancel', () => { isDraggingOrbit = false; });
-
-  container.addEventListener('wheel', e => {
-    if (!isStudioInteractive) return;
-    orbitDistance = Math.max(4.0, Math.min(12.0, orbitDistance + e.deltaY * 0.006));
-    e.preventDefault();
-  }, { passive: false });
-}
-
-/* =========================================================================
-   6. RENDER TICK & 6-STAGE CINEMATIC SCROLL ANIMATION
-   ========================================================================= */
-let lastTime = 0;
-function renderLoop(currentTime) {
-  requestAnimationFrame(renderLoop);
-
-  const delta = (currentTime - lastTime) * 0.001;
-  lastTime = currentTime;
-
-  // Exact section-based smooth scroll dampening
-  const y = window.scrollY;
-  smoothScrollY += (y - smoothScrollY) * 0.08;
-
-  let stageIndex = 0;
-  while (stageIndex < sectionTops.length - 2 && smoothScrollY >= sectionTops[stageIndex + 1]) {
-    stageIndex++;
-  }
-  const topCurrent = sectionTops[stageIndex] || 0;
-  const topNext = sectionTops[stageIndex + 1] || (topCurrent + 1000);
-  const t = Math.min(1, Math.max(0, (smoothScrollY - topCurrent) / Math.max(1, topNext - topCurrent)));
-  const easeT = t * t * (3 - 2 * t);
-
-  const k1 = CAMERA_KEYFRAMES[stageIndex];
-  const k2 = CAMERA_KEYFRAMES[Math.min(CAMERA_KEYFRAMES.length - 1, stageIndex + 1)];
-
-  let targetAz = THREE.MathUtils.lerp(k1.az, k2.az, easeT) * (Math.PI / 180);
-  let targetEl = THREE.MathUtils.lerp(k1.el, k2.el, easeT) * (Math.PI / 180);
-  let targetDist = THREE.MathUtils.lerp(k1.dist, k2.dist, easeT);
-  let targetLookX = THREE.MathUtils.lerp(k1.tx, k2.tx, easeT);
-  let targetLookY = THREE.MathUtils.lerp(k1.ty, k2.ty, easeT);
-  let targetFov = THREE.MathUtils.lerp(k1.fov, k2.fov, easeT);
-
-  // Responsive Mobile Portrait Scaling
-  const w = window.innerWidth;
-  const h = window.innerHeight;
-  const aspect = w / h;
-  const mobileDistFactor = aspect < 1 ? 1.0 + (1.0 - aspect) * 1.35 : 1.0;
-  const mobileFovBoost = aspect < 1 ? 6 : 0;
-
-  if (isStudioInteractive) {
-    targetAz = orbitAzimuth;
-    targetEl = orbitElevation;
-    targetDist = orbitDistance;
-    targetLookX = 0;
-    targetLookY = 0.55;
-  } else {
-    targetAz += mouseX * 0.05;
-    targetEl -= mouseY * 0.025;
-  }
-
-  const finalDist = targetDist * mobileDistFactor;
-  const camX = targetLookX + finalDist * Math.cos(targetEl) * Math.sin(targetAz);
-  const camY = targetLookY + finalDist * Math.sin(targetEl);
-  const camZ = finalDist * Math.cos(targetEl) * Math.cos(targetAz);
-
-  camera.position.set(camX, camY, camZ);
-  camera.lookAt(targetLookX, targetLookY, 0);
-  camera.fov = targetFov + mobileFovBoost;
-  camera.updateProjectionMatrix();
-
-  // Supercar Interactive Dynamics
-  if (window.activeHypercar) {
-    const p = window.activeHypercar;
-
-    // 1. Wheel Rotation
-    const wheelSpeed = Math.abs(y - smoothScrollY) * 0.04;
-    p.wheelsGroup.children.forEach(wheel => {
-      wheel.children[0].rotation.z += wheelSpeed;
-      wheel.children[1].rotation.z += wheelSpeed;
-    });
-
-    // 2. REAR CLAMSHELL HOOD OPENING (Section 2 "Engine" in Video 2!)
-    // When scrolling to the Engine section (stageIndex == 2), the clamshell tilts open automatically!
-    const isEngineSection = stageIndex === 2;
-    const clamTargetAngle = isClamshellOpen || isEngineSection ? 0.65 : 0;
-    p.rearClamshellGroup.rotation.z += (clamTargetAngle - p.rearClamshellGroup.rotation.z) * 0.08;
-
-    // 3. Gullwing / Dihedral Doors Opening
-    const doorTargetAngle = isDoorsOpen ? 0.75 : 0;
-    p.doorLeftGroup.rotation.y += (-doorTargetAngle - p.doorLeftGroup.rotation.y) * 0.12;
-    p.doorRightGroup.rotation.y += (doorTargetAngle - p.doorRightGroup.rotation.y) * 0.12;
-
-    // 4. Active Aero DRS Wing
-    const wingTargetAngle = isWingRaised || (smoothScrollY > (sectionTops[1] || 800) * 0.5) ? -0.25 : 0;
-    p.activeWingGroup.rotation.z += (wingTargetAngle - p.activeWingGroup.rotation.z) * 0.1;
-
-    // 5. X-Ray Chassis Mode (Section 4 "Anatomy" in Video 1!)
-    const isAnatomySection = stageIndex === 4 || isXRayMode;
-    const targetPaintOpacity = isAnatomySection ? 0.18 : 1.0;
-    p.paintMaterial.opacity += (targetPaintOpacity - p.paintMaterial.opacity) * 0.08;
-
-    // 6. Wind Tunnel Particles
-    if (isAeroActive || stageIndex === 1) {
-      p.windTunnelParticles.visible = true;
-      const positions = windTunnelGeometry.attributes.position.array;
-      for (let i = 0; i < positions.length; i += 3) {
-        positions[i] -= 0.08;
-        if (positions[i] < -2.8) positions[i] = 2.8;
-      }
-      windTunnelGeometry.attributes.position.needsUpdate = true;
-    } else {
-      p.windTunnelParticles.visible = false;
+      const ringMat2 = new THREE.MeshBasicMaterial({ color: 0xe60026, transparent: true, opacity: 0.3 });
+      const ring2 = new THREE.Mesh(new THREE.RingGeometry(5.2, 5.22, 96), ringMat2);
+      ring2.rotation.x = -Math.PI / 2;
+      ring2.position.y = 0.005;
+      scene.add(ring2);
+      studioLights.accentRing = ring2;
     }
 
-    p.group.position.y = Math.sin(currentTime * 0.002) * 0.008;
-  }
+    /* =========================================================================
+       4. PROCEDURAL HIGH-FIDELITY PORSCHE 911 GT3 RS MODEL
+       ========================================================================= */
+    function buildPorscheModel() {
+      carGroup = new THREE.Group();
+      partsList = [];
 
-  renderer.render(scene, camera);
-}
+      // Initialize Master Materials
+      materials.paint = new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color(currentPaintColor),
+        metalness: 0.65,
+        roughness: 0.16,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.04,
+        envMapIntensity: 1.6,
+        transparent: true,
+        opacity: 1.0
+      });
 
-/* =========================================================================
-   7. WEB AUDIO V12 / FLAT-SIX ENGINE SYNTHESIZER
-   ========================================================================= */
-let audioCtx = null;
-let isAudioPlaying = false;
-let engineOsc1, engineOsc2, engineSub, engineGain, engineFilter;
-let targetRPM = 900;
+      materials.carbon = new THREE.MeshStandardMaterial({
+        color: 0x141517,
+        roughness: 0.35,
+        metalness: 0.25,
+        envMapIntensity: 1.2
+      });
 
-function initEngineAudio() {
-  if (audioCtx) return;
-  const AudioContext = window.AudioContext || window.webkitAudioContext;
-  audioCtx = new AudioContext();
+      materials.glass = new THREE.MeshPhysicalMaterial({
+        color: 0x06080c,
+        metalness: 0.95,
+        roughness: 0.05,
+        clearcoat: 1.0,
+        envMapIntensity: 2.0,
+        transparent: true,
+        opacity: 0.92
+      });
 
-  engineGain = audioCtx.createGain();
-  engineGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+      materials.rubberTire = new THREE.MeshStandardMaterial({
+        color: 0x0c0d0f,
+        roughness: 0.92,
+        metalness: 0.05
+      });
 
-  engineFilter = audioCtx.createBiquadFilter();
-  engineFilter.type = 'lowpass';
-  engineFilter.frequency.setValueAtTime(550, audioCtx.currentTime);
+      materials.wheelRim = new THREE.MeshStandardMaterial({
+        color: currentWheelColor,
+        metalness: 0.92,
+        roughness: 0.22,
+        envMapIntensity: 1.5
+      });
 
-  engineOsc1 = audioCtx.createOscillator();
-  engineOsc1.type = 'sawtooth';
-  engineOsc1.frequency.setValueAtTime(38, audioCtx.currentTime);
+      materials.brakeDisc = new THREE.MeshStandardMaterial({
+        color: 0x8a929e,
+        metalness: 0.95,
+        roughness: 0.3
+      });
 
-  engineOsc2 = audioCtx.createOscillator();
-  engineOsc2.type = 'triangle';
-  engineOsc2.frequency.setValueAtTime(76, audioCtx.currentTime);
+      materials.caliper = new THREE.MeshStandardMaterial({
+        color: 0xffcc00, // Porsche PCCB Yellow
+        metalness: 0.6,
+        roughness: 0.25
+      });
 
-  engineSub = audioCtx.createOscillator();
-  engineSub.type = 'sine';
-  engineSub.frequency.setValueAtTime(19, audioCtx.currentTime);
+      materials.ledEmitter = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        emissive: 0xdef0ff,
+        emissiveIntensity: 3.5,
+        roughness: 0.1
+      });
 
-  engineOsc1.connect(engineFilter);
-  engineOsc2.connect(engineFilter);
-  engineSub.connect(engineFilter);
-  engineFilter.connect(engineGain);
-  engineGain.connect(audioCtx.destination);
+      materials.taillightEmitter = new THREE.MeshStandardMaterial({
+        color: 0xff1020,
+        emissive: 0xff0020,
+        emissiveIntensity: 4.0,
+        roughness: 0.2
+      });
 
-  engineOsc1.start();
-  engineOsc2.start();
-  engineSub.start();
-}
+      materials.engineCore = new THREE.MeshStandardMaterial({
+        color: 0x222630,
+        metalness: 0.85,
+        roughness: 0.3,
+        emissive: 0xff4400,
+        emissiveIntensity: 0.4
+      });
 
-function toggleEngineAudio() {
-  initEngineAudio();
-  if (audioCtx.state === 'suspended') audioCtx.resume();
+      materials.chassisWireframe = new THREE.MeshBasicMaterial({
+        color: 0x00e5ff,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.35
+      });
 
-  isAudioPlaying = !isAudioPlaying;
-  const btn = document.getElementById('btn-engine-sound');
-  btn.classList.toggle('playing', isAudioPlaying);
+      // Modular Component Groups (Separate for Exploded / X-Ray Transformation)
+      const groupBodyShell = new THREE.Group();
+      const groupCabinGlass = new THREE.Group();
+      const groupAeroWing = new THREE.Group();
+      const groupEnginePowertrain = new THREE.Group();
+      const groupChassisStructure = new THREE.Group();
+      const groupWheelsBrakes = new THREE.Group();
 
-  if (isAudioPlaying) {
-    engineGain.gain.setTargetAtTime(0.18, audioCtx.currentTime, 0.2);
-    document.getElementById('sound-label').textContent = 'V12 On';
-  } else {
-    engineGain.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.2);
-    document.getElementById('sound-label').textContent = 'Audio';
-  }
-}
+      /* -------------------------------------------------------------
+         A. AERODYNAMIC BODY SHELL (Sculpted Panels & Curves)
+         ------------------------------------------------------------- */
+      // 1. Lower Aerodynamic Monocoque Tub (Sleek aerodynamic base)
+      const basePoints = [
+        new THREE.Vector2(2.15, 0.20),
+        new THREE.Vector2(2.00, 0.45),
+        new THREE.Vector2(1.50, 0.68),
+        new THREE.Vector2(0.80, 0.82),
+        new THREE.Vector2(0.00, 0.84),
+        new THREE.Vector2(-0.80, 0.85),
+        new THREE.Vector2(-1.50, 0.82),
+        new THREE.Vector2(-2.05, 0.72),
+        new THREE.Vector2(-2.25, 0.45),
+        new THREE.Vector2(-2.25, 0.20),
+        new THREE.Vector2(-1.70, 0.20),
+        new THREE.Vector2(-1.10, 0.20),
+        new THREE.Vector2(1.10, 0.20),
+        new THREE.Vector2(1.70, 0.20)
+      ];
+      const baseShape = new THREE.Shape(basePoints);
+      const extrudeSettings = {
+        depth: 1.80,
+        bevelEnabled: true,
+        bevelSegments: 6,
+        steps: 2,
+        bevelSize: 0.08,
+        bevelThickness: 0.08
+      };
+      const baseGeo = new THREE.ExtrudeGeometry(baseShape, extrudeSettings);
+      baseGeo.translate(0, 0, -0.90);
+      const bodyBaseMesh = new THREE.Mesh(baseGeo, materials.paint);
+      groupBodyShell.add(bodyBaseMesh);
 
-function revEnginePedal() {
-  initEngineAudio();
-  if (!isAudioPlaying) toggleEngineAudio();
+      // 2. Sculpted Front Frunk Hood with Dual GT3 RS Air Nostrils
+      const hoodGeo = new THREE.BoxGeometry(1.20, 0.12, 1.40);
+      const hoodMesh = new THREE.Mesh(hoodGeo, materials.paint);
+      hoodMesh.position.set(1.15, 0.72, 0);
+      hoodMesh.rotation.z = -0.16; // Slopes forward
+      groupBodyShell.add(hoodMesh);
 
-  targetRPM = 8200;
-  updateEngineRPM();
+      // Carbon Hood Air Ducts
+      const duct1 = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.06, 0.25), materials.carbon);
+      duct1.position.set(1.18, 0.76, 0.32);
+      duct1.rotation.z = -0.16;
+      const duct2 = duct1.clone();
+      duct2.position.z = -0.32;
+      groupBodyShell.add(duct1, duct2);
 
-  setTimeout(() => {
-    targetRPM = 900;
-    updateEngineRPM();
-  }, 1000);
-}
+      // 3. Flared Front Fenders & Headlight Nacelles
+      [-0.78, 0.78].forEach(zSign => {
+        const fenderHump = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.28, 1.10, 24), materials.paint);
+        fenderHump.rotation.z = Math.PI / 2 + 0.12;
+        fenderHump.position.set(1.25, 0.76, zSign);
+        groupBodyShell.add(fenderHump);
 
-function updateEngineRPM() {
-  if (!audioCtx) return;
-  const baseFreq = (targetRPM / 60) * 6; // 6 firing pulses per rev for V12
-  engineOsc1.frequency.setTargetAtTime(baseFreq, audioCtx.currentTime, 0.08);
-  engineOsc2.frequency.setTargetAtTime(baseFreq * 2, audioCtx.currentTime, 0.08);
-  engineSub.frequency.setTargetAtTime(baseFreq * 0.5, audioCtx.currentTime, 0.08);
-  engineFilter.frequency.setTargetAtTime(Math.min(4200, baseFreq * 14), audioCtx.currentTime, 0.1);
+        // Front Fender Top Pressure Relief Louvers (GT3 RS signature gills)
+        const louver = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.04, 0.16), materials.carbon);
+        louver.position.set(1.20, 0.90, zSign);
+        groupBodyShell.add(louver);
+      });
 
-  const gaugePercent = Math.min(100, Math.max(10, ((targetRPM - 800) / 8000) * 100));
-  document.getElementById('gauge-fill').style.width = gaugePercent + '%';
-  document.getElementById('engine-rpm-val').textContent = Math.round(targetRPM) + ' RPM';
-}
+      // 4. Front Bumper, Radiator Grille & Splitter
+      const splitterGeo = new THREE.BoxGeometry(0.40, 0.04, 1.94);
+      const splitter = new THREE.Mesh(splitterGeo, materials.carbon);
+      splitter.position.set(2.18, 0.18, 0);
+      groupBodyShell.add(splitter);
 
-/* =========================================================================
-   8. UI INTERACTIONS & CONTROLS
-   ========================================================================= */
-function setupUIInteractions() {
-  document.getElementById('btn-engine-sound').addEventListener('click', toggleEngineAudio);
-  document.getElementById('btn-rev-pedal').addEventListener('click', revEnginePedal);
+      // Front Radiator Mesh (Dark intake cavity)
+      const grille = new THREE.Mesh(new THREE.BoxGeometry(0.30, 0.28, 1.40), materials.carbon);
+      grille.position.set(2.05, 0.32, 0);
+      groupBodyShell.add(grille);
 
-  document.querySelectorAll('.swatch').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
-      btn.classList.add('active');
-      const hex = btn.getAttribute('data-color');
-      document.getElementById('label-color-name').textContent = btn.getAttribute('data-name');
-      if (window.activeHypercar) {
-        window.activeHypercar.paintMaterial.color.set(hex);
+      // Corner Canards / Aerodynamic Dive Planes
+      [-0.92, 0.92].forEach(zSign => {
+        const canard = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.03, 0.18), materials.carbon);
+        canard.position.set(2.14, 0.38, zSign);
+        canard.rotation.y = zSign * 0.3;
+        canard.rotation.z = -0.15;
+        groupBodyShell.add(canard);
+      });
+
+      // 5. Muscular Rear Hips / Flared Fenders
+      [-0.82, 0.82].forEach(zSign => {
+        const hipMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.38, 1.25, 24), materials.paint);
+        hipMesh.rotation.z = Math.PI / 2 - 0.14;
+        hipMesh.position.set(-1.25, 0.78, zSign);
+        groupBodyShell.add(hipMesh);
+
+        // Rear Side Air Intake Scoops
+        const sideScoop = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.22, 0.08), materials.carbon);
+        sideScoop.position.set(-0.70, 0.65, zSign * 1.02);
+        groupBodyShell.add(sideScoop);
+      });
+
+      // 6. Rear Bumper & Extreme Aerodynamic Diffuser
+      const diffuser = new THREE.Mesh(new THREE.BoxGeometry(0.60, 0.12, 1.86), materials.carbon);
+      diffuser.position.set(-2.22, 0.22, 0);
+      diffuser.rotation.z = 0.22;
+      groupBodyShell.add(diffuser);
+
+      // Diffuser Strakes / Fins
+      [-0.6, -0.2, 0.2, 0.6].forEach(zPos => {
+        const strake = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.16, 0.03), materials.carbon);
+        strake.position.set(-2.22, 0.22, zPos);
+        strake.rotation.z = 0.22;
+        groupBodyShell.add(strake);
+      });
+
+      // Dual Center Titanium Exhaust Pipes
+      const exhaustMat = new THREE.MeshStandardMaterial({
+        color: 0x485870,
+        metalness: 0.95,
+        roughness: 0.18
+      });
+      [-0.10, 0.10].forEach(zPos => {
+        const pipe = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.065, 0.25, 24), exhaustMat);
+        pipe.rotation.z = Math.PI / 2;
+        pipe.position.set(-2.28, 0.36, zPos);
+        groupBodyShell.add(pipe);
+      });
+
+      /* -------------------------------------------------------------
+         B. GREENHOUSE, ROOF & CABIN GLASS
+         ------------------------------------------------------------- */
+      // Aerodynamic Double-Bubble Roof
+      const roofGeo = new THREE.BoxGeometry(1.45, 0.06, 1.25);
+      const roofMesh = new THREE.Mesh(roofGeo, materials.carbon);
+      roofMesh.position.set(-0.25, 1.26, 0);
+      groupCabinGlass.add(roofMesh);
+
+      // Roof Longitudinal Air Deflection Guides (Directing radiator air outward)
+      [-0.45, 0.45].forEach(zSign => {
+        const roofFin = new THREE.Mesh(new THREE.BoxGeometry(1.20, 0.04, 0.03), materials.carbon);
+        roofFin.position.set(-0.25, 1.30, zSign);
+        groupCabinGlass.add(roofFin);
+      });
+
+      // Front Windshield
+      const windshield = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.04, 1.32), materials.glass);
+      windshield.position.set(0.60, 1.08, 0);
+      windshield.rotation.z = -0.58;
+      groupCabinGlass.add(windshield);
+
+      // Rear Fastback Sloping Glass
+      const rearWindow = new THREE.Mesh(new THREE.BoxGeometry(1.05, 0.04, 1.22), materials.glass);
+      rearWindow.position.set(-1.18, 1.04, 0);
+      rearWindow.rotation.z = 0.48;
+      groupCabinGlass.add(rearWindow);
+
+      // Side Windows
+      [-0.64, 0.64].forEach(zSign => {
+        const sideGlass = new THREE.Mesh(new THREE.BoxGeometry(1.25, 0.36, 0.03), materials.glass);
+        sideGlass.position.set(-0.25, 1.06, zSign);
+        groupCabinGlass.add(sideGlass);
+      });
+
+      // Interior Sports Cockpit (Seats & Dashboard)
+      const seatMat = new THREE.MeshStandardMaterial({ color: 0x111215, roughness: 0.8 });
+      [-0.26, 0.26].forEach(zSign => {
+        const seatBase = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.16, 0.38), seatMat);
+        seatBase.position.set(-0.25, 0.42, zSign);
+        const seatBack = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.58, 0.36), seatMat);
+        seatBack.position.set(-0.48, 0.70, zSign);
+        seatBack.rotation.z = 0.22;
+        groupCabinGlass.add(seatBase, seatBack);
+      });
+
+      // Clubsport Rear Titanium Roll Cage (Visible through rear glass)
+      const cageMat = new THREE.MeshStandardMaterial({ color: 0xe60026, metalness: 0.8, roughness: 0.2 });
+      const bar1 = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 1.2, 16), cageMat);
+      bar1.position.set(-0.85, 0.82, 0);
+      bar1.rotation.x = Math.PI / 2;
+      const bar2 = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.85, 16), cageMat);
+      bar2.position.set(-0.75, 0.92, 0.32);
+      bar2.rotation.z = 0.65;
+      const bar3 = bar2.clone();
+      bar3.position.z = -0.32;
+      groupCabinGlass.add(bar1, bar2, bar3);
+
+      /* -------------------------------------------------------------
+         C. HIGH-DOWNFORCE SWAN-NECK GT3 RS REAR WING
+         ------------------------------------------------------------- */
+      // Twin Upright Swan-Neck Struts
+      [-0.45, 0.45].forEach(zSign => {
+        const pylon = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.65, 0.04), materials.carbon);
+        pylon.position.set(-1.85, 1.25, zSign);
+        pylon.rotation.z = -0.25;
+        groupAeroWing.add(pylon);
+      });
+
+      // Main Aerodynamic Carbon Airfoil (Spans full width)
+      const wingBlade = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.045, 1.88), materials.carbon);
+      wingBlade.position.set(-1.90, 1.58, 0);
+      wingBlade.rotation.z = -0.08; // Angle of attack
+      groupAeroWing.add(wingBlade);
+
+      // DRS Active Flap Element (Top secondary element)
+      const drsFlap = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.025, 1.84), materials.carbon);
+      drsFlap.position.set(-1.98, 1.62, 0);
+      drsFlap.rotation.z = -0.15;
+      groupAeroWing.add(drsFlap);
+
+      // Aerodynamic Wing Endplates
+      [-0.94, 0.94].forEach(zSign => {
+        const endplate = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.28, 0.02), materials.carbon);
+        endplate.position.set(-1.92, 1.58, zSign);
+        groupAeroWing.add(endplate);
+      });
+
+      /* -------------------------------------------------------------
+         D. LIGHTING ARRAYS: HEADLIGHTS & TAILLIGHT BAR
+         ------------------------------------------------------------- */
+      // 1. Porsche 4-Point Matrix LED Headlights
+      [-0.72, 0.72].forEach(zSign => {
+        const headLampHousing = new THREE.Group();
+        const bucket = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.06, 32), materials.carbon);
+        bucket.rotation.z = Math.PI / 2 + 0.35;
+        headLampHousing.add(bucket);
+
+        // 4 Illuminated Projector Points (Iconic Porsche signature)
+        [[-0.06, -0.06], [0.06, -0.06], [-0.06, 0.06], [0.06, 0.06]].forEach(([dx, dy]) => {
+          const ledDot = new THREE.Mesh(new THREE.SphereGeometry(0.028, 12, 12), materials.ledEmitter);
+          ledDot.position.set(0.04, dx, dy);
+          headLampHousing.add(ledDot);
+        });
+
+        // Outer Oval Glass Lens
+        const lens = new THREE.Mesh(new THREE.SphereGeometry(0.18, 24, 16), materials.glass);
+        lens.scale.set(1.4, 0.8, 1.1);
+        lens.position.set(0.02, 0, 0);
+        headLampHousing.add(lens);
+
+        headLampHousing.position.set(1.78, 0.72, zSign);
+        groupBodyShell.add(headLampHousing);
+        headlightMeshes.push(headLampHousing);
+      });
+
+      // 2. Continuous Razor-Thin Rear LED Light Bar (Porsche Signature)
+      const lightbarGeo = new THREE.BoxGeometry(0.04, 0.045, 1.76);
+      taillightMesh = new THREE.Mesh(lightbarGeo, materials.taillightEmitter);
+      taillightMesh.position.set(-2.26, 0.68, 0);
+      groupBodyShell.add(taillightMesh);
+
+      // Porsche Lettermark Plaque
+      const badgePlaque = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.06, 0.68), materials.carbon);
+      badgePlaque.position.set(-2.265, 0.60, 0);
+      groupBodyShell.add(badgePlaque);
+
+      /* -------------------------------------------------------------
+         E. WHEELS, TIRES, BRAKES & HUBS
+         ------------------------------------------------------------- */
+      const wheelConfigs = [
+        { x: 1.30, y: 0.35, z: 0.88, r: 0.35, w: 0.28 }, // Front Left
+        { x: 1.30, y: 0.35, z: -0.88, r: 0.35, w: 0.28 }, // Front Right
+        { x: -1.20, y: 0.37, z: 0.94, r: 0.37, w: 0.34 }, // Rear Left (Staggered wider)
+        { x: -1.20, y: 0.37, z: -0.94, r: 0.37, w: 0.34 }  // Rear Right
+      ];
+
+      wheelConfigs.forEach(cfg => {
+        const wheelAssembly = new THREE.Group();
+        const signZ = Math.sign(cfg.z);
+
+        // 1. Rubber Tire with Curved Sidewall
+        const tireGeo = new THREE.CylinderGeometry(cfg.r, cfg.r, cfg.w, 40);
+        const tire = new THREE.Mesh(tireGeo, materials.rubberTire);
+        tire.rotation.x = Math.PI / 2;
+        wheelAssembly.add(tire);
+
+        // 2. Lightweight Forged Wheel Rim (Deep Dish Rim)
+        const rimOuter = new THREE.Mesh(new THREE.TorusGeometry(cfg.r * 0.72, 0.03, 16, 40), materials.wheelRim);
+        rimOuter.position.z = signZ * (cfg.w * 0.35);
+        wheelAssembly.add(rimOuter);
+
+        // 10 Forged Spokes (Y-Pattern Design)
+        for (let i = 0; i < 5; i++) {
+          const spokeAngle = (i * Math.PI * 2) / 5;
+          const spoke1 = new THREE.Mesh(new THREE.BoxGeometry(cfg.r * 1.35, 0.035, 0.04), materials.wheelRim);
+          spoke1.rotation.z = spokeAngle;
+          spoke1.position.z = signZ * (cfg.w * 0.32);
+          wheelAssembly.add(spoke1);
+
+          const spoke2 = spoke1.clone();
+          spoke2.rotation.z = spokeAngle + 0.12;
+          wheelAssembly.add(spoke2);
+        }
+
+        // Center-Lock Hex Hub Nut (Colored)
+        const centerNut = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.065, 0.08, 6), materials.caliper);
+        centerNut.rotation.x = Math.PI / 2;
+        centerNut.position.z = signZ * (cfg.w * 0.42);
+        wheelAssembly.add(centerNut);
+
+        // 3. Perforated Carbon-Ceramic Brake Rotor Disc
+        const disc = new THREE.Mesh(new THREE.CylinderGeometry(cfg.r * 0.65, cfg.r * 0.65, 0.03, 36), materials.brakeDisc);
+        disc.rotation.x = Math.PI / 2;
+        disc.position.z = signZ * (cfg.w * 0.10);
+        wheelAssembly.add(disc);
+
+        // 4. Heavy-Duty Monobloc Brake Caliper (Yellow PCCB)
+        const caliper = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.16, 0.08), materials.caliper);
+        caliper.position.set(0.04, cfg.r * 0.40, signZ * (cfg.w * 0.12));
+        caliper.rotation.z = 0.25;
+        wheelAssembly.add(caliper);
+
+        wheelAssembly.position.set(cfg.x, cfg.y, cfg.z);
+        groupWheelsBrakes.add(wheelAssembly);
+
+        // Register wheel for outward explosion translation
+        partsList.push({
+          obj: wheelAssembly,
+          basePos: new THREE.Vector3(cfg.x, cfg.y, cfg.z),
+          explodeVec: new THREE.Vector3(0, 0, signZ * 1.4)
+        });
+      });
+
+      /* -------------------------------------------------------------
+         F. POWERTRAIN & MECHANICALS (Engine & Suspension Revealed in X-Ray)
+         ------------------------------------------------------------- */
+      // 4.0L Boxer Flat-Six Engine Block (Mounted low behind rear axle)
+      const engineBlock = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.32, 0.75), materials.engineCore);
+      engineBlock.position.set(-1.45, 0.42, 0);
+      groupEnginePowertrain.add(engineBlock);
+
+      // Intake Plenums (Twin carbon runners)
+      const plenumL = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.65, 20), materials.carbon);
+      plenumL.rotation.z = Math.PI / 2;
+      plenumL.position.set(-1.45, 0.64, 0.24);
+      const plenumR = plenumL.clone();
+      plenumR.position.z = -0.24;
+      groupEnginePowertrain.add(plenumL, plenumR);
+
+      // Twin Titanium Exhaust Headers
+      [-0.28, 0.28].forEach(zPos => {
+        const header = new THREE.Mesh(new THREE.TorusGeometry(0.18, 0.04, 12, 24), exhaustMat);
+        header.position.set(-1.75, 0.36, zPos);
+        groupEnginePowertrain.add(header);
+      });
+
+      // PDK 7-Speed Transmission Casing (Forward of engine)
+      const transmission = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.30, 0.42), materials.engineCore);
+      transmission.position.set(-0.85, 0.40, 0);
+      groupEnginePowertrain.add(transmission);
+
+      // Chassis Monocoque Structure (Visible when exploded)
+      const chassisSkeleton = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.18, 1.4), materials.carbon);
+      chassisSkeleton.position.set(0, 0.24, 0);
+      groupChassisStructure.add(chassisSkeleton);
+
+      // Register Component Groups into Parts Array for Exploded View
+      partsList.push({
+        obj: groupBodyShell,
+        basePos: new THREE.Vector3(0, 0, 0),
+        explodeVec: new THREE.Vector3(0, 1.10, 0)
+      });
+      partsList.push({
+        obj: groupCabinGlass,
+        basePos: new THREE.Vector3(0, 0, 0),
+        explodeVec: new THREE.Vector3(0, 1.85, 0)
+      });
+      partsList.push({
+        obj: groupAeroWing,
+        basePos: new THREE.Vector3(0, 0, 0),
+        explodeVec: new THREE.Vector3(-0.4, 2.40, 0)
+      });
+      partsList.push({
+        obj: groupEnginePowertrain,
+        basePos: new THREE.Vector3(0, 0, 0),
+        explodeVec: new THREE.Vector3(-0.6, 0.20, 0)
+      });
+
+      carGroup.add(groupBodyShell);
+      carGroup.add(groupCabinGlass);
+      carGroup.add(groupAeroWing);
+      carGroup.add(groupWheelsBrakes);
+      carGroup.add(groupEnginePowertrain);
+      carGroup.add(groupChassisStructure);
+
+      scene.add(carGroup);
+    }
+
+    /* =========================================================================
+       5. SILK VEIL / CAR COVER (Matching Video 0:00 Hero Unveil)
+       ========================================================================= */
+    function buildSilkCover() {
+      // Create a draped parametric mesh wrapping the car silhouette
+      const coverGeo = new THREE.BoxGeometry(4.7, 1.35, 2.15, 24, 12, 16);
+      
+      // Deform box vertices to hug the sports car contours
+      const pos = coverGeo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        let x = pos.getX(i);
+        let y = pos.getY(i);
+        let z = pos.getZ(i);
+
+        // Sloping nose in front
+        if (x > 0.8 && y > 0.2) {
+          y -= (x - 0.8) * 0.45;
+        }
+        // Sloping tail at rear
+        if (x < -0.8 && y > 0.4) {
+          y -= (-x - 0.8) * 0.35;
+        }
+        // Soft cloth draping folds
+        y += Math.sin(x * 6 + z * 8) * 0.035;
+        pos.setY(i, y);
       }
-    });
-  });
+      coverGeo.computeVertexNormals();
 
-  document.querySelectorAll('[data-wheel]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('[data-wheel]').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentWheelFinish = btn.getAttribute('data-wheel');
-      document.getElementById('label-wheel-name').textContent = btn.textContent;
-      if (window.activeHypercar) {
-        const color = currentWheelFinish === 'gold' ? 0xd4af37 : (currentWheelFinish === 'silver' ? 0xd0d4de : 0x15161a);
-        const metalness = currentWheelFinish === 'black' ? 0.75 : 0.95;
-        window.activeHypercar.wheelMaterial.color.set(color);
-        window.activeHypercar.wheelMaterial.metalness = metalness;
+      const clothMat = new THREE.MeshStandardMaterial({
+        color: 0x181a20, // Matte black / carbon silk cover
+        roughness: 0.65,
+        metalness: 0.15,
+        transparent: true,
+        opacity: 0.98,
+        side: THREE.DoubleSide
+      });
+
+      clothMesh = new THREE.Mesh(coverGeo, clothMat);
+      clothMesh.position.set(0, 0.72, 0);
+      scene.add(clothMesh);
+    }
+
+    /* =========================================================================
+       6. AERODYNAMIC WIND-TUNNEL STREAMLINES
+       ========================================================================= */
+    function buildAeroStreamlines() {
+      const particleCount = 280;
+      const positions = new Float32Array(particleCount * 3);
+      const velocities = [];
+
+      for (let i = 0; i < particleCount; i++) {
+        positions[i * 3 + 0] = (Math.random() - 0.5) * 6; // X (Length)
+        positions[i * 3 + 1] = 0.2 + Math.random() * 1.5; // Y (Height)
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 2.2; // Z (Width)
+        velocities.push(0.08 + Math.random() * 0.08);
       }
+
+      const streamGeo = new THREE.BufferGeometry();
+      streamGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+      // Glow sprite texture
+      const cv = document.createElement('canvas');
+      cv.width = cv.height = 64;
+      const ctx = cv.getContext('2d');
+      const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+      g.addColorStop(0, 'rgba(0,229,255,1)');
+      g.addColorStop(0.4, 'rgba(0,229,255,0.6)');
+      g.addColorStop(1, 'rgba(0,229,255,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, 64, 64);
+      const streamTex = new THREE.CanvasTexture(cv);
+
+      const streamMat = new THREE.PointsMaterial({
+        map: streamTex,
+        size: 0.22,
+        color: 0x00e5ff,
+        transparent: true,
+        opacity: 0.0, // Fades in during Aero section
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+
+      aeroStreamlines = new THREE.Points(streamGeo, streamMat);
+      aeroStreamlines.userData = { velocities: velocities };
+      scene.add(aeroStreamlines);
+    }
+
+    /* =========================================================================
+       7. INTERACTION, ORBIT & RESIZE
+       ========================================================================= */
+    function setupInteraction() {
+      const canvas = $('#webgl-canvas');
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      // Drag to Orbit Handlers (Free inspection mode)
+      canvas.addEventListener('mousedown', e => {
+        if (!isFreeOrbit) return;
+        isDragging = true;
+        prevMouseX = e.clientX;
+        prevMouseY = e.clientY;
+      });
+      window.addEventListener('mouseup', () => { isDragging = false; });
+      window.addEventListener('mousemove', e => {
+        if (!isDragging || !isFreeOrbit) return;
+        const deltaX = e.clientX - prevMouseX;
+        const deltaY = e.clientY - prevMouseY;
+        prevMouseX = e.clientX;
+        prevMouseY = e.clientY;
+
+        orbitAzimuth -= deltaX * 0.008;
+        orbitElevation = Math.max(0.04, Math.min(Math.PI / 2 - 0.05, orbitElevation + deltaY * 0.008));
+      });
+
+      // Wheel Zoom in Free Orbit
+      canvas.addEventListener('wheel', e => {
+        if (!isFreeOrbit) return;
+        e.preventDefault();
+        orbitDistance = Math.max(4.5, Math.min(14.0, orbitDistance + e.deltaY * 0.005));
+      }, { passive: false });
+
+      // Touch handlers for mobile
+      let touchStartX = 0, touchStartY = 0;
+      canvas.addEventListener('touchstart', e => {
+        if (!isFreeOrbit || e.touches.length !== 1) return;
+        isDragging = true;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      });
+      window.addEventListener('touchend', () => { isDragging = false; });
+      window.addEventListener('touchmove', e => {
+        if (!isDragging || !isFreeOrbit || e.touches.length !== 1) return;
+        const deltaX = e.touches[0].clientX - touchStartX;
+        const deltaY = e.touches[0].clientY - touchStartY;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+
+        orbitAzimuth -= deltaX * 0.008;
+        orbitElevation = Math.max(0.04, Math.min(Math.PI / 2 - 0.05, orbitElevation + deltaY * 0.008));
+      });
+    }
+
+    function onWindowResize() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      renderer.setSize(w, h);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+
+      // Recalculate max scroll height
+      maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    }
+
+    function onScroll() {
+      targetScrollPos = window.scrollY;
+    }
+
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function toggleFreeOrbit() {
+      isFreeOrbit = !isFreeOrbit;
+      const btn = $('#btn-free-orbit');
+      const text = $('#orbit-text');
+      const container = $('#canvas-container');
+
+      if (isFreeOrbit) {
+        btn.style.borderColor = 'var(--primary)';
+        text.textContent = 'EXIT 360°';
+        container.classList.add('interactive');
+      } else {
+        btn.style.borderColor = 'rgba(255,255,255,0.15)';
+        text.textContent = 'INSPECT 360°';
+        container.classList.remove('interactive');
+      }
+    }
+
+    /* =========================================================================
+       8. MAIN ANIMATION & CINEMATIC RENDER LOOP
+       ========================================================================= */
+    let clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const delta = clock.getDelta();
+      const time = clock.getElapsedTime();
+
+      // 1. Silky Smooth Inertia Scroll Interpolation
+      scrollPos = lerp(scrollPos, targetScrollPos, 0.075);
+      scrollPercent = Math.min(1, Math.max(0, scrollPos / maxScroll));
+
+      // Update progress bar
+      $('#progress-bar').style.width = (scrollPercent * 100) + '%';
+
+      // 2. Cloth Veil Transition (Matching Video 0:00 - 0:01)
+      if (clothMesh) {
+        const unveilFactor = Math.min(1, Math.max(0, scrollPercent / 0.12));
+        // Cloth lifts up and peels backward
+        clothMesh.position.y = 0.72 + unveilFactor * 1.8;
+        clothMesh.position.x = -unveilFactor * 2.2;
+        clothMesh.rotation.z = unveilFactor * 0.25;
+        clothMesh.material.opacity = Math.max(0, 1.0 - unveilFactor * 1.4);
+        clothMesh.visible = clothMesh.material.opacity > 0.01;
+      }
+
+      // 3. Cinematic Camera Interpolation Along Narrative Stages
+      if (!isFreeOrbit) {
+        // Map 0..1 scroll percentage across 5 keyframe segments
+        const numSegments = CAMERA_KEYFRAMES.length - 1;
+        const scaledProgress = scrollPercent * numSegments;
+        const segmentIndex = Math.min(Math.floor(scaledProgress), numSegments - 1);
+        const segmentT = scaledProgress - segmentIndex;
+        // Smooth step curve
+        const smoothT = segmentT * segmentT * (3 - 2 * segmentT);
+
+        const kfA = CAMERA_KEYFRAMES[segmentIndex];
+        const kfB = CAMERA_KEYFRAMES[segmentIndex + 1];
+
+        const curAz = lerp(kfA.az, kfB.az, smoothT) * Math.PI / 180 + Math.sin(time * 0.3) * 0.015;
+        const curEl = lerp(kfA.el, kfB.el, smoothT) * Math.PI / 180;
+        const curDist = lerp(kfA.dist, kfB.dist, smoothT);
+        const curTx = lerp(kfA.tx, kfB.tx, smoothT);
+        const curTy = lerp(kfA.ty, kfB.ty, smoothT);
+        const curTz = lerp(kfA.tz, kfB.tz, smoothT);
+        const curFov = lerp(kfA.fov, kfB.fov, smoothT);
+
+        // Position camera in spherical orbit around target
+        camera.position.set(
+          curTx + curDist * Math.cos(curEl) * Math.cos(curAz),
+          curTy + curDist * Math.sin(curEl),
+          curTz + curDist * Math.cos(curEl) * Math.sin(curAz)
+        );
+        camera.lookAt(curTx, curTy, curTz);
+        camera.fov = curFov;
+        camera.updateProjectionMatrix();
+
+        // Sync orbit controls variables in case user switches to free orbit
+        orbitAzimuth = curAz;
+        orbitElevation = curEl;
+        orbitDistance = curDist;
+        orbitTarget.set(curTx, curTy, curTz);
+      } else {
+        // Free Orbit Mode
+        camera.position.set(
+          orbitTarget.x + orbitDistance * Math.cos(orbitElevation) * Math.cos(orbitAzimuth),
+          orbitTarget.y + orbitDistance * Math.sin(orbitElevation),
+          orbitTarget.z + orbitDistance * Math.cos(orbitElevation) * Math.sin(orbitAzimuth)
+        );
+        camera.lookAt(orbitTarget);
+      }
+
+      // 4. Exploded / X-Ray Transformation (Section 3 Matching Video 0:08)
+      // Active around scroll progress 0.40 to 0.70
+      let autoExplode = 0;
+      if (scrollPercent >= 0.38 && scrollPercent <= 0.70) {
+        const xProgress = (scrollPercent - 0.38) / 0.32;
+        autoExplode = Math.sin(xProgress * Math.PI); // Smooth peak at 0.54
+      }
+      const effectiveExplode = Math.max(autoExplode, manualExplode / 100);
+
+      partsList.forEach(p => {
+        p.obj.position.set(
+          p.basePos.x + p.explodeVec.x * effectiveExplode,
+          p.basePos.y + p.explodeVec.y * effectiveExplode,
+          p.basePos.z + p.explodeVec.z * effectiveExplode
+        );
+      });
+
+      // X-Ray Transparency & Wireframe transition
+      if (effectiveExplode > 0.05) {
+        materials.paint.opacity = THREE.MathUtils.lerp(1.0, 0.18, effectiveExplode);
+        materials.glass.opacity = THREE.MathUtils.lerp(0.92, 0.25, effectiveExplode);
+        materials.engineCore.emissiveIntensity = THREE.MathUtils.lerp(0.4, 2.2, effectiveExplode);
+      } else {
+        materials.paint.opacity = 1.0;
+        materials.glass.opacity = 0.92;
+        materials.engineCore.emissiveIntensity = 0.4;
+      }
+
+      // 5. Aerodynamic Streamlines Animation (Section 2 Matching Video 0:07)
+      if (aeroStreamlines) {
+        const aeroSectionActive = scrollPercent >= 0.16 && scrollPercent <= 0.44;
+        aeroStreamlines.material.opacity = lerp(
+          aeroStreamlines.material.opacity,
+          aeroSectionActive ? 0.85 : 0.0,
+          0.08
+        );
+
+        if (aeroStreamlines.material.opacity > 0.01) {
+          const pos = aeroStreamlines.geometry.attributes.position;
+          const vels = aeroStreamlines.userData.velocities;
+          for (let i = 0; i < pos.count; i++) {
+            let x = pos.getX(i) - vels[i];
+            if (x < -3.2) x = 3.2; // Loop back to front of car
+            pos.setX(i, x);
+          }
+          pos.needsUpdate = true;
+        }
+      }
+
+      // 6. Taillight Pulse Effect
+      if (taillightMesh && isLightsOn) {
+        const pulse = 3.5 + Math.sin(time * 3.5) * 0.8;
+        materials.taillightEmitter.emissiveIntensity = pulse;
+      }
+
+      // 7. Hide Hero Telemetry when scrolling past hero
+      const heroTelem = $('#hero-telemetry');
+      if (heroTelem) {
+        if (scrollPercent > 0.18) {
+          heroTelem.classList.add('hidden');
+        } else {
+          heroTelem.classList.remove('hidden');
+        }
+      }
+
+      // 8. Story Text Visibility Trigger (Intersection / Scroll Based)
+      updateStoryCards();
+
+      // Render
+      renderer.render(scene, camera);
+    }
+
+    function updateStoryCards() {
+      const cards = $$('.story-card');
+      const sections = $$('.story-section');
+
+      sections.forEach((sec, idx) => {
+        const rect = sec.getBoundingClientRect();
+        const card = cards[idx];
+        if (!card) return;
+
+        // In viewport check
+        if (rect.top <= window.innerHeight * 0.65 && rect.bottom >= window.innerHeight * 0.35) {
+          card.classList.add('visible');
+        } else if (idx !== 0) { // Keep hero title cached until scrolled away
+          card.classList.remove('visible');
+        }
+      });
+    }
+
+    /* =========================================================================
+       9. LIVE TELEMETRY COUNTER ANIMATION
+       ========================================================================= */
+    function animateCounters() {
+      $$('.counter').forEach(el => {
+        const target = parseFloat(el.dataset.target);
+        const decimals = parseInt(el.dataset.decimals || 0);
+        let current = 0;
+        const duration = 1800;
+        const startTime = performance.now();
+
+        function update(now) {
+          const progress = Math.min(1, (now - startTime) / duration);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          current = target * eased;
+          el.textContent = current.toFixed(decimals);
+          if (progress < 1) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+      });
+    }
+
+    /* =========================================================================
+       10. CONFIGURATOR CONTROLS: PAINT, WHEELS, WEISSACH
+       ========================================================================= */
+    function setPaintColor(hex, name, el) {
+      currentPaintColor = hex;
+      materials.paint.color.set(hex);
+      if (studioLights.underGlow) studioLights.underGlow.color.set(hex);
+      if (studioLights.accentRing) studioLights.accentRing.material.color.set(hex);
+
+      $('#paint-name-display').textContent = name;
+      $('#modal-paint').textContent = name;
+
+      $$('.swatch').forEach(s => s.classList.remove('active'));
+      if (el) el.classList.add('active');
+    }
+
+    function setWheelFinish(hex, el) {
+      currentWheelColor = hex;
+      materials.wheelRim.color.set(hex);
+
+      $$('.control-group-title:has(+ .pill-toggles) + .pill-toggles .pill-btn').forEach;
+      const parent = el.parentElement;
+      parent.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    function toggleWeissach(el) {
+      isWeissach = !isWeissach;
+      el.classList.toggle('active', isWeissach);
+      el.textContent = `Weissach Carbon: ${isWeissach ? 'ON' : 'OFF'}`;
+
+      // Toggle carbon or painted roof/hood
+      materials.carbon.color.set(isWeissach ? 0x141517 : currentPaintColor);
+    }
+
+    function toggleHeadlights(el) {
+      isLightsOn = !isLightsOn;
+      el.classList.toggle('active', isLightsOn);
+      el.textContent = `LED Lights: ${isLightsOn ? 'ON' : 'OFF'}`;
+
+      materials.ledEmitter.emissiveIntensity = isLightsOn ? 3.5 : 0.0;
+      materials.taillightEmitter.emissiveIntensity = isLightsOn ? 4.0 : 0.4;
+    }
+
+    function setExplodeManual(val) {
+      manualExplode = parseFloat(val);
+    }
+
+    /* =========================================================================
+       11. WEB AUDIO API 9,000 RPM FLAT-SIX ACOUSTIC SYNTHESIZER
+       ========================================================================= */
+    let audioCtx = null;
+    let isAudioPlaying = false;
+    let engineNodes = null;
+
+    function initEngineAudio() {
+      if (audioCtx) return;
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioContext();
+    }
+
+    function toggleSound() {
+      initEngineAudio();
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      isAudioPlaying = !isAudioPlaying;
+      const btn = $('#btn-sound-toggle');
+      const label = $('#sound-label');
+
+      if (isAudioPlaying) {
+        btn.classList.add('playing');
+        label.textContent = 'MUTE ACOUSTICS';
+        startEngineSound();
+      } else {
+        btn.classList.remove('playing');
+        label.textContent = 'AUDIO REV';
+        stopEngineSound();
+      }
+    }
+
+    function startEngineSound() {
+      if (!audioCtx) return;
+      stopEngineSound(); // Clear any existing nodes
+
+      // Master Gain
+      const masterGain = audioCtx.createGain();
+      masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+      masterGain.gain.exponentialRampToValueAtTime(0.4, audioCtx.currentTime + 0.5);
+      masterGain.connect(audioCtx.destination);
+
+      // Multi-harmonic oscillator bank simulating boxer-6 firing order
+      const osc1 = audioCtx.createOscillator(); // Sub-bass fundamental (idle ~45Hz)
+      const osc2 = audioCtx.createOscillator(); // Second harmonic (firing pulse ~90Hz)
+      const osc3 = audioCtx.createOscillator(); // High induction scream (~270Hz)
+
+      osc1.type = 'sawtooth';
+      osc2.type = 'triangle';
+      osc3.type = 'sawtooth';
+
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(450, audioCtx.currentTime);
+
+      // Distortion wave shaper for authentic boxer raspy growl
+      const distortion = audioCtx.createWaveShaper();
+      distortion.curve = makeDistortionCurve(18);
+      distortion.oversample = '4x';
+
+      // Connect
+      osc1.connect(filter);
+      osc2.connect(filter);
+      osc3.connect(filter);
+      filter.connect(distortion);
+      distortion.connect(masterGain);
+
+      // Start
+      const t = audioCtx.currentTime;
+      osc1.frequency.setValueAtTime(50, t);
+      osc2.frequency.setValueAtTime(100, t);
+      osc3.frequency.setValueAtTime(280, t);
+
+      // Rev sequence (simulate aggressive blip to 9,000 RPM equivalent)
+      osc1.frequency.exponentialRampToValueAtTime(180, t + 1.2);
+      osc1.frequency.exponentialRampToValueAtTime(80, t + 2.4);
+      filter.frequency.exponentialRampToValueAtTime(2200, t + 1.2);
+      filter.frequency.exponentialRampToValueAtTime(650, t + 2.4);
+
+      osc1.start();
+      osc2.start();
+      osc3.start();
+
+      engineNodes = { osc1, osc2, osc3, masterGain };
+    }
+
+    function stopEngineSound() {
+      if (engineNodes) {
+        try {
+          engineNodes.masterGain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+          setTimeout(() => {
+            if (engineNodes) {
+              engineNodes.osc1.stop();
+              engineNodes.osc2.stop();
+              engineNodes.osc3.stop();
+              engineNodes = null;
+            }
+          }, 350);
+        } catch(e) {}
+      }
+    }
+
+    function makeDistortionCurve(amount) {
+      const k = typeof amount === 'number' ? amount : 50;
+      const n_samples = 44100;
+      const curve = new Float32Array(n_samples);
+      const deg = Math.PI / 180;
+      for (let i = 0; i < n_samples; ++i) {
+        const x = (i * 2) / n_samples - 1;
+        curve[i] = ((3 + k) * x * 20 * deg) / (Math.PI + k * Math.abs(x));
+      }
+      return curve;
+    }
+
+    $('#btn-sound-toggle').addEventListener('click', toggleSound);
+
+    /* =========================================================================
+       12. MODAL DIALOG CONTROLS
+       ========================================================================= */
+    function openOrderModal() {
+      $('#order-modal').classList.add('open');
+    }
+    function closeOrderModal() {
+      $('#order-modal').classList.remove('open');
+    }
+
+    /* =========================================================================
+       13. BOOTSTRAP APPLICATION
+       ========================================================================= */
+    window.addEventListener('DOMContentLoaded', () => {
+      initThree();
+      animateCounters();
+      animate();
     });
-  });
 
-  document.querySelectorAll('.model-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.model-tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      const modelIdx = parseInt(tab.getAttribute('data-model'), 10);
-      currentVehicleIndex = modelIdx;
-      buildVehicle(VEHICLES[modelIdx]);
-    });
-  });
-
-  // Clamshell Engine Bay Toggle (Video 2)
-  document.getElementById('btn-toggle-clamshell').addEventListener('click', function() {
-    isClamshellOpen = !isClamshellOpen;
-    this.classList.toggle('active', isClamshellOpen);
-  });
-
-  // Gullwing Doors Toggle (Video 2)
-  document.getElementById('btn-toggle-doors').addEventListener('click', function() {
-    isDoorsOpen = !isDoorsOpen;
-    this.classList.toggle('active', isDoorsOpen);
-  });
-
-  // Headlights
-  document.getElementById('btn-toggle-lights').addEventListener('click', function() {
-    isHeadlightsOn = !isHeadlightsOn;
-    this.classList.toggle('active', isHeadlightsOn);
-    const beamOpacity = isHeadlightsOn ? 0.28 : 0.0;
-    lightBeamLeft.material.opacity = beamOpacity;
-    lightBeamRight.material.opacity = beamOpacity;
-  });
-
-  // Active DRS Wing
-  document.getElementById('btn-toggle-wing').addEventListener('click', function() {
-    isWingRaised = !isWingRaised;
-    this.classList.toggle('active', isWingRaised);
-  });
-
-  // X-Ray Chassis
-  document.getElementById('btn-toggle-xray').addEventListener('click', function() {
-    isXRayMode = !isXRayMode;
-    this.classList.toggle('active', isXRayMode);
-  });
-
-  // Wind Tunnel
-  document.getElementById('btn-toggle-aero').addEventListener('click', function() {
-    isAeroActive = !isAeroActive;
-    this.classList.toggle('active', isAeroActive);
-  });
-}
-
-function animateCounter(elementId, targetValue, decimals = 0) {
-  const el = document.getElementById(elementId);
-  if (!el) return;
-  const start = 0;
-  const duration = 1200;
-  const startTime = performance.now();
-
-  function step(time) {
-    const elapsed = time - startTime;
-    const progress = Math.min(1, elapsed / duration);
-    const easeOut = 1 - Math.pow(1 - progress, 3);
-    const current = start + (targetValue - start) * easeOut;
-    el.textContent = current.toFixed(decimals);
-    if (progress < 1) requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
-}
-
-// Immediate Safe Startup (No missed events)
-function launch() {
-  try {
-    initScene();
-  } catch (err) {
-    console.error("Hypercar 3D Engine Error:", err);
-  }
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', launch);
-} else {
-  launch();
-}
-</script>
+  </script>
 </body>
 </html>
