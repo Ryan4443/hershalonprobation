@@ -108,6 +108,11 @@
     <!-- Settings Button -->
     <button id="btn-settings" class="fixed top-4 left-4 z-40 touch-btn w-12 h-12 bg-gray-900/60 border-gray-500 text-2xl hidden md:flex items-center justify-center">⚙️</button>
 
+    <!-- Quick Full Screen Button -->
+    <button id="btn-quick-fullscreen" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-40 glass-panel px-4 py-2 rounded-full font-black text-white text-xs md:text-sm uppercase tracking-wider hover:bg-white/20 transition-all flex items-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+        ⛶ Full Screen
+    </button>
+
     <!-- Settings Modal -->
     <div id="settings-modal" class="fixed inset-0 z-[60] hidden items-center justify-center bg-black/70 backdrop-blur-md">
         <div class="glass-panel p-6 md:p-8 rounded-2xl w-[90%] max-w-md flex flex-col gap-6 text-white shadow-[0_0_50px_rgba(0,0,0,0.8)] border-t border-white/20">
@@ -882,6 +887,27 @@
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
                 }
+            }
+        });
+
+        // Quick Fullscreen Logic
+        const btnQuickFullscreen = document.getElementById('btn-quick-fullscreen');
+        btnQuickFullscreen.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    showToast(`Your browser doesn't support fullscreen!`, 'error');
+                });
+            }
+        });
+
+        // Dynamic Fullscreen UI Updates
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                btnQuickFullscreen.style.display = 'none'; // Disappear when equipped
+                document.getElementById('btn-fullscreen').innerText = 'Exit Full Screen';
+            } else {
+                btnQuickFullscreen.style.display = 'flex'; // Reappear if user exits
+                document.getElementById('btn-fullscreen').innerText = 'Toggle Full Screen';
             }
         });
 
