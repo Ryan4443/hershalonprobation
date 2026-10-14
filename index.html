@@ -11,195 +11,184 @@
       --accent-2: #ff0055;
       --gold: #ffcc00;
       --green: #10b981;
-      --bg-glass: rgba(8, 12, 22, 0.84);
-      --border-glass: rgba(0, 240, 255, 0.30);
+      --bg-glass: rgba(8, 12, 22, 0.82);
+      --border-glass: rgba(0, 240, 255, 0.28);
     }
     * { box-sizing: border-box; user-select: none; -webkit-user-select: none; margin: 0; padding: 0; }
     body, html { width: 100%; height: 100%; overflow: hidden; background: #04060c; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: #fff; }
     #game-canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; z-index: 1; }
 
     /* ======================================================================
-       STARTUP LOADING SCREEN WITH RYAN & GEMINI CREDITS
+       STARTUP LOADING SCREEN (CREDITS FOR RYAN & GEMINI)
        ====================================================================== */
     #loading-screen {
       position: fixed; inset: 0; z-index: 100;
       background: radial-gradient(circle at center, #111a30 0%, #04060c 100%);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 24px; text-align: center; transition: opacity 0.55s ease;
+      padding: 20px; text-align: center; transition: opacity 0.5s ease;
     }
     #loading-screen.hidden { opacity: 0; pointer-events: none; }
     .load-badge {
       background: rgba(0, 240, 255, 0.12); border: 1px solid var(--accent); color: var(--accent);
-      padding: 5px 16px; border-radius: 99px; font-size: 11px; font-weight: 900;
-      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px;
-      box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+      padding: 5px 14px; border-radius: 99px; font-size: 10px; font-weight: 900;
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;
     }
     .load-title {
-      font-size: clamp(32px, 6vw, 54px); font-weight: 900; letter-spacing: 5px;
+      font-size: clamp(28px, 6vw, 52px); font-weight: 900; letter-spacing: 4px;
       background: linear-gradient(90deg, #ffffff, var(--accent), var(--accent-2));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      text-shadow: 0 10px 35px rgba(0, 240, 255, 0.3);
     }
     .credits-box {
-      margin-top: 12px; margin-bottom: 24px; padding: 12px 24px;
+      margin: 12px 0 20px; padding: 10px 22px;
       background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 14px; display: flex; gap: 22px; align-items: center; flex-wrap: wrap; justify-content: center;
+      border-radius: 14px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap; justify-content: center;
     }
     .credit-item { display: flex; flex-direction: column; gap: 2px; }
-    .credit-role { font-size: 10px; color: #94a3b8; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; }
-    .credit-name { font-size: 15px; font-weight: 900; color: var(--gold); letter-spacing: 0.8px; }
+    .credit-role { font-size: 9px; color: #94a3b8; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+    .credit-name { font-size: 14px; font-weight: 900; color: var(--gold); }
     .credit-name.ai { color: var(--accent); }
 
     .load-bar-wrap {
-      width: min(420px, 88vw); height: 10px; background: rgba(255,255,255,0.08);
-      border-radius: 99px; overflow: hidden; border: 1px solid var(--border-glass); margin-bottom: 10px;
+      width: min(380px, 85vw); height: 8px; background: rgba(255,255,255,0.08);
+      border-radius: 99px; overflow: hidden; border: 1px solid var(--border-glass); margin-bottom: 8px;
     }
     #load-bar-fill {
-      width: 15%; height: 100%;
+      width: 20%; height: 100%;
       background: linear-gradient(90deg, var(--accent), var(--gold), var(--accent-2));
       transition: width 0.25s ease;
     }
-    #load-status { font-size: 12px; color: #cbd5e1; letter-spacing: 1px; font-weight: 700; margin-bottom: 18px; }
-    .load-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    #load-status { font-size: 11px; color: #cbd5e1; font-weight: 700; margin-bottom: 16px; max-width: 420px; }
+    .load-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
     .btn-start-game {
       background: linear-gradient(135deg, var(--accent), #3b82f6); color: #000;
-      border: none; padding: 12px 30px; border-radius: 99px; font-size: 14px; font-weight: 900;
-      letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
-      box-shadow: 0 0 28px rgba(0, 240, 255, 0.5); transition: transform 0.18s ease;
+      border: none; padding: 11px 28px; border-radius: 99px; font-size: 13px; font-weight: 900;
+      letter-spacing: 1.2px; text-transform: uppercase; cursor: pointer;
+      box-shadow: 0 0 24px rgba(0, 240, 255, 0.45);
     }
-    .btn-start-game:hover { transform: scale(1.05); }
 
-    /* AIM & GO CENTER RETICLE (VISIBLE ON FOOT) */
+    /* AIM & GO RETICLE (ON FOOT) */
     #aim-reticle {
       position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      width: 28px; height: 28px; border: 2px solid var(--accent); border-radius: 50%;
+      width: 26px; height: 26px; border: 2px solid var(--accent); border-radius: 50%;
       pointer-events: none; z-index: 8; display: none;
-      box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
     }
     #aim-reticle::after {
       content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
       width: 5px; height: 5px; background: var(--accent-2); border-radius: 50%;
     }
-    #aim-reticle-label {
-      position: fixed; top: calc(50% + 22px); left: 50%; transform: translateX(-50%);
-      font-size: 10px; font-weight: 900; color: var(--accent); background: rgba(0,0,0,0.75);
-      padding: 2px 8px; border-radius: 6px; pointer-events: none; z-index: 8; display: none;
-      white-space: nowrap; letter-spacing: 0.8px;
-    }
 
-    /* HUD OVERLAY */
-    #hud { position: fixed; inset: 0; pointer-events: none; z-index: 10; display: flex; flex-direction: column; justify-content: space-between; padding: 14px; }
+    /* ======================================================================
+       NEAT, MINIMAL HUD OVERLAY
+       ====================================================================== */
+    #hud { position: fixed; inset: 0; pointer-events: none; z-index: 10; display: flex; flex-direction: column; justify-content: space-between; padding: 12px; }
     .interactive { pointer-events: auto; }
 
-    /* TOP BAR */
-    .top-bar { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap; }
-    .profile-cluster { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .brand-card {
-      background: var(--bg-glass); backdrop-filter: blur(14px);
-      border: 1px solid var(--border-glass); border-left: 4px solid var(--accent);
-      padding: 9px 15px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.55);
+    .top-bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .profile-cluster { display: flex; align-items: center; gap: 8px; }
+    .brand-pill {
+      background: var(--bg-glass); backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass); border-left: 3px solid var(--accent);
+      padding: 6px 12px; border-radius: 10px;
     }
-    .brand-title { font-size: 19px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; background: linear-gradient(90deg, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .brand-sub { font-size: 10px; color: #94a3b8; letter-spacing: 1.1px; margin-top: 2px; font-weight: 700; }
+    .brand-title { font-size: 14px; font-weight: 900; letter-spacing: 1.5px; background: linear-gradient(90deg, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .brand-sub { font-size: 8px; color: #94a3b8; font-weight: 800; letter-spacing: 0.8px; }
 
-    .cash-card {
-      background: var(--bg-glass); backdrop-filter: blur(14px);
-      border: 1px solid rgba(255, 204, 0, 0.35); padding: 7px 15px; border-radius: 12px;
-      display: flex; align-items: center; gap: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    .cash-pill {
+      background: var(--bg-glass); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 204, 0, 0.35); padding: 6px 12px; border-radius: 10px;
+      display: flex; align-items: center; gap: 10px;
     }
-    .cash-val { color: var(--gold); font-size: 20px; font-weight: 900; font-variant-numeric: tabular-nums; text-shadow: 0 0 12px rgba(255,204,0,0.4); }
-    .lvl-wrap { display: flex; flex-direction: column; gap: 3px; min-width: 95px; }
-    .lvl-top { display: flex; justify-content: space-between; font-size: 11px; font-weight: 800; color: var(--accent); }
-    .xp-track { width: 100%; height: 5px; background: rgba(255,255,255,0.12); border-radius: 99px; overflow: hidden; }
-    #xp-fill { width: 45%; height: 100%; background: linear-gradient(90deg, var(--accent), #a855f7); transition: width 0.3s ease; }
+    .cash-val { color: var(--gold); font-size: 16px; font-weight: 900; font-variant-numeric: tabular-nums; }
+    .lvl-badge { font-size: 10px; font-weight: 900; color: var(--accent); background: rgba(0,240,255,0.12); padding: 2px 7px; border-radius: 6px; }
 
-    .toolbar { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; max-width: 820px; }
+    /* COMPACT QUICK ICON BAR (TOP RIGHT) */
+    .quick-icons { display: flex; gap: 6px; align-items: center; }
+    .icon-btn {
+      width: 40px; height: 40px; border-radius: 11px;
+      background: var(--bg-glass); backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass); color: #fff; font-size: 17px;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      transition: all 0.15s ease; box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      position: relative;
+    }
+    .icon-btn:hover, .icon-btn:active { background: var(--accent); color: #000; border-color: #fff; transform: translateY(-1px); }
+    .icon-btn.settings-gear { border-color: var(--gold); color: var(--gold); }
+    .icon-btn.settings-gear:hover { background: var(--gold); color: #000; }
+
     .btn-hud {
-      background: rgba(12, 18, 34, 0.88); color: #f8fafc; border: 1px solid var(--border-glass);
-      padding: 8px 11px; border-radius: 9px; font-weight: 800; font-size: 11px; cursor: pointer;
-      transition: all 0.16s ease; display: inline-flex; align-items: center; gap: 5px;
-      text-transform: uppercase; letter-spacing: 0.6px; backdrop-filter: blur(10px);
+      background: rgba(15, 23, 42, 0.9); color: #f8fafc; border: 1px solid var(--border-glass);
+      padding: 9px 13px; border-radius: 10px; font-weight: 800; font-size: 11px; cursor: pointer;
+      transition: all 0.15s ease; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      text-transform: uppercase; letter-spacing: 0.6px;
     }
-    .btn-hud:hover { background: var(--accent); color: #000; border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 0 14px rgba(0,240,255,0.5); }
+    .btn-hud:hover { background: var(--accent); color: #000; border-color: var(--accent); }
     .btn-hud.highlight { border-color: var(--gold); color: var(--gold); }
     .btn-hud.highlight:hover { background: var(--gold); color: #000; }
-    .btn-hud.active-mode { background: rgba(16, 185, 129, 0.25); border-color: #34d399; color: #34d399; }
-    .btn-hud.fix-btn { border-color: #f43f5e; color: #fda4af; }
-    .btn-hud.fix-btn:hover { background: #f43f5e; color: #fff; }
+    .btn-hud.active-pill { background: rgba(16, 185, 129, 0.22); border-color: #34d399; color: #34d399; }
 
     /* DRIFT & REWARD BANNERS */
     #drift-banner {
-      position: fixed; top: 82px; left: 50%; transform: translateX(-50%) scale(0.9);
+      position: fixed; top: 68px; left: 50%; transform: translateX(-50%) scale(0.9);
       background: linear-gradient(135deg, rgba(255,0,85,0.9), rgba(10,14,26,0.94));
-      border: 2px solid #ff0055; padding: 9px 26px; border-radius: 999px;
-      text-align: center; opacity: 0; transition: all 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-      box-shadow: 0 0 35px rgba(255,0,85,0.55); pointer-events: none;
+      border: 2px solid #ff0055; padding: 7px 22px; border-radius: 999px;
+      text-align: center; opacity: 0; transition: all 0.2s ease; pointer-events: none;
     }
     #drift-banner.active { opacity: 1; transform: translateX(-50%) scale(1); }
-    #drift-score-text { font-size: 22px; font-weight: 900; letter-spacing: 1px; }
-    #drift-mult-text { font-size: 11px; color: var(--gold); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+    #drift-score-text { font-size: 19px; font-weight: 900; }
+    #drift-mult-text { font-size: 10px; color: var(--gold); font-weight: 800; }
 
     #reward-toast {
-      position: fixed; top: 148px; left: 50%; transform: translateX(-50%);
-      background: rgba(16, 185, 129, 0.92); border: 1px solid #6ee7b7; color: #fff;
-      padding: 6px 18px; border-radius: 99px; font-weight: 900; font-size: 13px;
-      opacity: 0; transition: all 0.25s ease; pointer-events: none; box-shadow: 0 0 20px rgba(16,185,129,0.5);
-      white-space: nowrap;
+      position: fixed; top: 126px; left: 50%; transform: translateX(-50%);
+      background: rgba(16, 185, 129, 0.94); border: 1px solid #6ee7b7; color: #fff;
+      padding: 5px 16px; border-radius: 99px; font-weight: 900; font-size: 12px;
+      opacity: 0; transition: all 0.25s ease; pointer-events: none; white-space: nowrap;
     }
     #reward-toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
 
-    /* INTERACTIVE DEALERSHIP PROMPT */
     #interact-prompt {
-      position: fixed; bottom: 162px; left: 50%; transform: translateX(-50%);
-      background: rgba(8, 12, 24, 0.94); border: 2px solid var(--gold); color: #fff;
-      padding: 9px 20px; border-radius: 99px; font-weight: 800; font-size: 12px;
+      position: fixed; bottom: 145px; left: 50%; transform: translateX(-50%);
+      background: rgba(8, 12, 24, 0.94); border: 1.5px solid var(--gold); color: #fff;
+      padding: 7px 16px; border-radius: 99px; font-weight: 800; font-size: 11px;
       z-index: 20; display: none; pointer-events: auto; cursor: pointer;
-      box-shadow: 0 0 25px rgba(255, 204, 0, 0.4);
     }
-    #interact-prompt span.key { background: var(--gold); color: #000; padding: 2px 7px; border-radius: 5px; font-weight: 900; margin: 0 4px; }
+    #interact-prompt span.key { background: var(--gold); color: #000; padding: 1px 6px; border-radius: 4px; font-weight: 900; margin: 0 3px; }
 
-    /* BOTTOM BAR */
-    .bottom-bar { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
-    .radar-panel { display: flex; align-items: flex-end; gap: 12px; }
+    /* BOTTOM BAR: MINIMAP & COMPACT GAUGE */
+    .bottom-bar { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; }
     .minimap-wrap {
-      width: 150px; height: 150px; border-radius: 50%; overflow: hidden;
-      border: 3px solid var(--accent); background: rgba(5, 10, 20, 0.88);
-      box-shadow: 0 0 25px rgba(0, 240, 255, 0.28); position: relative; cursor: pointer;
+      width: 126px; height: 126px; border-radius: 50%; overflow: hidden;
+      border: 2.5px solid var(--accent); background: rgba(5, 10, 20, 0.90);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.25); position: relative; cursor: pointer;
     }
     #minimap { width: 100%; height: 100%; display: block; }
     .zone-label {
-      position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
-      background: rgba(0,0,0,0.82); padding: 2px 8px; border-radius: 6px;
-      font-size: 9px; font-weight: 900; color: var(--accent); white-space: nowrap; border: 1px solid rgba(0,240,255,0.3);
+      position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,0.85); padding: 1px 7px; border-radius: 5px;
+      font-size: 8px; font-weight: 900; color: var(--accent); white-space: nowrap;
     }
 
-    .controls-hint {
-      background: var(--bg-glass); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.12);
-      padding: 9px 13px; border-radius: 12px; font-size: 11px; color: #cbd5e1; line-height: 1.55;
-    }
-    .controls-hint b { color: var(--accent); }
-
-    /* CIRCULAR TACHOMETER & MANUAL SHIFTER CLUSTER */
+    /* COMPACT SPEEDOMETER + SHIFTER */
     .gauge-cluster {
-      background: var(--bg-glass); backdrop-filter: blur(16px);
-      border: 1px solid var(--border-glass); border-radius: 20px; padding: 12px 16px;
-      display: flex; align-items: center; gap: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.65);
+      background: var(--bg-glass); backdrop-filter: blur(14px);
+      border: 1px solid var(--border-glass); border-radius: 18px; padding: 8px 12px;
+      display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.6);
     }
-    .shifter-col { display: flex; flex-direction: column; gap: 5px; align-items: center; }
+    .shifter-col { display: flex; flex-direction: column; gap: 4px; align-items: center; }
     .paddle-btn {
       background: rgba(255,255,255,0.08); border: 1px solid var(--border-glass); color: #fff;
-      padding: 5px 10px; border-radius: 7px; font-size: 11px; font-weight: 900; cursor: pointer;
-      width: 82px; text-align: center; transition: all 0.12s;
+      padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 900; cursor: pointer;
+      width: 64px; text-align: center;
     }
-    .paddle-btn:hover, .paddle-btn:active { background: var(--accent); color: #000; }
+    .paddle-btn:active { background: var(--accent); color: #000; }
     .trans-badge {
-      font-size: 10px; font-weight: 900; padding: 4px 8px; border-radius: 6px; cursor: pointer;
+      font-size: 9px; font-weight: 900; padding: 3px 6px; border-radius: 5px; cursor: pointer;
       background: rgba(0, 240, 255, 0.16); border: 1px solid var(--accent); color: var(--accent);
-      width: 82px; text-align: center;
+      width: 64px; text-align: center;
     }
     .trans-badge.manual { background: rgba(255, 0, 85, 0.22); border-color: var(--accent-2); color: #fda4af; }
 
-    .dial-box { position: relative; width: 128px; height: 128px; }
+    .dial-box { position: relative; width: 104px; height: 104px; }
     .dial-svg { width: 100%; height: 100%; transform: rotate(135deg); }
     .dial-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 9; stroke-linecap: round; stroke-dasharray: 251; stroke-dashoffset: 63; }
     #dial-rpm { fill: none; stroke: url(#rpmGrad); stroke-width: 9; stroke-linecap: round; stroke-dasharray: 251; stroke-dashoffset: 251; transition: stroke-dashoffset 0.04s linear; }
@@ -207,61 +196,43 @@
       position: absolute; inset: 0; display: flex; flex-direction: column;
       align-items: center; justify-content: center; text-align: center;
     }
-    .speed-val { font-size: 36px; font-weight: 900; line-height: 0.95; font-variant-numeric: tabular-nums; }
-    .speed-unit { font-size: 9px; color: #94a3b8; font-weight: 800; letter-spacing: 1px; margin-top: 2px; }
+    .speed-val { font-size: 28px; font-weight: 900; line-height: 0.95; font-variant-numeric: tabular-nums; }
+    .speed-unit { font-size: 8px; color: #94a3b8; font-weight: 800; margin-top: 2px; }
     .gear-pill {
-      margin-top: 4px; background: var(--accent-2); color: #fff; font-weight: 900;
-      font-size: 14px; padding: 1px 10px; border-radius: 6px; box-shadow: 0 0 12px rgba(255,0,85,0.5);
+      margin-top: 3px; background: var(--accent-2); color: #fff; font-weight: 900;
+      font-size: 12px; padding: 1px 8px; border-radius: 5px;
     }
-    .gear-pill.redline { background: var(--gold); color: #000; animation: pulseRedline 0.15s infinite alternate; }
-    @keyframes pulseRedline { from { transform: scale(1); } to { transform: scale(1.14); } }
+    .gear-pill.redline { background: var(--gold); color: #000; }
 
-    .veh-telemetry { display: flex; flex-direction: column; gap: 5px; min-width: 150px; }
-    .veh-name-hud { font-size: 12px; color: #fff; font-weight: 900; text-transform: uppercase; }
-    .telemetry-sub { font-size: 10px; font-weight: 800; color: #34d399; }
-    .bar-group { display: flex; flex-direction: column; gap: 2px; }
-    .bar-label { display: flex; justify-content: space-between; font-size: 10px; font-weight: 800; color: #94a3b8; }
-    .bar-track { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 99px; overflow: hidden; }
-    #nos-bar { width: 100%; height: 100%; background: linear-gradient(90deg, #00f0ff, #3b82f6); }
-    #drift-angle-bar { width: 0%; height: 100%; background: linear-gradient(90deg, var(--gold), var(--accent-2)); }
-
-    /* MODALS */
+    /* MODALS (SETTINGS, GARAGE, GLB) */
     .modal-backdrop {
-      position: fixed; inset: 0; background: rgba(3, 6, 14, 0.85); backdrop-filter: blur(12px);
-      z-index: 50; display: none; align-items: center; justify-content: center; padding: 16px;
+      position: fixed; inset: 0; background: rgba(3, 6, 14, 0.86); backdrop-filter: blur(12px);
+      z-index: 50; display: none; align-items: center; justify-content: center; padding: 14px;
     }
     .modal-backdrop.open { display: flex; }
     .modal-card {
       background: #0b1120; border: 1px solid var(--border-glass); border-radius: 18px;
-      max-width: 920px; width: 100%; max-height: 88vh; overflow-y: auto; padding: 22px;
+      max-width: 860px; width: 100%; max-height: 88vh; overflow-y: auto; padding: 18px;
       box-shadow: 0 24px 64px rgba(0,0,0,0.85);
     }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 16px; }
-    .modal-title { font-size: 19px; font-weight: 900; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; }
-    .close-btn { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; width: 34px; height: 34px; border-radius: 8px; cursor: pointer; font-weight: 900; }
-    .close-btn:hover { background: var(--accent-2); border-color: var(--accent-2); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 14px; }
+    .modal-title { font-size: 16px; font-weight: 900; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; }
+    .close-btn { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-weight: 900; }
 
-    .veh-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(265px, 1fr)); gap: 14px; }
+    .settings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)); gap: 10px; margin-bottom: 16px; }
+    .veh-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(245px, 1fr)); gap: 12px; }
     .veh-card {
       background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 7px;
-      transition: all 0.2s ease;
+      border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 6px;
     }
-    .veh-card.active { border-color: var(--accent); box-shadow: 0 0 22px rgba(0,240,255,0.22); }
-    .veh-card h3 { font-size: 14px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; gap: 6px; }
-    .glb-status { font-size: 9px; padding: 2px 7px; border-radius: 99px; font-weight: 800; white-space: nowrap; }
+    .veh-card.active { border-color: var(--accent); box-shadow: 0 0 18px rgba(0,240,255,0.2); }
+    .veh-card h3 { font-size: 13px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; gap: 4px; }
+    .glb-status { font-size: 9px; padding: 2px 6px; border-radius: 99px; font-weight: 800; }
     .glb-status.loaded { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #34d399; }
-    .glb-status.proc { background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid #fbbf24; }
-    .stat-bar-line { font-size: 11px; color: #94a3b8; display: flex; justify-content: space-between; }
-    .stat-track { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 99px; overflow: hidden; }
+    .glb-status.proc { background: rgba(0, 240, 255, 0.15); color: var(--accent); border: 1px solid var(--accent); }
+    .stat-bar-line { font-size: 10px; color: #94a3b8; display: flex; justify-content: space-between; }
+    .stat-track { width: 100%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 99px; overflow: hidden; }
     .stat-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #a855f7); }
-
-    .drop-zone {
-      border: 2px dashed var(--accent); background: rgba(0, 240, 255, 0.06);
-      border-radius: 14px; padding: 18px; text-align: center; cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .drop-zone:hover { background: rgba(0, 240, 255, 0.14); box-shadow: 0 0 25px rgba(0,240,255,0.28); }
 
     /* ======================================================================
        MOBILE TOUCH CONTROLS (NOS DIRECTLY ON TOP OF LEFT & RIGHT BUTTONS!)
@@ -269,36 +240,30 @@
     #mobile-controls { position: fixed; inset: 0; pointer-events: none; z-index: 15; display: none; }
     #mobile-controls.visible { display: block; }
     .touch-left {
-      position: absolute; bottom: 24px; left: 20px;
-      display: flex; flex-direction: column; gap: 10px; align-items: stretch;
+      position: absolute; bottom: 150px; left: 16px;
+      display: flex; flex-direction: column; gap: 8px; align-items: stretch;
       pointer-events: auto;
     }
-    .touch-steer-row { display: flex; gap: 12px; }
+    .touch-steer-row { display: flex; gap: 10px; }
     .touch-right {
-      position: absolute; bottom: 24px; right: 20px;
-      display: flex; gap: 10px; align-items: flex-end;
+      position: absolute; bottom: 135px; right: 16px;
+      display: flex; gap: 8px; align-items: flex-end;
       pointer-events: auto;
     }
     .t-btn {
-      width: 66px; height: 66px; border-radius: 15px; background: rgba(15, 23, 42, 0.80);
-      border: 2px solid var(--border-glass); color: #fff; font-weight: 900; font-size: 18px;
+      width: 60px; height: 60px; border-radius: 14px; background: rgba(15, 23, 42, 0.82);
+      border: 2px solid var(--border-glass); color: #fff; font-weight: 900; font-size: 16px;
       display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px);
       touch-action: none;
     }
     .t-btn.nos-top {
-      width: 100%; height: 50px; border-color: var(--gold); color: var(--gold);
-      background: rgba(255, 204, 0, 0.16); font-size: 15px; letter-spacing: 1px;
-      box-shadow: 0 0 18px rgba(255, 204, 0, 0.25);
+      width: 100%; height: 44px; border-color: var(--gold); color: var(--gold);
+      background: rgba(255, 204, 0, 0.18); font-size: 13px; letter-spacing: 1px;
     }
     .t-btn:active, .t-btn.pressed { background: var(--accent); color: #000; border-color: #fff; }
     .t-btn.nos-top:active, .t-btn.nos-top.pressed { background: var(--gold); color: #000; }
-    .t-btn.gas { height: 86px; background: rgba(0, 240, 255, 0.22); border-color: var(--accent); }
-    .t-btn.brake { background: rgba(255, 0, 85, 0.22); border-color: var(--accent-2); }
-
-    @media (max-width: 820px) {
-      .controls-hint { display: none; }
-      .veh-telemetry { display: none; }
-    }
+    .t-btn.gas { height: 78px; background: rgba(0, 240, 255, 0.24); border-color: var(--accent); }
+    .t-btn.brake { background: rgba(255, 0, 85, 0.24); border-color: var(--accent-2); }
   </style>
   <script type="importmap">
     {
@@ -311,9 +276,7 @@
 </head>
 <body>
 
-<!-- ========================================================================
-     STARTUP LOADING SCREEN (CREDITS FOR RYAN & GEMINI + GLB STATUS)
-     ======================================================================== -->
+<!-- STARTUP LOADING SCREEN WITH RYAN & GEMINI CREDITS -->
 <div id="loading-screen">
   <div class="load-badge">OPEN-WORLD 3D DRIFT & SUPERBIKE SIMULATOR</div>
   <div class="load-title">CODE DRIFT: ULTIMATE</div>
@@ -323,7 +286,7 @@
       <span class="credit-role">Created & Directed By</span>
       <span class="credit-name">👑 RYAN</span>
     </div>
-    <div style="width:1px;height:28px;background:rgba(255,255,255,0.15);"></div>
+    <div style="width:1px;height:26px;background:rgba(255,255,255,0.15);"></div>
     <div class="credit-item">
       <span class="credit-role">3D Engine & Co-Developer</span>
       <span class="credit-name ai">✨ GEMINI AI</span>
@@ -331,100 +294,69 @@
   </div>
 
   <div class="load-bar-wrap"><div id="load-bar-fill"></div></div>
-  <div id="load-status">Scanning Browser Cache & Restoring Your 6 Provided .GLB Models...</div>
+  <div id="load-status">Loading 3D Vehicles & Restoring Cached .GLB Models...</div>
 
   <div class="load-actions">
     <button class="btn-start-game" id="btn-launch-game">🏁 START ENGINE</button>
-    <label class="btn-hud highlight" style="padding:12px 18px;border-radius:99px;cursor:pointer;">
-      📂 Load 6 .GLB Files (<span id="load-glb-counter">0/6</span>)
+    <label class="btn-hud highlight" style="border-radius:99px;padding:10px 16px;cursor:pointer;">
+      📂 Load .GLB Files (<span id="load-glb-counter">0/6</span>)
       <input type="file" id="splash-glb-input" multiple accept=".glb,.gltf" style="display:none;" />
     </label>
   </div>
 </div>
 
-<!-- AIM & GO RETICLE (SHOWS WHEN WALKING ON FOOT) -->
+<!-- AIM & GO RETICLE (ON FOOT) -->
 <div id="aim-reticle"></div>
-<div id="aim-reticle-label">AIM & GO ACTIVE • CLICK GROUND OR PRESS [Z] AUTO-WALK</div>
 
 <canvas id="game-canvas"></canvas>
 
-<!-- MAIN HUD -->
+<!-- ========================================================================
+     SUPER CLEAN & NEAT HUD (EVERYTHING TUCKED INTO THE ⚙️ SETTINGS ICON!)
+     ======================================================================== -->
 <div id="hud">
   <div class="top-bar">
     <div class="profile-cluster interactive">
-      <div class="brand-card">
-        <div class="brand-title">CODE DRIFT <span style="font-size:12px;color:var(--gold);">ULTIMATE</span></div>
-        <div class="brand-sub">BY RYAN & GEMINI • 3D OPEN WORLD</div>
+      <div class="brand-pill">
+        <div class="brand-title">CODE DRIFT</div>
+        <div class="brand-sub">BY RYAN & GEMINI</div>
       </div>
 
-      <div class="cash-card">
-        <div>
-          <div style="font-size:10px;color:#94a3b8;font-weight:800;">BANK BALANCE</div>
-          <div class="cash-val" id="hud-cash">$50,000</div>
-        </div>
-        <div class="lvl-wrap">
-          <div class="lvl-top"><span>LVL <span id="hud-lvl">1</span></span><span id="hud-xp-txt">0/500 XP</span></div>
-          <div class="xp-track"><div id="xp-fill"></div></div>
-        </div>
+      <div class="cash-pill">
+        <span class="cash-val" id="hud-cash">$50,000</span>
+        <span class="lvl-badge">LVL <span id="hud-lvl">1</span></span>
       </div>
     </div>
 
-    <div class="toolbar interactive">
-      <button class="btn-hud highlight" id="btn-open-glb">📦 6 .GLB MODELS (<span id="glb-count">0/6</span>)</button>
-      <button class="btn-hud fix-btn" id="btn-flip-car" title="Flip car 180 degrees (Key: R)">🔄 FLIP 180° (R)</button>
-      <button class="btn-hud" id="btn-open-garage">🏎️ DEALERSHIP (G)</button>
-      <button class="btn-hud" id="btn-walk">🚶 <span id="walk-label">EXIT CAR</span> (F)</button>
-      <button class="btn-hud" id="btn-aim-walk" style="display:none;">🎯 AIM-WALK: <span id="aim-walk-txt">OFF</span> (Z)</button>
-      <button class="btn-hud" id="btn-open-map">📍 TELEPORT (M)</button>
-      <button class="btn-hud" id="btn-cam">🎥 <span id="cam-label">CHASE</span> (C)</button>
-      <button class="btn-hud" id="btn-tod">🌅 <span id="tod-label">SUNSET</span> (T)</button>
-      <button class="btn-hud" id="btn-ctrl-mode">🎮 <span id="ctrl-label">PC</span></button>
-      <button class="btn-hud highlight" id="btn-fullscreen">⛶ <span id="fs-label">FULLSCREEN</span></button>
+    <!-- COMPACT QUICK ICONS + ⚙️ SETTINGS ICON -->
+    <div class="quick-icons interactive">
+      <button class="icon-btn" id="btn-open-garage" title="Dealership & Garage (G)">🏎️</button>
+      <button class="icon-btn" id="btn-walk" title="Exit / Enter Vehicle (F)">🚶</button>
+      <button class="icon-btn" id="btn-cam" title="Switch Camera View (C)">🎥</button>
+      <button class="icon-btn settings-gear" id="btn-open-settings" title="Settings, Map, Fullscreen & .GLB Models">⚙️</button>
     </div>
   </div>
 
   <div id="drift-banner">
     <div id="drift-score-text">DRIFT +1,250</div>
-    <div id="drift-mult-text">COMBO 2.5x • KEEP SLIDING!</div>
+    <div id="drift-mult-text">COMBO 2.5x • SLIDING!</div>
   </div>
 
   <div id="reward-toast">+$2,500 CASH EARNED!</div>
 
-  <div id="interact-prompt">Press <span class="key">G</span> or Click Here to Open Dealership</div>
+  <div id="interact-prompt">Tap Here or Press <span class="key">G</span> for Dealership</div>
 
   <div class="bottom-bar">
-    <div class="radar-panel interactive">
-      <div class="minimap-wrap" title="Click to open Teleport Map" id="minimap-trigger">
-        <canvas id="minimap" width="150" height="150"></canvas>
-        <div class="zone-label" id="zone-name">DEALERSHIP PLAZA</div>
-      </div>
-      <div class="controls-hint">
-        <div><b>WASD</b> Drive / Walk • <b>SPACE</b> Drift • <b>SHIFT</b> Nitro / Sprint</div>
-        <div><b>X</b> Auto/Manual Gear • <b>E / Q</b> Shift Up / Down • <b>R</b> Flip 180°</div>
-        <div><b>F</b> Exit/Enter Car • <b>L</b> Fullscreen • <b>Click Ground</b> Aim & Go</div>
-      </div>
+    <div class="minimap-wrap interactive" title="Tap for Fast Travel & Settings" id="minimap-trigger">
+      <canvas id="minimap" width="126" height="126"></canvas>
+      <div class="zone-label" id="zone-name">DEALERSHIP</div>
     </div>
 
-    <!-- CIRCULAR TACHOMETER + MANUAL GEAR SHIFTER -->
+    <!-- COMPACT CIRCULAR TACHOMETER + SHIFTER -->
     <div class="gauge-cluster interactive">
-      <div class="veh-telemetry">
-        <div class="veh-name-hud" id="hud-veh-name">1986 BMW M3 COUPE (E30)</div>
-        <div class="telemetry-sub" id="model-badge">✓ 3D MODEL ACTIVE</div>
-        <div class="bar-group" style="margin-top:4px;">
-          <div class="bar-label"><span>NITROUS OXIDE</span><span id="nos-pct">100%</span></div>
-          <div class="bar-track"><div id="nos-bar"></div></div>
-        </div>
-        <div class="bar-group">
-          <div class="bar-label"><span>DRIFT SLIP ANGLE</span><span id="drift-deg">0°</span></div>
-          <div class="bar-track"><div id="drift-angle-bar"></div></div>
-        </div>
-      </div>
-
-      <!-- MANUAL / AUTO SHIFTER CONTROLS -->
       <div class="shifter-col">
-        <div class="trans-badge" id="btn-trans-mode" title="Press X to switch Auto/Manual">⚙️ AUTO (X)</div>
-        <button class="paddle-btn" id="btn-shift-up" title="Shift Up (Key: E)">▲ GEAR + (E)</button>
-        <button class="paddle-btn" id="btn-shift-dn" title="Shift Down (Key: Q)">▼ GEAR - (Q)</button>
+        <div class="trans-badge" id="btn-trans-mode">AUTO</div>
+        <button class="paddle-btn" id="btn-shift-up">▲ G+</button>
+        <button class="paddle-btn" id="btn-shift-dn">▼ G-</button>
       </div>
 
       <div class="dial-box">
@@ -454,43 +386,67 @@
      ======================================================================== -->
 <div id="mobile-controls">
   <div class="touch-left">
-    <div class="t-btn nos-top" id="t-nos">⚡ NOS BOOST</div>
+    <div class="t-btn nos-top" id="t-nos">⚡ NOS</div>
     <div class="touch-steer-row">
       <div class="t-btn" id="t-left">◀</div>
       <div class="t-btn" id="t-right">▶</div>
     </div>
   </div>
   <div class="touch-right">
-    <div class="t-btn" id="t-shift-dn" style="font-size:13px;">G-</div>
-    <div class="t-btn" id="t-shift-up" style="font-size:13px;">G+</div>
-    <div class="t-btn" id="t-drift" style="font-size:13px;">DRIFT</div>
+    <div class="t-btn" id="t-drift" style="font-size:12px;">DRIFT</div>
     <div class="t-btn brake" id="t-brake">BRK</div>
     <div class="t-btn gas" id="t-gas">GAS</div>
   </div>
 </div>
 
-<!-- YOUR 6 PROVIDED .GLB MODELS MANAGER & 1-CLICK HTML BUNDLER -->
-<div class="modal-backdrop" id="modal-glb">
+<!-- ========================================================================
+     ⚙️ ALL-IN-ONE SETTINGS, CONTROLS, FAST TRAVEL & .GLB BAKER MODAL
+     ======================================================================== -->
+<div class="modal-backdrop" id="modal-settings">
   <div class="modal-card">
     <div class="modal-header">
-      <div class="modal-title">📦 Your 6 Provided .GLB Models & Single-File Web Baker</div>
-      <button class="close-btn" data-close="modal-glb">✕</button>
+      <div class="modal-title">⚙️ Game Settings, Controls, Map & 3D .GLB Manager</div>
+      <button class="close-btn" data-close="modal-settings">✕</button>
     </div>
-    <p style="font-size:12px;color:#cbd5e1;line-height:1.6;margin-bottom:14px;">
-      Your 6 provided <code>.glb</code> models (**1986 BMW M3 E30**, **2019 BMW S1000RR**, **BMW M4 CSL**, **BMW M4 Widebody**, **BMW S1000 RR**, and **2023 McLaren Solus GT**) are automatically restored from your browser cache and displayed both on your vehicle and on the <b>Dealership Turntables</b>!
-    </p>
-    <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
-      <label class="drop-zone" style="flex:1;">
-        <input type="file" id="glb-file-input" multiple accept=".glb,.gltf" style="display:none;" />
-        <div style="font-size:16px;font-weight:900;color:var(--accent);">📂 Drop all 6 `.GLB` files here (or Click to Browse)</div>
-        <div style="font-size:11px;color:#94a3b8;margin-top:4px;">Automatically matches each car/bike, removes studio floors & saves permanently</div>
-      </label>
-      <button class="btn-hud highlight" id="btn-bake-html" style="padding:16px 20px;">
-        ⚡ EXPORT SINGLE-FILE<br>WEB HTML (WITH .GLBs)
-      </button>
+
+    <!-- QUICK SETTINGS GRID -->
+    <div class="settings-grid">
+      <button class="btn-hud highlight" id="btn-fullscreen">⛶ <span id="fs-label">FULLSCREEN</span></button>
+      <button class="btn-hud" id="btn-ctrl-mode">🎮 CTRL: <span id="ctrl-label">AUTO</span></button>
+      <button class="btn-hud" id="btn-tod">🌅 TIME: <span id="tod-label">SUNSET</span></button>
+      <button class="btn-hud" id="btn-flip-car">🔄 FLIP CAR 180° (R)</button>
+      <button class="btn-hud" id="btn-aim-walk">🎯 AIM-WALK: <span id="aim-walk-txt">OFF</span></button>
+      <button class="btn-hud" id="btn-mute-audio">🔊 AUDIO: <span id="audio-txt">ON</span></button>
     </div>
-    <div id="glb-log" style="font-size:12px;color:#34d399;margin-bottom:12px;min-height:18px;font-weight:700;"></div>
-    <div class="veh-grid" id="glb-status-grid"></div>
+
+    <!-- FAST TRAVEL TELEPORT ROW -->
+    <div style="font-size:12px;font-weight:900;color:var(--accent);margin-bottom:8px;text-transform:uppercase;">📍 Fast Travel Locations</div>
+    <div class="settings-grid" style="margin-bottom:16px;">
+      <button class="btn-hud" data-tp="45,-12,3.14159">🏪 Dealership Plaza</button>
+      <button class="btn-hud" data-tp="0,0,0">🏙️ Downtown Square</button>
+      <button class="btn-hud" data-tp="-160,120,0">🌳 Central Park</button>
+      <button class="btn-hud" data-tp="220,130,1.57">🏁 Apex Drift Track</button>
+      <button class="btn-hud" data-tp="-220,-240,0">🚦 Drag Strip</button>
+    </div>
+
+    <!-- 6 .GLB MODELS MANAGER & PHONE/WEB SINGLE-FILE BAKER -->
+    <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        <div>
+          <div style="font-size:13px;font-weight:900;color:var(--gold);">📦 Your 6 Provided .GLB Models (<span id="glb-count">0/6</span> Loaded)</div>
+          <div style="font-size:11px;color:#94a3b8;">To make your `.glb` files work on your phone or any device: Load them below, then tap <b>"⚡ Bake .GLBs Into HTML"</b>!</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <label class="btn-hud highlight" style="cursor:pointer;">
+            📂 Load 6 .GLB Files
+            <input type="file" id="glb-file-input" multiple accept=".glb,.gltf" style="display:none;" />
+          </label>
+          <button class="btn-hud active-pill" id="btn-bake-html">⚡ Bake .GLBs Into HTML</button>
+        </div>
+      </div>
+      <div id="glb-log" style="font-size:11px;color:#34d399;margin-bottom:10px;font-weight:700;"></div>
+      <div class="veh-grid" id="glb-status-grid"></div>
+    </div>
   </div>
 </div>
 
@@ -501,36 +457,18 @@
       <div class="modal-title">🏎️ Ryan's Motorsport Dealership & Tuning Garage</div>
       <button class="close-btn" data-close="modal-garage">✕</button>
     </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
-      <div style="font-size:12px;color:#cbd5e1;">
-        Earn cash from <b>Drifting</b>, collecting <b>Gold Cash Crates ($2,500)</b>, hitting <b>Speed Traps</b>, and launching off <b>Stunt Ramps</b>!
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+      <div style="font-size:11px;color:#cbd5e1;">
+        Active Vehicle: <b id="hud-veh-name" style="color:var(--accent);">1986 BMW M3 E30</b> (<span id="model-badge" style="color:#34d399;">3D Ready</span>)
       </div>
-      <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;">
-        <span style="font-size:12px;color:#94a3b8;font-weight:700;">Paint:</span>
-        <input type="color" id="paint-picker" value="#d90429" style="width:34px;height:28px;border:none;background:none;cursor:pointer;" />
-        <button class="btn-hud" id="btn-upgrade-engine">⚡ ECU Tune ($5,000)</button>
-        <button class="btn-hud" id="btn-upgrade-turbo">🔥 Stage 2 Turbo ($7,500)</button>
-        <button class="btn-hud highlight" id="btn-free-cash">🎁 +$50,000 GRANT</button>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+        <input type="color" id="paint-picker" value="#d90429" style="width:32px;height:28px;border:none;background:none;cursor:pointer;" title="Custom Paint" />
+        <button class="btn-hud" id="btn-upgrade-engine">⚡ ECU ($5k)</button>
+        <button class="btn-hud" id="btn-upgrade-turbo">🔥 Turbo ($7.5k)</button>
+        <button class="btn-hud highlight" id="btn-free-cash">🎁 +$50k Grant</button>
       </div>
     </div>
     <div class="veh-grid" id="garage-grid"></div>
-  </div>
-</div>
-
-<!-- TELEPORT & MAP MODAL -->
-<div class="modal-backdrop" id="modal-map">
-  <div class="modal-card" style="max-width:580px;">
-    <div class="modal-header">
-      <div class="modal-title">📍 Fast Travel & World Locations</div>
-      <button class="close-btn" data-close="modal-map">✕</button>
-    </div>
-    <div class="veh-grid" style="grid-template-columns:1fr 1fr;">
-      <button class="btn-hud" style="padding:15px;justify-content:center;" data-tp="45,-12,3.14159">🏪 Luxury Dealership Plaza</button>
-      <button class="btn-hud" style="padding:15px;justify-content:center;" data-tp="0,0,0">🏙️ Downtown Neon Square</button>
-      <button class="btn-hud" style="padding:15px;justify-content:center;" data-tp="-160,120,0">🌳 Central Park Lakefront</button>
-      <button class="btn-hud" style="padding:15px;justify-content:center;" data-tp="220,130,1.57">🏁 Apex Drift Circuit</button>
-      <button class="btn-hud" style="padding:15px;justify-content:center;" data-tp="-220,-240,0">🚦 1/4 Mile Drag Strip</button>
-    </div>
   </div>
 </div>
 
@@ -538,14 +476,12 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-const CLEAN_HTML_TEMPLATE = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+// Capture clean HTML source for the binary-safe split/join Single-File Baker
+const INITIAL_HTML_SOURCE = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
 const EMBEDDED_GLB_DATA = /*__EMBEDDED_GLBS_START__*/{}/*__EMBEDDED_GLBS_END__*/;
 const rawDataURLStore = { ...EMBEDDED_GLB_DATA };
 
-// World Boundary Limit (Blocks cars & on-foot player from leaving the map)
 const MAP_LIMIT = 330;
-
-// Saved per-vehicle rotation overrides so your .GLB models always face forward
 const savedYawOffsets = JSON.parse(localStorage.getItem('codeDriftYawOffsets') || '{}');
 function saveYawOffsets() {
   localStorage.setItem('codeDriftYawOffsets', JSON.stringify(savedYawOffsets));
@@ -568,7 +504,6 @@ const VEHICLES = [
     handling: 3.3,
     driftGrip: 0.92,
     color: 0xd90429,
-    author: 'Lexyc16',
     matchKeys: ['m3 e30', 'e30', '1986', 'lexyc16', 'rubber.001'],
     defaultFilename: 'bmw_m3_e30_1986.glb',
     targetLength: 4.45
@@ -584,7 +519,6 @@ const VEHICLES = [
     handling: 3.9,
     driftGrip: 0.94,
     color: 0xf8fafc,
-    author: 'VTX',
     matchKeys: ['bmws19', 's1000rr 2019', 'bmws_sign', 'lights_f'],
     defaultFilename: 'bmw_s1000rr_2019.glb',
     targetLength: 2.18
@@ -600,7 +534,6 @@ const VEHICLES = [
     handling: 3.5,
     driftGrip: 0.91,
     color: 0x333942,
-    author: 'Mpgs Studios',
     matchKeys: ['m4csl', 'bmwm8carsave', 'object442', 'line005', '2125684715'],
     defaultFilename: 'bmw_m4csl.glb',
     targetLength: 4.78
@@ -616,7 +549,6 @@ const VEHICLES = [
     handling: 3.6,
     driftGrip: 0.89,
     color: 0x10b981,
-    author: 'vecarz',
     matchKeys: ['m4competitiong82', 'widebody', 'vecarz', 'kit0_paint'],
     defaultFilename: 'bmw_m4_widebody.glb',
     targetLength: 4.82
@@ -632,7 +564,6 @@ const VEHICLES = [
     handling: 4.1,
     driftGrip: 0.93,
     color: 0xe11d48,
-    author: 'VTX',
     matchKeys: ['offlrds1000r', 'bmw_m1krr', 's1000 rr', 'bride_alcantara'],
     defaultFilename: 'bmw_s1000_rr.glb',
     targetLength: 2.18
@@ -648,7 +579,6 @@ const VEHICLES = [
     handling: 4.2,
     driftGrip: 0.95,
     color: 0xff5500,
-    author: 'kevin',
     matchKeys: ['solus_gt', 'solus gt', 'mclaren', 'cifra_logo', 'csr2_interiora'],
     defaultFilename: 'mclaren_solus_gt.glb',
     targetLength: 4.95
@@ -676,7 +606,8 @@ const state = {
   rpm: 0.15,
   redlining: false,
   highSpeedTimer: 0,
-  borderWarnCooldown: 0
+  borderWarnCooldown: 0,
+  audioMuted: false
 };
 
 if (savedData?.ownedIds) {
@@ -791,12 +722,20 @@ window.addEventListener('pointerdown', initAudio, { once: true });
 window.addEventListener('keydown', initAudio, { once: true });
 
 function triggerExhaustPop() {
-  if (!audioReady || !popSynth) return;
+  if (!audioReady || !popSynth || state.audioMuted) return;
   try { popSynth.triggerAttackRelease('C1', '32n'); } catch (e) {}
 }
 
 function updateAudio(speedRatio, rpmRatio, isDrifting, vehType) {
   if (!audioReady) return;
+  if (state.audioMuted) {
+    engineOsc.volume.value = -100;
+    engineSub.volume.value = -100;
+    screechGain.gain.rampTo(0, 0.05);
+    return;
+  }
+  engineOsc.volume.value = -16;
+  engineSub.volume.value = -14;
   const baseFreq = vehType === 'bike' ? 105 : 58;
   const maxFreq = vehType === 'bike' ? 410 : 225;
   const freq = baseFreq + rpmRatio * (maxFreq - baseFreq) + speedRatio * 35;
@@ -822,7 +761,7 @@ function makeRoadTexture() {
   const ctx = c.getContext('2d');
   ctx.fillStyle = '#161a24';
   ctx.fillRect(0, 0, 512, 512);
-  for (let i = 0; i < 4000; i++) {
+  for (let i = 0; i < 3500; i++) {
     const v = 18 + Math.floor(Math.random() * 20);
     ctx.fillStyle = `rgb(${v},${v+2},${v+6})`;
     ctx.fillRect(Math.random() * 512, Math.random() * 512, 2, 2);
@@ -848,14 +787,11 @@ ground.rotation.x = -Math.PI / 2;
 ground.receiveShadow = true;
 worldGroup.add(ground);
 
-// ============================================================================
-// PHYSICAL & VISUAL CYBER-NEON MAP BOUNDARY WALL (±330m)
-// ============================================================================
+// Physical & Visual Cyber-Neon Map Boundary Wall (±330m)
 function buildMapBoundaryWalls() {
   const span = MAP_LIMIT * 2;
   const wallHeight = 9.0;
 
-  // Create glowing hazard chevron texture for the border wall
   const c = document.createElement('canvas');
   c.width = 256; c.height = 64;
   const ctx = c.getContext('2d');
@@ -867,30 +803,22 @@ function buildMapBoundaryWalls() {
   ctx.fillStyle = '#ff0055';
   for (let x = 0; x < 256; x += 64) {
     ctx.beginPath();
-    ctx.moveTo(x, 60);
-    ctx.lineTo(x + 24, 4);
-    ctx.lineTo(x + 44, 4);
-    ctx.lineTo(x + 20, 60);
-    ctx.closePath();
-    ctx.fill();
+    ctx.moveTo(x, 60); ctx.lineTo(x + 24, 4); ctx.lineTo(x + 44, 4); ctx.lineTo(x + 20, 60);
+    ctx.closePath(); ctx.fill();
   }
   const borderTex = new THREE.CanvasTexture(c);
   borderTex.wrapS = borderTex.wrapT = THREE.RepeatWrapping;
   borderTex.repeat.set(28, 1);
 
-  const wallMat = new THREE.MeshBasicMaterial({
-    map: borderTex, transparent: true, opacity: 0.78, side: THREE.DoubleSide
-  });
+  const wallMat = new THREE.MeshBasicMaterial({ map: borderTex, transparent: true, opacity: 0.78, side: THREE.DoubleSide });
   const topRailMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
 
-  const wallSides = [
+  [
     { x: 0, z: MAP_LIMIT, rotY: 0 },
     { x: 0, z: -MAP_LIMIT, rotY: 0 },
     { x: MAP_LIMIT, z: 0, rotY: Math.PI / 2 },
     { x: -MAP_LIMIT, z: 0, rotY: Math.PI / 2 }
-  ];
-
-  wallSides.forEach((s) => {
+  ].forEach((s) => {
     const wMesh = new THREE.Mesh(new THREE.PlaneGeometry(span, wallHeight), wallMat);
     wMesh.position.set(s.x, wallHeight / 2, s.z);
     wMesh.rotation.y = s.rotY;
@@ -900,15 +828,6 @@ function buildMapBoundaryWalls() {
     rail.position.set(s.x, wallHeight, s.z);
     rail.rotation.y = s.rotY;
     worldGroup.add(rail);
-  });
-
-  // Corner Beacon Towers
-  const towerGeo = new THREE.BoxGeometry(3.5, 22, 3.5);
-  const towerMat = new THREE.MeshBasicMaterial({ color: 0xff0055 });
-  [[-MAP_LIMIT, -MAP_LIMIT], [MAP_LIMIT, -MAP_LIMIT], [-MAP_LIMIT, MAP_LIMIT], [MAP_LIMIT, MAP_LIMIT]].forEach(([cx, cz]) => {
-    const t = new THREE.Mesh(towerGeo, towerMat);
-    t.position.set(cx, 11, cz);
-    worldGroup.add(t);
   });
 }
 buildMapBoundaryWalls();
@@ -1042,7 +961,7 @@ function buildLuxuryDealership() {
   neonFascia.position.set(dx, 8.75, dz);
   worldGroup.add(neonFascia);
 
-  const signTex = makeBannerTexture("RYAN'S MOTORSPORT DEALERSHIP", "WALK IN OR PRESS [G] • 6 EXOTIC MODELS", '#00f0ff');
+  const signTex = makeBannerTexture("RYAN'S MOTORSPORT DEALERSHIP", "TAP GARAGE OR WALK IN • 6 EXOTIC MODELS", '#00f0ff');
   const signBoard = new THREE.Mesh(
     new THREE.PlaneGeometry(24, 5.2),
     new THREE.MeshBasicMaterial({ map: signTex, side: THREE.DoubleSide })
@@ -1084,7 +1003,7 @@ function buildLuxuryDealership() {
     neonRing.position.set(pos.x, 0.38, pos.z);
     worldGroup.add(neonRing);
 
-    const priceLabel = v.owned ? 'OWNED • CLICK OR [G] TO DRIVE' : `$${v.price.toLocaleString()} • [G] TO BUY`;
+    const priceLabel = v.owned ? 'OWNED • TAP GARAGE TO DRIVE' : `$${v.price.toLocaleString()} • IN DEALERSHIP`;
     const infoTex = makeBannerTexture(v.name, priceLabel, v.owned ? '#34d399' : '#ffcc00');
     const infoPlane = new THREE.Mesh(
       new THREE.PlaneGeometry(5.5, 1.35),
@@ -1114,8 +1033,8 @@ function buildWorldZonesAndCollectibles() {
   const trunkMat = new THREE.MeshStandardMaterial({ color: 0x451a03 });
   const leafGeo = new THREE.ConeGeometry(3.2, 7.5, 8);
   const leafMat = new THREE.MeshStandardMaterial({ color: 0x15803d, roughness: 0.7 });
-  for (let i = 0; i < 36; i++) {
-    const angle = (i / 36) * Math.PI * 2;
+  for (let i = 0; i < 32; i++) {
+    const angle = (i / 32) * Math.PI * 2;
     const dist = 34 + (i % 3) * 12;
     const tx = px + Math.cos(angle) * dist, tz = pz + Math.sin(angle) * dist;
     const trunk = new THREE.Mesh(trunkGeo, trunkMat); trunk.position.set(tx, 2, tz);
@@ -1123,7 +1042,6 @@ function buildWorldZonesAndCollectibles() {
     worldGroup.add(trunk, crown);
   }
 
-  // Apex Race Track (220, 180)
   const trackRing = new THREE.Mesh(
     new THREE.RingGeometry(48, 68, 64),
     new THREE.MeshStandardMaterial({ color: 0x222634, roughness: 0.4, side: THREE.DoubleSide })
@@ -1136,16 +1054,13 @@ function buildWorldZonesAndCollectibles() {
   curbInner.rotation.x = -Math.PI / 2; curbInner.position.set(220, 0.06, 180);
   worldGroup.add(trackRing, curbInner);
 
-  // Drag Strip (-220, -240)
   addRoadSegment(-220, -120, 24, 340, 0);
 
-  // Speed Trap Gates
-  const gateCoords = [
+  [
     { x: 0, z: 60, rot: 0, name: 'Downtown Speed Trap' },
     { x: -220, z: -120, rot: 0, name: 'Drag Strip Speed Trap' },
     { x: 220, z: 122, rot: Math.PI / 2, name: 'Apex Circuit Gate' }
-  ];
-  gateCoords.forEach((g) => {
+  ].forEach((g) => {
     const arch = new THREE.Group();
     const pGeo = new THREE.BoxGeometry(0.6, 8, 0.6);
     const pMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
@@ -1160,13 +1075,11 @@ function buildWorldZonesAndCollectibles() {
     speedTraps.push({ x: g.x, z: g.z, cooldown: 0, name: g.name });
   });
 
-  // 3 Neon Stunt Jump Ramps
-  const rampCoords = [
+  [
     { x: 0, z: -45 },
     { x: 80, z: 25 },
     { x: -80, z: 0 }
-  ];
-  rampCoords.forEach((rc) => {
+  ].forEach((rc) => {
     const rampMesh = new THREE.Mesh(
       new THREE.BoxGeometry(7, 1.8, 9),
       new THREE.MeshStandardMaterial({ color: 0xff0055, emissive: 0xff0055, emissiveIntensity: 0.35 })
@@ -1177,7 +1090,6 @@ function buildWorldZonesAndCollectibles() {
     ramps.push({ x: rc.x, z: rc.z, r: 5.5 });
   });
 
-  // 20 Spinning Gold Cash Crates ($2,500 each)
   const crateGeo = new THREE.OctahedronGeometry(0.85, 0);
   const crateMat = new THREE.MeshStandardMaterial({ color: 0xffcc00, emissive: 0xffaa00, emissiveIntensity: 0.6, metalness: 0.9, roughness: 0.1 });
   for (let i = 0; i < 20; i++) {
@@ -1194,52 +1106,65 @@ function buildWorldZonesAndCollectibles() {
 buildWorldZonesAndCollectibles();
 
 // ============================================================================
-// 5. VEHICLE MODELS: YOUR PROVIDED .GLB LOADER + FALLBACK REPLICAS
+// 5. CONTOURED 3D CAD VEHICLE GENERATOR + .GLB NORMALIZER
 // ============================================================================
 const gltfLoader = new GLTFLoader();
 const loadedVehicleRigs = new Map();
 
-function buildBaked3DVehicle(cfg) {
+// Creates smooth contoured 3D sports car / hypercar / superbike bodies using ExtrudeGeometry profiles
+function buildContoured3DVehicle(cfg) {
   const root = new THREE.Group();
   const orientGroup = new THREE.Group();
   root.add(orientGroup);
 
   const wheels = [];
   const paintMat = new THREE.MeshPhysicalMaterial({
-    color: cfg.color, metalness: 0.72, roughness: 0.14, clearcoat: 1.0, clearcoatRoughness: 0.04
+    color: cfg.color, metalness: 0.74, roughness: 0.14, clearcoat: 1.0, clearcoatRoughness: 0.04
   });
   paintMat.name = 'PrimaryPaint';
 
-  const carbonMat = new THREE.MeshStandardMaterial({ color: 0x151821, roughness: 0.28, metalness: 0.75 });
+  const carbonMat = new THREE.MeshStandardMaterial({ color: 0x141720, roughness: 0.28, metalness: 0.75 });
   const tireMat = new THREE.MeshStandardMaterial({ color: 0x0e1015, roughness: 0.65, metalness: 0.2 });
-  const glassMat = new THREE.MeshPhysicalMaterial({ color: 0x050a14, metalness: 0.1, roughness: 0.04, transparent: true, opacity: 0.82, clearcoat: 1.0 });
+  const glassMat = new THREE.MeshPhysicalMaterial({ color: 0x050a14, metalness: 0.1, roughness: 0.04, transparent: true, opacity: 0.84, clearcoat: 1.0 });
   const headMat = new THREE.MeshBasicMaterial({ color: 0xe0f7ff });
   const yellowDRL = new THREE.MeshBasicMaterial({ color: 0xffdd00 });
   const tailMat = new THREE.MeshBasicMaterial({ color: 0xff0033 });
   const goldMat = new THREE.MeshStandardMaterial({ color: 0xeab308, metalness: 0.9, roughness: 0.15 });
   const chromeMat = new THREE.MeshStandardMaterial({ color: 0xe4e4e7, metalness: 0.92, roughness: 0.12 });
+  const caliperMat = new THREE.MeshStandardMaterial({ color: 0xef4444, metalness: 0.6, roughness: 0.3 });
 
   if (cfg.type === 'bike') {
     const isCustom = cfg.id === 'bmw_s1000rr_custom';
-    const engine = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.44, 0.58), carbonMat);
-    engine.position.set(0, 0.48, 0.06);
-    orientGroup.add(engine);
 
-    const tank = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.38, 0.76), paintMat);
-    tank.position.set(0, 0.78, 0.08);
-    tank.castShadow = true;
-    orientGroup.add(tank);
+    // Sculpted Sportbike Side Profile extruded across width
+    const bikeShape = new THREE.Shape();
+    bikeShape.moveTo(-0.75, 0.78);
+    bikeShape.lineTo(-0.20, 0.86);
+    bikeShape.lineTo(0.25, 0.92);
+    bikeShape.lineTo(0.82, 0.74);
+    bikeShape.lineTo(0.55, 0.42);
+    bikeShape.lineTo(-0.15, 0.36);
+    bikeShape.closePath();
 
-    const nose = new THREE.Mesh(new THREE.ConeGeometry(0.28, 0.64, 12), paintMat);
-    nose.rotation.x = Math.PI / 2;
-    nose.position.set(0, 0.80, 0.68);
-    orientGroup.add(nose);
+    const bodyGeo = new THREE.ExtrudeGeometry(bikeShape, { depth: 0.36, bevelEnabled: true, bevelThickness: 0.06, bevelSize: 0.05, bevelSegments: 4 });
+    bodyGeo.center();
+    bodyGeo.rotateY(Math.PI / 2);
+    const bodyMesh = new THREE.Mesh(bodyGeo, paintMat);
+    bodyMesh.position.set(0, 0.68, 0.08);
+    bodyMesh.castShadow = true;
+    orientGroup.add(bodyMesh);
 
-    const bubble = new THREE.Mesh(new THREE.SphereGeometry(0.24, 16, 12), glassMat);
-    bubble.scale.set(0.85, 0.65, 1.65);
-    bubble.position.set(0, 0.96, 0.52);
+    const bubble = new THREE.Mesh(new THREE.SphereGeometry(0.22, 16, 12), glassMat);
+    bubble.scale.set(0.85, 0.62, 1.65);
+    bubble.position.set(0, 0.98, 0.50);
     bubble.rotation.x = -0.45;
     orientGroup.add(bubble);
+
+    if (isCustom) {
+      const winglet = new THREE.Mesh(new THREE.BoxGeometry(0.74, 0.025, 0.20), carbonMat);
+      winglet.position.set(0, 0.72, 0.68);
+      orientGroup.add(winglet);
+    }
 
     [-0.12, 0.12].forEach((fx) => {
       const fork = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.022, 0.72, 12), goldMat);
@@ -1248,10 +1173,15 @@ function buildBaked3DVehicle(cfg) {
       orientGroup.add(fork);
     });
 
-    const tail = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.16, 0.66), paintMat);
-    tail.position.set(0, 0.88, -0.58);
-    tail.rotation.x = 0.26;
-    orientGroup.add(tail);
+    // Tucked-in Sportbike Rider
+    const riderGroup = new THREE.Group();
+    const rTorso = new THREE.Mesh(new THREE.CapsuleGeometry(0.15, 0.36, 8, 12), carbonMat);
+    rTorso.position.set(0, 1.06, -0.05);
+    rTorso.rotation.x = 0.85;
+    const rHelmet = new THREE.Mesh(new THREE.SphereGeometry(0.15, 16, 14), paintMat);
+    rHelmet.position.set(0, 1.22, 0.22);
+    riderGroup.add(rTorso, rHelmet);
+    orientGroup.add(riderGroup);
 
     const tireGeo = new THREE.TorusGeometry(0.31, 0.095, 16, 28);
     [0.74, -0.72].forEach((zPos, idx) => {
@@ -1268,33 +1198,97 @@ function buildBaked3DVehicle(cfg) {
     const isHyper = cfg.id === 'mclaren_solus_gt';
     const isE30 = cfg.id === 'bmw_m3_e30';
     const isWide = cfg.id === 'bmw_m4_widebody';
-    const bodyW = isHyper ? 2.05 : isWide ? 2.04 : isE30 ? 1.78 : 1.92;
-    const bodyL = isE30 ? 4.40 : 4.72;
+    const bodyW = isHyper ? 2.02 : isWide ? 2.00 : isE30 ? 1.76 : 1.90;
+    const halfL = isE30 ? 2.20 : 2.36;
 
-    const lowerBody = new THREE.Mesh(new THREE.BoxGeometry(bodyW, isHyper ? 0.42 : 0.50, bodyL), paintMat);
-    lowerBody.position.set(0, 0.48, 0);
-    lowerBody.castShadow = true;
-    orientGroup.add(lowerBody);
+    // Aerodynamic Side Silhouette Shape (Z = horizontal length, Y = height)
+    const carShape = new THREE.Shape();
+    carShape.moveTo(-halfL, 0.26);
+    carShape.lineTo(halfL, 0.22);
+    carShape.lineTo(halfL - 0.12, 0.58); // Front bumper & grille
+    carShape.lineTo(0.85, 0.74);         // Sleek sloped hood
+    if (isHyper) {
+      carShape.lineTo(0.15, 1.02);       // Low LMP teardrop canopy peak
+      carShape.lineTo(-1.15, 0.84);
+    } else if (isE30) {
+      carShape.lineTo(0.35, 1.18);       // Classic E30 upright windshield
+      carShape.lineTo(-0.85, 1.18);      // Flat coupe roof
+      carShape.lineTo(-1.35, 0.78);      // C-pillar
+    } else {
+      carShape.lineTo(0.20, 1.16);       // Fastback G82 M4 windshield
+      carShape.lineTo(-0.75, 1.14);      // Curved coupe roof
+      carShape.lineTo(-1.65, 0.78);      // Fastback rear deck
+    }
+    carShape.lineTo(-halfL, 0.74);       // Rear trunk lip
+    carShape.closePath();
 
-    const cabin = new THREE.Mesh(new THREE.BoxGeometry(bodyW * 0.78, 0.44, 1.95), glassMat);
-    cabin.position.set(0, 0.90, -0.10);
+    const extrudeSettings = {
+      depth: bodyW - 0.18,
+      bevelEnabled: true,
+      bevelThickness: 0.09,
+      bevelSize: 0.08,
+      bevelSegments: 5
+    };
+    const bodyGeo = new THREE.ExtrudeGeometry(carShape, extrudeSettings);
+    bodyGeo.center();
+    bodyGeo.rotateY(Math.PI / 2); // Align profile along Z (+Z front, -Z rear)
+    const bodyMesh = new THREE.Mesh(bodyGeo, paintMat);
+    bodyMesh.position.set(0, 0.68, 0);
+    bodyMesh.castShadow = true;
+    bodyMesh.receiveShadow = true;
+    orientGroup.add(bodyMesh);
+
+    // Tinted Windshield & Side Windows
+    const cabin = new THREE.Mesh(
+      new THREE.BoxGeometry(bodyW * 0.83, isHyper ? 0.34 : 0.38, isE30 ? 1.75 : 1.95),
+      glassMat
+    );
+    cabin.position.set(0, isHyper ? 0.88 : 0.98, -0.18);
     orientGroup.add(cabin);
 
-    const gtWing = new THREE.Mesh(new THREE.BoxGeometry(bodyW + 0.12, 0.05, 0.34), carbonMat);
-    gtWing.position.set(0, 1.02, -bodyL / 2 + 0.18);
-    orientGroup.add(gtWing);
+    // Widebody Flared Wheel Arches
+    [[-bodyW / 2, 1.38], [bodyW / 2, 1.38], [-bodyW / 2, -1.38], [bodyW / 2, -1.38]].forEach(([fx, fz]) => {
+      const arch = new THREE.Mesh(new THREE.CylinderGeometry(0.44, 0.44, 0.18, 20, 1, false, 0, Math.PI).rotateZ(Math.PI / 2), paintMat);
+      arch.position.set(fx, 0.38, fz);
+      orientGroup.add(arch);
+    });
 
-    const hl = new THREE.Mesh(new THREE.BoxGeometry(bodyW * 0.82, 0.09, 0.06), isE30 ? yellowDRL : headMat);
-    hl.position.set(0, 0.58, bodyL / 2 + 0.01);
-    const tl = new THREE.Mesh(new THREE.BoxGeometry(bodyW * 0.85, 0.11, 0.06), tailMat);
-    tl.position.set(0, 0.60, -bodyL / 2 - 0.01);
-    orientGroup.add(hl, tl);
+    // Rear GT Wing & Front Carbon Splitter
+    const wing = new THREE.Mesh(new THREE.BoxGeometry(bodyW + 0.10, 0.04, 0.32), isE30 ? paintMat : carbonMat);
+    wing.position.set(0, isHyper ? 1.06 : 0.98, -halfL + 0.18);
+    const lStrut = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.22, 0.18), carbonMat); lStrut.position.set(-0.55, 0.88, -halfL + 0.18);
+    const rStrut = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.22, 0.18), carbonMat); rStrut.position.set(0.55, 0.88, -halfL + 0.18);
+    const splitter = new THREE.Mesh(new THREE.BoxGeometry(bodyW + 0.06, 0.04, 0.38), carbonMat);
+    splitter.position.set(0, 0.20, halfL - 0.08);
+    orientGroup.add(wing, lStrut, rStrut, splitter);
 
-    const wGeo = new THREE.CylinderGeometry(0.35, 0.35, 0.28, 24).rotateZ(Math.PI / 2);
-    [[-bodyW / 2, 0.35, 1.38, true], [bodyW / 2, 0.35, 1.38, true], [-bodyW / 2, 0.35, -1.38, false], [bodyW / 2, 0.35, -1.38, false]].forEach(([wx, wy, wz, isFront]) => {
+    // Headlights (+Z) & Taillights (-Z)
+    [-0.64, 0.64].forEach((hx) => {
+      const hl = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.09, 0.08), cfg.id === 'bmw_m4_csl' || isE30 ? yellowDRL : headMat);
+      hl.position.set(hx, 0.56, halfL + 0.01);
+      orientGroup.add(hl);
+    });
+    if (!isHyper) {
+      [-0.17, 0.17].forEach((kx) => {
+        const grille = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.34, 0.08), carbonMat);
+        grille.position.set(kx, 0.46, halfL + 0.01);
+        orientGroup.add(grille);
+      });
+    }
+    const tl = new THREE.Mesh(new THREE.BoxGeometry(bodyW * 0.86, 0.11, 0.08), tailMat);
+    tl.position.set(0, 0.62, -halfL - 0.01);
+    orientGroup.add(tl);
+
+    // 5-Spoke Alloy Wheels + Red Brake Calipers
+    const wGeo = new THREE.CylinderGeometry(0.36, 0.36, 0.28, 24).rotateZ(Math.PI / 2);
+    [[-bodyW / 2, 0.36, 1.38, true], [bodyW / 2, 0.36, 1.38, true], [-bodyW / 2, 0.36, -1.38, false], [bodyW / 2, 0.36, -1.38, false]].forEach(([wx, wy, wz, isFront]) => {
       const wGroup = new THREE.Group();
       wGroup.position.set(wx, wy, wz);
-      wGroup.add(new THREE.Mesh(wGeo, tireMat), new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.30, 14).rotateZ(Math.PI / 2), chromeMat));
+      const tire = new THREE.Mesh(wGeo, tireMat);
+      const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, 0.30, 16).rotateZ(Math.PI / 2), isWide || isHyper ? goldMat : chromeMat);
+      const caliper = new THREE.Mesh(new THREE.BoxGeometry(0.31, 0.14, 0.14), caliperMat);
+      caliper.position.set(0, 0.08, -0.08);
+      wGroup.add(tire, rim, caliper);
       orientGroup.add(wGroup);
       wheels.push({ node: wGroup, isFront });
     });
@@ -1303,7 +1297,7 @@ function buildBaked3DVehicle(cfg) {
   return { scene: root, orientGroup, wheels, isGLB: false };
 }
 
-// Normalize and rig your provided .GLB models (strips studio backdrops & aligns forward +Z)
+// Normalize and rig your provided .GLB models
 function normalizeAndRigGLB(gltf, cfg) {
   const model = gltf.scene;
   const meshesToRemove = [];
@@ -1348,9 +1342,7 @@ function normalizeAndRigGLB(gltf, cfg) {
   wrapper.add(orientGroup);
 
   model.position.set(-center.x, -box.min.y, -center.z);
-  if (size.x > size.z * 1.15) {
-    inner.rotation.y = -Math.PI / 2;
-  }
+  if (size.x > size.z * 1.15) inner.rotation.y = -Math.PI / 2;
 
   const horizLength = Math.max(size.x, size.z) || 1;
   inner.scale.setScalar(cfg.targetLength / horizLength);
@@ -1415,13 +1407,12 @@ function identifyVehicleFromGLB(gltf, filename = '') {
   return VEHICLES.find((v) => !loadedVehicleRigs.get(v.id)?.isGLB) || VEHICLES[0];
 }
 
-// Initialize fallback meshes first before loading cached .GLBs
 VEHICLES.forEach((v) => {
-  loadedVehicleRigs.set(v.id, buildBaked3DVehicle(v));
+  loadedVehicleRigs.set(v.id, buildContoured3DVehicle(v));
 });
 
 // ============================================================================
-// 6. CLEAN, PROPORTIONAL 3D STREET RACER CHARACTER (KEPT EXACTLY AS YOU LIKED!)
+// 6. CLEAN, PROPORTIONAL 3D STREET RACER CHARACTER (KEPT UNTOUCHED!)
 // ============================================================================
 const charGroup = new THREE.Group();
 charGroup.visible = false;
@@ -1495,7 +1486,7 @@ function buildCleanStreetRacerAvatar() {
 buildCleanStreetRacerAvatar();
 
 // ============================================================================
-// 7. POPULATE DEALERSHIP SHOWROOM WITH YOUR ACTUAL .GLB MODELS!
+// 7. POPULATE DEALERSHIP SHOWROOM WITH YOUR ACTUAL .GLB MODELS
 // ============================================================================
 function refreshDealershipShowroom() {
   showroomTurntables.forEach((slot) => {
@@ -1506,14 +1497,14 @@ function refreshDealershipShowroom() {
       slot.group.add(rig.scene.clone(true));
     }
 
-    const priceLabel = v.owned ? 'OWNED • CLICK OR [G] TO DRIVE' : `$${v.price.toLocaleString()} • [G] TO BUY`;
+    const priceLabel = v.owned ? 'OWNED • TAP GARAGE TO DRIVE' : `$${v.price.toLocaleString()} • IN DEALERSHIP`;
     slot.infoPlane.material.map = makeBannerTexture(v.name, priceLabel, v.owned ? '#34d399' : '#ffcc00');
     slot.infoPlane.material.needsUpdate = true;
   });
 }
 
 // ============================================================================
-// 8. RESTORE YOUR 6 PROVIDED .GLB MODELS FROM ALL BROWSER CACHES & FOLDERS
+// 8. RESTORE YOUR 6 PROVIDED .GLB MODELS FROM EMBEDDED / SERVER / INDEXEDDB
 // ============================================================================
 function openDBByName(dbName) {
   return new Promise((resolve, reject) => {
@@ -1579,7 +1570,7 @@ async function parseAndApplyGLBBuffer(arrayBuffer, targetVeh = null, filename = 
 }
 
 // ============================================================================
-// 9. PLAYER VEHICLE, MANUAL/AUTO GEARBOX & STUNT JUMP PHYSICS
+// 9. PLAYER VEHICLE & GEARBOX PHYSICS
 // ============================================================================
 let currentVehIdx = 0;
 let playerVehGroup = new THREE.Group();
@@ -1614,7 +1605,7 @@ function spawnPlayerVehicle(idx) {
 
   document.getElementById('hud-veh-name').textContent = cfg.name;
   const badge = document.getElementById('model-badge');
-  badge.textContent = currentVehRig.isGLB ? '✓ YOUR .GLB MODEL ACTIVE' : '✓ 3D MODEL ACTIVE';
+  badge.textContent = currentVehRig.isGLB ? '✓ YOUR .GLB ACTIVE' : '✓ 3D CONTOURED CAD';
   badge.style.color = currentVehRig.isGLB ? '#34d399' : '#00f0ff';
   renderGarageModal();
 }
@@ -1627,7 +1618,6 @@ camera.lookAt(45, 1.0, 0);
 spawnPlayerVehicle(0);
 refreshDealershipShowroom();
 
-// Auto-preload your 6 provided .GLB models from Embedded Data, Local Folder, or IndexedDB!
 async function autoRestoreAllProvidedGLBs() {
   const barFill = document.getElementById('load-bar-fill');
   const statusEl = document.getElementById('load-status');
@@ -1635,10 +1625,9 @@ async function autoRestoreAllProvidedGLBs() {
   let glbLoadedCount = 0;
 
   for (const v of VEHICLES) {
-    statusEl.textContent = `Restoring ${v.name}...`;
+    statusEl.textContent = `Checking ${v.name}...`;
     let loaded = false;
 
-    // 1. Check Embedded Single-File Base64 Data
     if (EMBEDDED_GLB_DATA[v.id]) {
       try {
         const res = await fetch(EMBEDDED_GLB_DATA[v.id]);
@@ -1648,7 +1637,6 @@ async function autoRestoreAllProvidedGLBs() {
       } catch (e) {}
     }
 
-    // 2. Check Web Server / Same Folder
     if (!loaded) {
       for (const path of [v.defaultFilename, `models/${v.defaultFilename}`]) {
         try {
@@ -1665,7 +1653,6 @@ async function autoRestoreAllProvidedGLBs() {
       }
     }
 
-    // 3. Check BOTH IndexedDB Stores (Restores the 6 .GLB files you loaded earlier!)
     if (!loaded) {
       const cachedBuf = await getGLBFromAnyDB(v.id);
       if (cachedBuf) {
@@ -1681,9 +1668,9 @@ async function autoRestoreAllProvidedGLBs() {
 
   refreshDealershipShowroom();
   if (glbLoadedCount > 0) {
-    statusEl.textContent = `✓ Restored ${glbLoadedCount}/6 of your Provided .GLB Models! Ready to Drive!`;
+    statusEl.textContent = `✓ Restored ${glbLoadedCount}/6 of your .GLB Models! Tap START ENGINE!`;
   } else {
-    statusEl.textContent = `Engine Ready! (Drop your 6 .GLB files anytime or click START ENGINE)`;
+    statusEl.textContent = `Ready! Tap "Load .GLB Files" below if on a new device, or tap START ENGINE!`;
   }
 }
 autoRestoreAllProvidedGLBs();
@@ -1709,7 +1696,7 @@ const GEAR_RATIOS = {
 
 function updateTransmissionUI() {
   const badge = document.getElementById('btn-trans-mode');
-  badge.textContent = state.manualMode ? '⚙️ MANUAL (X)' : '⚙️ AUTO (X)';
+  badge.textContent = state.manualMode ? 'MANUAL' : 'AUTO';
   badge.classList.toggle('manual', state.manualMode);
   saveProgress();
 }
@@ -1719,7 +1706,7 @@ function toggleTransmissionMode() {
   state.manualMode = !state.manualMode;
   if (state.gear === 0) state.gear = 1;
   updateTransmissionUI();
-  showRewardToast(state.manualMode ? '⚙️ MANUAL GEARBOX: Use [E] Shift Up & [Q] Shift Down!' : '⚙️ AUTOMATIC GEARBOX ACTIVE');
+  showRewardToast(state.manualMode ? '⚙️ MANUAL GEARBOX (E/Q or G+/G-)' : '⚙️ AUTOMATIC GEARBOX');
 }
 
 function shiftGear(delta) {
@@ -1810,18 +1797,18 @@ window.addEventListener('pointerup', (e) => {
 function toggleAimWalkMode() {
   autoAimWalk = !autoAimWalk;
   document.getElementById('aim-walk-txt').textContent = autoAimWalk ? 'ON' : 'OFF';
-  document.getElementById('btn-aim-walk').classList.toggle('active-mode', autoAimWalk);
+  document.getElementById('btn-aim-walk').classList.toggle('active-pill', autoAimWalk);
   if (autoAimWalk) {
     aimTargetPos = null;
     aimMarker.visible = false;
     aimBeam.visible = false;
-    showRewardToast('🎯 Look-to-Go ON: Your character walks wherever you aim!');
+    showRewardToast('🎯 Aim-Walk ON: Character walks wherever you look!');
   }
 }
 document.getElementById('btn-aim-walk').addEventListener('click', toggleAimWalkMode);
 
 // ============================================================================
-// 12. INPUTS, FULLSCREEN TOGGLE, DEALERSHIP & .GLB MANAGER
+// 12. SETTINGS, FULLSCREEN, BINARY-SAFE HTML BAKER & GARAGE
 // ============================================================================
 function rotateCurrentVehicleMesh(deltaRad) {
   const cfg = VEHICLES[currentVehIdx];
@@ -1847,6 +1834,11 @@ document.addEventListener('fullscreenchange', () => {
   if (lbl) lbl.textContent = document.fullscreenElement ? 'EXIT FULLSCREEN' : 'FULLSCREEN';
 });
 
+document.getElementById('btn-mute-audio').addEventListener('click', () => {
+  state.audioMuted = !state.audioMuted;
+  document.getElementById('audio-txt').textContent = state.audioMuted ? 'MUTED' : 'ON';
+});
+
 const keys = {};
 window.addEventListener('keydown', (e) => {
   const k = e.key.toLowerCase();
@@ -1855,7 +1847,7 @@ window.addEventListener('keydown', (e) => {
   if (k === 'f') toggleOnFoot();
   if (k === 'z' && isOnFoot) toggleAimWalkMode();
   if (k === 'g') toggleModal('modal-garage');
-  if (k === 'm') toggleModal('modal-map');
+  if (k === 'm') toggleModal('modal-settings');
   if (k === 't') cycleTimeOfDay();
   if (k === 'x') toggleTransmissionMode();
   if (k === 'r') rotateCurrentVehicleMesh(Math.PI);
@@ -1878,10 +1870,7 @@ function showRewardToast(msg) {
 function updateHUDStats() {
   document.getElementById('hud-cash').textContent = '$' + Math.floor(state.cash).toLocaleString();
   state.level = Math.floor(state.xp / 500) + 1;
-  const xpInLvl = Math.floor(state.xp % 500);
   document.getElementById('hud-lvl').textContent = state.level;
-  document.getElementById('hud-xp-txt').textContent = `${xpInLvl}/500 XP`;
-  document.getElementById('xp-fill').style.width = `${(xpInLvl / 500) * 100}%`;
   saveProgress();
 }
 updateHUDStats();
@@ -1908,15 +1897,14 @@ function renderGLBStatusGrid() {
     card.innerHTML = `
       <h3>
         <span>${v.name}</span>
-        <span class="glb-status ${isGLB ? 'loaded' : 'proc'}">${isGLB ? '✓ YOUR .GLB ACTIVE' : 'FALLBACK MESH'}</span>
+        <span class="glb-status ${isGLB ? 'loaded' : 'proc'}">${isGLB ? '✓ .GLB ACTIVE' : '3D CAD'}</span>
       </h3>
-      <div style="font-size:11px;color:#94a3b8;">File: <code>${v.defaultFilename}</code></div>
-      <div style="display:flex;gap:6px;margin-top:6px;">
-        <label class="btn-hud" style="flex:1;justify-content:center;">
-          📂 Select .GLB
+      <div style="display:flex;gap:6px;margin-top:4px;">
+        <label class="btn-hud" style="flex:1;padding:6px;font-size:10px;cursor:pointer;">
+          📂 Assign .GLB
           <input type="file" accept=".glb,.gltf" data-veh-idx="${idx}" style="display:none;" />
         </label>
-        <button class="btn-hud" data-drive-idx="${idx}">Drive</button>
+        <button class="btn-hud" style="padding:6px 10px;font-size:10px;" data-drive-idx="${idx}">Drive</button>
       </div>
     `;
     grid.appendChild(card);
@@ -1930,14 +1918,14 @@ function renderGLBStatusGrid() {
       const buf = await file.arrayBuffer();
       await parseAndApplyGLBBuffer(buf, v, file.name);
       await saveGLBToBothDBs(v.id, buf);
-      document.getElementById('glb-log').textContent = `✓ Loaded & Saved "${file.name}" for ${v.name}!`;
+      document.getElementById('glb-log').textContent = `✓ Saved "${file.name}" for ${v.name}!`;
     });
   });
 
   grid.querySelectorAll('[data-drive-idx]').forEach((btn) => {
     btn.addEventListener('click', () => {
       spawnPlayerVehicle(Number(btn.dataset.driveIdx));
-      toggleModal('modal-glb', false);
+      toggleModal('modal-settings', false);
     });
   });
 }
@@ -1951,7 +1939,7 @@ function renderGarageModal() {
     const card = document.createElement('div');
     card.className = `veh-card ${idx === currentVehIdx ? 'active' : ''}`;
     const btnLabel = idx === currentVehIdx
-      ? '✓ CURRENTLY DRIVING'
+      ? '✓ DRIVING'
       : v.owned
       ? 'DRIVE NOW'
       : `BUY ($${v.price.toLocaleString()})`;
@@ -1965,7 +1953,7 @@ function renderGarageModal() {
       <div class="stat-track"><div class="stat-fill" style="width:${Math.min(100, v.topSpeed)}%"></div></div>
       <div class="stat-bar-line"><span>Acceleration</span><span>${v.accel}</span></div>
       <div class="stat-track"><div class="stat-fill" style="width:${Math.min(100, v.accel * 1.5)}%"></div></div>
-      <button class="btn-hud ${idx === currentVehIdx || !v.owned ? 'highlight' : ''}" style="margin-top:8px;justify-content:center;" data-veh-action="${idx}">
+      <button class="btn-hud ${idx === currentVehIdx || !v.owned ? 'highlight' : ''}" style="margin-top:6px;width:100%;" data-veh-action="${idx}">
         ${btnLabel}
       </button>
     `;
@@ -1983,7 +1971,7 @@ function renderGarageModal() {
           updateHUDStats();
           showRewardToast(`🎉 Purchased ${v.name}!`);
         } else {
-          showRewardToast(`⚠️ Need $${(v.price - state.cash).toLocaleString()} more! Collect Gold Crates or click +$50k Grant!`);
+          showRewardToast(`⚠️ Need $${(v.price - state.cash).toLocaleString()} more! Tap +$50k Grant!`);
           return;
         }
       }
@@ -1999,7 +1987,7 @@ async function handleFilesList(fileList) {
   if (!files.length) return;
   const logEl = document.getElementById('glb-log');
   const statusEl = document.getElementById('load-status');
-  if (logEl) logEl.textContent = `⏳ Loading & saving ${files.length} .GLB model(s)...`;
+  if (logEl) logEl.textContent = `⏳ Loading & caching ${files.length} .GLB model(s)...`;
   if (statusEl) statusEl.textContent = `⏳ Loading ${files.length} .GLB model(s)...`;
 
   const names = [];
@@ -2011,10 +1999,10 @@ async function handleFilesList(fileList) {
       names.push(matched.name);
     }
   }
-  const msg = `✓ Loaded & permanently cached: ${names.join(', ')}!`;
+  const msg = `✓ Loaded & cached: ${names.join(', ')}!`;
   if (logEl) logEl.textContent = msg;
   if (statusEl) statusEl.textContent = msg;
-  showRewardToast(`📦 Loaded ${names.length} Provided .GLB Model(s)!`);
+  showRewardToast(`📦 Loaded ${names.length} .GLB Model(s)!`);
 }
 
 document.getElementById('glb-file-input').addEventListener('change', (e) => handleFilesList(e.target.files));
@@ -2025,29 +2013,31 @@ window.addEventListener('drop', (e) => {
   if (e.dataTransfer?.files?.length) handleFilesList(e.dataTransfer.files);
 });
 
+// Binary-Safe Split/Join Single-File HTML Baker (Works 100% on Phone & Web!)
 document.getElementById('btn-bake-html').addEventListener('click', () => {
   const keysLoaded = Object.keys(rawDataURLStore);
   if (keysLoaded.length === 0) {
-    document.getElementById('glb-log').textContent = '⚠️ Load your 6 .glb files first so they can be baked into the HTML!';
+    document.getElementById('glb-log').textContent = '⚠️ Please select your .glb files first using "📂 Load 6 .GLB Files"!';
     return;
   }
-  document.getElementById('glb-log').textContent = `⏳ Baking ${keysLoaded.length} .glb model(s) into a standalone Web HTML file...`;
+  document.getElementById('glb-log').textContent = `⏳ Baking ${keysLoaded.length} .GLB model(s) into a single mobile/web HTML file...`;
   setTimeout(() => {
-    const bakedJSON = JSON.stringify(rawDataURLStore);
-    const bundledHTML = CLEAN_HTML_TEMPLATE.replace(
-      /\/\*__EMBEDDED_GLBS_START__\*\/[\s\S]*?\/\*__EMBEDDED_GLBS_END__\*\//,
-      `/*__EMBEDDED_GLBS_START__*/${bakedJSON}/*__EMBEDDED_GLBS_END__*/`
-    );
+    const startTag = '/*__EMBEDDED_GLBS_START__*/';
+    const endTag = '/*__EMBEDDED_GLBS_END__*/';
+    const partsA = INITIAL_HTML_SOURCE.split(startTag);
+    const partsB = partsA[1].split(endTag);
+    const bundledHTML = partsA[0] + startTag + JSON.stringify(rawDataURLStore) + endTag + partsB[1];
+
     const blob = new Blob([bundledHTML], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'Code_Drift_Ultimate_Web.html';
+    a.download = 'Code_Drift_Mobile_Web.html';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    document.getElementById('glb-log').textContent = `✅ Downloaded "Code_Drift_Ultimate_Web.html" with ${keysLoaded.length} embedded .GLB models!`;
+    document.getElementById('glb-log').textContent = `✅ Downloaded "Code_Drift_Mobile_Web.html"! Send that file to your phone or host it online!`;
   }, 100);
 });
 
@@ -2055,14 +2045,13 @@ function toggleModal(id, force) {
   const el = document.getElementById(id);
   const open = force !== undefined ? force : !el.classList.contains('open');
   el.classList.toggle('open', open);
-  if (id === 'modal-glb' && open) renderGLBStatusGrid();
+  if (id === 'modal-settings' && open) renderGLBStatusGrid();
   if (id === 'modal-garage' && open) renderGarageModal();
 }
 
 document.getElementById('btn-open-garage').addEventListener('click', () => toggleModal('modal-garage'));
-document.getElementById('btn-open-glb').addEventListener('click', () => toggleModal('modal-glb'));
-document.getElementById('btn-open-map').addEventListener('click', () => toggleModal('modal-map'));
-document.getElementById('minimap-trigger').addEventListener('click', () => toggleModal('modal-map'));
+document.getElementById('btn-open-settings').addEventListener('click', () => toggleModal('modal-settings'));
+document.getElementById('minimap-trigger').addEventListener('click', () => toggleModal('modal-settings'));
 document.getElementById('interact-prompt').addEventListener('click', () => toggleModal('modal-garage', true));
 
 document.querySelectorAll('[data-close]').forEach((btn) => {
@@ -2077,7 +2066,7 @@ document.querySelectorAll('[data-tp]').forEach((btn) => {
     state.velAngle = rot;
     state.speed = 0;
     if (isOnFoot) charGroup.position.set(tx + 2, 0, tz);
-    toggleModal('modal-map', false);
+    toggleModal('modal-settings', false);
   });
 });
 
@@ -2100,7 +2089,7 @@ document.getElementById('btn-upgrade-engine').addEventListener('click', () => {
     updateHUDStats();
     renderGarageModal();
     showRewardToast('⚡ ECU Tuned (+Top Speed)!');
-  } else showRewardToast('⚠️ Need $5,000 for ECU Tune!');
+  } else showRewardToast('⚠️ Need $5,000!');
 });
 
 document.getElementById('btn-upgrade-turbo').addEventListener('click', () => {
@@ -2110,31 +2099,29 @@ document.getElementById('btn-upgrade-turbo').addEventListener('click', () => {
     VEHICLES[currentVehIdx].accel += 6;
     updateHUDStats();
     renderGarageModal();
-    showRewardToast('🔥 Stage 2 Turbo Installed (+Acceleration)!');
-  } else showRewardToast('⚠️ Need $7,500 for Stage 2 Turbo!');
+    showRewardToast('🔥 Stage 2 Turbo Installed!');
+  } else showRewardToast('⚠️ Need $7,500!');
 });
 
 document.getElementById('btn-free-cash').addEventListener('click', () => {
   state.cash += 50000;
   updateHUDStats();
   renderGarageModal();
-  showRewardToast('💰 +$50,000 Sponsorship Grant Added!');
+  showRewardToast('💰 +$50,000 Grant Added!');
 });
 
-const camLabels = ['CHASE', 'COCKPIT', 'HOOD', 'TOP'];
 function cycleCamera() {
   state.camMode = (state.camMode + 1) % 4;
-  document.getElementById('cam-label').textContent = camLabels[state.camMode];
+  const camLabels = ['CHASE CAM', 'COCKPIT CAM', 'HOOD CAM', 'TOP CAM'];
+  showRewardToast(`🎥 ${camLabels[state.camMode]}`);
 }
 document.getElementById('btn-cam').addEventListener('click', cycleCamera);
 
 function toggleOnFoot() {
   isOnFoot = !isOnFoot;
   charGroup.visible = isOnFoot;
-  document.getElementById('walk-label').textContent = isOnFoot ? 'ENTER CAR' : 'EXIT CAR';
+  document.getElementById('btn-walk').textContent = isOnFoot ? '🏎️' : '🚶';
   document.getElementById('aim-reticle').style.display = isOnFoot ? 'block' : 'none';
-  document.getElementById('aim-reticle-label').style.display = isOnFoot ? 'block' : 'none';
-  document.getElementById('btn-aim-walk').style.display = isOnFoot ? 'inline-flex' : 'none';
 
   if (isOnFoot) {
     const sideOffset = new THREE.Vector3(Math.cos(state.heading) * 2.2, 0, -Math.sin(state.heading) * 2.2);
@@ -2170,7 +2157,7 @@ function cycleTimeOfDay() {
 }
 document.getElementById('btn-tod').addEventListener('click', cycleTimeOfDay);
 
-let mobileMode = 'ontouchstart' in window;
+let mobileMode = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 const mobEl = document.getElementById('mobile-controls');
 function updateControlModeUI() {
   mobEl.classList.toggle('visible', mobileMode);
@@ -2196,13 +2183,106 @@ bindTouch('t-gas', 'w');
 bindTouch('t-brake', 's');
 bindTouch('t-drift', ' ');
 bindTouch('t-nos', 'shift');
-document.getElementById('t-shift-up').addEventListener('pointerdown', (e) => { e.preventDefault(); shiftGear(1); });
-document.getElementById('t-shift-dn').addEventListener('pointerdown', (e) => { e.preventDefault(); shiftGear(-1); });
 
 updateGLBCountUI();
 
 // ============================================================================
-// 13. SKIDMARKS, TIRE SMOKE, MINIMAP (WITH BORDER) & MAIN LOOP
+// 13. FIXED MINIMAP INDICATOR & EXACT 3D-TO-2D RADAR PROJECTION
+// ============================================================================
+const mmCanvas = document.getElementById('minimap');
+const mmCtx = mmCanvas.getContext('2d');
+
+function drawMinimap(px, pz, heading) {
+  const W = 126, H = 126, CX = 63, CY = 63, scale = 0.22;
+  mmCtx.clearRect(0, 0, W, H);
+
+  // Project any 3D world coordinate (wx, wz) so UP (-Y) is ALWAYS the player's forward heading
+  // and RIGHT (+X) is ALWAYS to the player's right!
+  const sinH = Math.sin(heading);
+  const cosH = Math.cos(heading);
+  function projectToRadar(wx, wz) {
+    const dx = wx - px;
+    const dz = wz - pz;
+    const fwdDist = dx * sinH + dz * cosH;
+    const rightDist = -dx * cosH + dz * sinH;
+    return [CX + rightDist * scale, CY - fwdDist * scale];
+  }
+
+  // Draw Grid Roads accurately rotated around player
+  mmCtx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
+  mmCtx.lineWidth = 3.5;
+  for (let o = -240; o <= 240; o += 80) {
+    const [x1, y1] = projectToRadar(o, -320);
+    const [x2, y2] = projectToRadar(o, 320);
+    mmCtx.beginPath(); mmCtx.moveTo(x1, y1); mmCtx.lineTo(x2, y2); mmCtx.stroke();
+
+    const [x3, y3] = projectToRadar(-320, o);
+    const [x4, y4] = projectToRadar(320, o);
+    mmCtx.beginPath(); mmCtx.moveTo(x3, y3); mmCtx.lineTo(x4, y4); mmCtx.stroke();
+  }
+
+  // Draw World Boundary Polygon (±330m)
+  const bCorners = [
+    projectToRadar(-MAP_LIMIT, -MAP_LIMIT),
+    projectToRadar(MAP_LIMIT, -MAP_LIMIT),
+    projectToRadar(MAP_LIMIT, MAP_LIMIT),
+    projectToRadar(-MAP_LIMIT, MAP_LIMIT)
+  ];
+  mmCtx.strokeStyle = '#ff0055';
+  mmCtx.lineWidth = 2;
+  mmCtx.beginPath();
+  mmCtx.moveTo(bCorners[0][0], bCorners[0][1]);
+  for (let i = 1; i < 4; i++) mmCtx.lineTo(bCorners[i][0], bCorners[i][1]);
+  mmCtx.closePath();
+  mmCtx.stroke();
+
+  // Draw Gold Cash Crates
+  mmCtx.fillStyle = '#ffcc00';
+  cashCrates.forEach((c) => {
+    if (!c.active) return;
+    const [rx, ry] = projectToRadar(c.x, c.z);
+    if (Math.hypot(rx - CX, ry - CY) < 56) {
+      mmCtx.fillRect(rx - 2, ry - 2, 4, 4);
+    }
+  });
+
+  // Draw Dealership Blip (or edge pointer if far away)
+  const [dlx, dly] = projectToRadar(45, -40);
+  const distD = Math.hypot(dlx - CX, dly - CY);
+  const clampedX = distD > 52 ? CX + ((dlx - CX) / distD) * 52 : dlx;
+  const clampedY = distD > 52 ? CY + ((dly - CY) / distD) * 52 : dly;
+  mmCtx.fillStyle = '#00f0ff';
+  mmCtx.beginPath(); mmCtx.arc(clampedX, clampedY, 4.5, 0, Math.PI * 2); mmCtx.fill();
+
+  // Draw North ('N') Compass Rim Indicator (+Z direction)
+  const [nx, ny] = projectToRadar(px, pz + 240);
+  const nLen = Math.hypot(nx - CX, ny - CY) || 1;
+  const nRimX = CX + ((nx - CX) / nLen) * 53;
+  const nRimY = CY + ((ny - CY) / nLen) * 53;
+  mmCtx.fillStyle = '#0f172a';
+  mmCtx.beginPath(); mmCtx.arc(nRimX, nRimY, 7, 0, Math.PI * 2); mmCtx.fill();
+  mmCtx.fillStyle = '#38bdf8';
+  mmCtx.font = '900 9px sans-serif';
+  mmCtx.textAlign = 'center';
+  mmCtx.textBaseline = 'middle';
+  mmCtx.fillText('N', nRimX, nRimY);
+
+  // Draw Player Center Arrow (Always points UP = exact forward direction of car/character!)
+  mmCtx.fillStyle = '#00f0ff';
+  mmCtx.strokeStyle = '#ffffff';
+  mmCtx.lineWidth = 1.5;
+  mmCtx.beginPath();
+  mmCtx.moveTo(CX, CY - 8);
+  mmCtx.lineTo(CX + 6, CY + 6);
+  mmCtx.lineTo(CX, CY + 3);
+  mmCtx.lineTo(CX - 6, CY + 6);
+  mmCtx.closePath();
+  mmCtx.fill();
+  mmCtx.stroke();
+}
+
+// ============================================================================
+// 14. SKIDMARKS, TIRE SMOKE & MAIN GAME LOOP
 // ============================================================================
 const skidMarks = [];
 const skidGeo = new THREE.PlaneGeometry(0.26, 0.85);
@@ -2217,7 +2297,7 @@ function addSkidmark(x, z, heading) {
     m.rotation.y = heading;
     scene.add(m);
     skidMarks.push(m);
-    if (skidMarks.length > 240) scene.remove(skidMarks.shift());
+    if (skidMarks.length > 220) scene.remove(skidMarks.shift());
   }
 }
 
@@ -2229,57 +2309,6 @@ function spawnSmoke(x, z) {
   m.position.set(x + (Math.random() - 0.5) * 0.5, 0.24, z + (Math.random() - 0.5) * 0.5);
   scene.add(m);
   smokeParticles.push({ mesh: m, life: 1.0 });
-}
-
-const mmCanvas = document.getElementById('minimap');
-const mmCtx = mmCanvas.getContext('2d');
-function drawMinimap(px, pz, heading) {
-  mmCtx.clearRect(0, 0, 150, 150);
-  mmCtx.save();
-  mmCtx.translate(75, 75);
-  mmCtx.rotate(heading);
-
-  // Roads
-  mmCtx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
-  mmCtx.lineWidth = 4;
-  for (let o = -240; o <= 240; o += 80) {
-    const rx = (o - px) * 0.25;
-    const rz = (o - pz) * 0.25;
-    mmCtx.beginPath(); mmCtx.moveTo(rx, -160); mmCtx.lineTo(rx, 160); mmCtx.stroke();
-    mmCtx.beginPath(); mmCtx.moveTo(-160, rz); mmCtx.lineTo(160, rz); mmCtx.stroke();
-  }
-
-  // World Boundary Box on Minimap
-  const bx = (-MAP_LIMIT - px) * 0.25;
-  const bz = (-MAP_LIMIT - pz) * 0.25;
-  const bw = MAP_LIMIT * 2 * 0.25;
-  mmCtx.strokeStyle = '#ff0055';
-  mmCtx.lineWidth = 2;
-  mmCtx.strokeRect(bx, bz, bw, bw);
-
-  // Gold Cash Crates
-  mmCtx.fillStyle = '#ffcc00';
-  cashCrates.forEach((c) => {
-    if (!c.active) return;
-    const cx = (c.x - px) * 0.25, cz = (c.z - pz) * 0.25;
-    if (Math.hypot(cx, cz) < 70) mmCtx.fillRect(cx - 2, cz - 2, 4, 4);
-  });
-
-  // Dealership Icon
-  const dx = (45 - px) * 0.25, dz = (-40 - pz) * 0.25;
-  mmCtx.fillStyle = '#00f0ff';
-  mmCtx.beginPath(); mmCtx.arc(dx, dz, 5, 0, Math.PI * 2); mmCtx.fill();
-
-  mmCtx.restore();
-
-  mmCtx.fillStyle = '#ff0055';
-  mmCtx.beginPath();
-  mmCtx.moveTo(75, 66);
-  mmCtx.lineTo(81, 80);
-  mmCtx.lineTo(75, 76);
-  mmCtx.lineTo(69, 80);
-  mmCtx.closePath();
-  mmCtx.fill();
 }
 
 let lastTime = performance.now();
@@ -2294,7 +2323,6 @@ function animate(now) {
 
   if (state.borderWarnCooldown > 0) state.borderWarnCooldown -= dt;
 
-  // Rotate Dealership Turntables
   showroomTurntables.forEach((slot, i) => {
     slot.group.rotation.y += dt * (i % 2 === 0 ? 0.55 : -0.55);
     slot.infoPlane.lookAt(camera.position);
@@ -2315,7 +2343,7 @@ function animate(now) {
         state.cash += 2500;
         state.xp += 100;
         updateHUDStats();
-        showRewardToast('💰 +$2,500 GOLD CASH CRATE COLLECTED!');
+        showRewardToast('💰 +$2,500 GOLD CRATE!');
       }
     } else {
       c.respawnTimer -= dt;
@@ -2327,9 +2355,6 @@ function animate(now) {
   });
 
   if (isOnFoot) {
-    // ========================================================================
-    // ON-FOOT STREET RACER MOVEMENT + HARD MAP BOUNDARY CLAMP
-    // ========================================================================
     const isSprinting = keys['shift'];
     const moveSpeed = isSprinting ? 14.5 : 8.5;
 
@@ -2368,7 +2393,6 @@ function animate(now) {
       }
     }
 
-    // Clamp on-foot character inside the Map Border
     charGroup.position.x = Math.max(-MAP_LIMIT + 2.5, Math.min(MAP_LIMIT - 2.5, charGroup.position.x));
     charGroup.position.z = Math.max(-MAP_LIMIT + 2.5, Math.min(MAP_LIMIT - 2.5, charGroup.position.z));
 
@@ -2396,9 +2420,6 @@ function animate(now) {
     );
     camera.lookAt(lookTarget);
   } else {
-    // ========================================================================
-    // VEHICLE DRIVING, MANUAL/AUTO GEARBOX & MAP BORDER COLLISION
-    // ========================================================================
     const throttleInput = (keys['w'] || keys['arrowup'] ? 1 : 0);
     const brakeInput = (keys['s'] || keys['arrowdown'] ? 1 : 0);
     const steerInput = (keys['a'] || keys['arrowleft'] ? 1 : 0) - (keys['d'] || keys['arrowright'] ? 1 : 0);
@@ -2407,8 +2428,6 @@ function animate(now) {
 
     if (boosting) state.nos = Math.max(0, state.nos - 28 * dt);
     else state.nos = Math.min(100, state.nos + 8 * dt);
-    document.getElementById('nos-bar').style.width = `${state.nos}%`;
-    document.getElementById('nos-pct').textContent = `${Math.round(state.nos)}%`;
 
     const baseTopSpeed = cfg.topSpeed + (state.engineLvl - 1) * 4 + (boosting ? 22 : 0);
     const baseAccel = cfg.accel + (state.turboLvl - 1) * 5 + (boosting ? 25 : 0);
@@ -2485,7 +2504,6 @@ function animate(now) {
     let nextX = playerVehGroup.position.x + vx * dt;
     let nextZ = playerVehGroup.position.z + vz * dt;
 
-    // Building Collider Check
     let hit = false;
     for (const c of colliders) {
       if (Math.abs(nextX - c.x) < c.hw && Math.abs(nextZ - c.z) < c.hd) {
@@ -2494,7 +2512,6 @@ function animate(now) {
       }
     }
 
-    // Hard Map Boundary Wall Check (±330m)
     const boundaryMargin = MAP_LIMIT - 3.0;
     let hitBorder = false;
     if (Math.abs(nextX) > boundaryMargin) {
@@ -2510,7 +2527,7 @@ function animate(now) {
       state.speed *= 0.45;
       if (state.borderWarnCooldown <= 0 && Math.abs(state.speed) > 8) {
         state.borderWarnCooldown = 2.5;
-        showRewardToast('🚧 MAP BOUNDARY REACHED! Turn Back Toward City!');
+        showRewardToast('🚧 MAP BORDER REACHED!');
       }
     }
 
@@ -2521,7 +2538,6 @@ function animate(now) {
       state.speed *= -0.35;
     }
 
-    // Stunt Ramps & Vertical Airtime
     for (const r of ramps) {
       if (Math.hypot(playerVehGroup.position.x - r.x, playerVehGroup.position.z - r.z) < r.r && Math.abs(state.speed) > 22 && playerVehGroup.position.y < 0.5) {
         vehVerticalVel = Math.min(18, Math.abs(state.speed) * 0.28);
@@ -2539,7 +2555,7 @@ function animate(now) {
           state.cash += jumpBonus;
           state.xp += 150;
           updateHUDStats();
-          showRewardToast(`🚀 STUNT JUMP LANDED! +$${jumpBonus.toLocaleString()}`);
+          showRewardToast(`🚀 STUNT JUMP! +$${jumpBonus.toLocaleString()}`);
         }
         airTime = 0;
       }
@@ -2548,10 +2564,6 @@ function animate(now) {
     playerVehGroup.rotation.y = state.heading;
 
     const slipAngle = state.heading - state.velAngle;
-    const slipDeg = Math.min(90, Math.round(Math.abs(slipAngle) * (180 / Math.PI)));
-    document.getElementById('drift-deg').textContent = `${slipDeg}°`;
-    document.getElementById('drift-angle-bar').style.width = `${Math.min(100, (slipDeg / 60) * 100)}%`;
-
     const targetRoll = cfg.type === 'bike'
       ? -state.steerAngle * speedFactor * 0.65
       : state.steerAngle * speedFactor * 0.08 + slipAngle * 0.12;
@@ -2626,7 +2638,7 @@ function animate(now) {
         state.cash += prize;
         state.xp += 120;
         updateHUDStats();
-        showRewardToast(`📸 ${trap.name}: ${kmh} KM/H! +$${prize.toLocaleString()}`);
+        showRewardToast(`📸 ${trap.name}: +$${prize.toLocaleString()}`);
       }
     });
 
@@ -2669,8 +2681,8 @@ function animate(now) {
   document.getElementById('interact-prompt').style.display = distToDealer < 24 ? 'block' : 'none';
 
   const px = activePos.x, pz = activePos.z;
-  let zName = 'DOWNTOWN NEON';
-  if (distToDealer < 28) zName = 'DEALERSHIP PLAZA';
+  let zName = 'DOWNTOWN';
+  if (distToDealer < 28) zName = 'DEALERSHIP';
   else if (px < -90 && pz > 50) zName = 'CENTRAL PARK';
   else if (px > 140 && pz > 100) zName = 'APEX CIRCUIT';
   else if (px < -150 && pz < -60) zName = 'DRAG STRIP';
