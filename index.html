@@ -10,12 +10,24 @@
       --accent: #00f0ff;
       --accent-2: #ff0055;
       --gold: #ffcc00;
-      --bg-glass: rgba(10, 14, 24, 0.78);
+      --bg-glass: rgba(10, 14, 24, 0.80);
       --border-glass: rgba(0, 240, 255, 0.28);
     }
     * { box-sizing: border-box; user-select: none; -webkit-user-select: none; margin: 0; padding: 0; }
     body, html { width: 100%; height: 100%; overflow: hidden; background: #05070d; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: #fff; }
     #game-canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; z-index: 1; }
+
+    /* STARTUP LOADING OVERLAY */
+    #loading-screen {
+      position: fixed; inset: 0; z-index: 100; background: radial-gradient(circle at center, #0f172a 0%, #03060c 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+      transition: opacity 0.5s ease;
+    }
+    #loading-screen.hidden { opacity: 0; pointer-events: none; }
+    .load-title { font-size: 36px; font-weight: 900; letter-spacing: 4px; background: linear-gradient(90deg, #fff, var(--accent), var(--accent-2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .load-bar-wrap { width: 320px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 99px; overflow: hidden; border: 1px solid var(--border-glass); }
+    #load-bar-fill { width: 20%; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width 0.25s ease; }
+    #load-status { font-size: 12px; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase; }
 
     /* HUD OVERLAY */
     #hud { position: fixed; inset: 0; pointer-events: none; z-index: 10; display: flex; flex-direction: column; justify-content: space-between; padding: 14px; }
@@ -31,7 +43,7 @@
     .brand-title { font-size: 20px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; background: linear-gradient(90deg, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .brand-sub { font-size: 11px; color: #94a3b8; letter-spacing: 1px; margin-top: 2px; }
 
-    .stats-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .stats-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
     .stat-pill {
       background: var(--bg-glass); backdrop-filter: blur(12px);
       border: 1px solid var(--border-glass); padding: 8px 14px; border-radius: 10px;
@@ -49,6 +61,8 @@
     .btn-hud:hover { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 15px rgba(0,240,255,0.5); }
     .btn-hud.highlight { border-color: var(--gold); color: var(--gold); }
     .btn-hud.highlight:hover { background: var(--gold); color: #000; }
+    .btn-hud.success { border-color: #10b981; color: #34d399; }
+    .btn-hud.success:hover { background: #10b981; color: #000; }
 
     /* DRIFT COMBO BANNER */
     #drift-banner {
@@ -67,7 +81,7 @@
     .minimap-wrap {
       width: 150px; height: 150px; border-radius: 50%; overflow: hidden;
       border: 3px solid var(--accent); background: rgba(5, 10, 20, 0.85);
-      box-shadow: 0 0 25px rgba(0, 240, 255, 0.25); position: relative;
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.25); position: relative; cursor: pointer;
     }
     #minimap { width: 100%; height: 100%; display: block; }
     .zone-label {
@@ -80,7 +94,7 @@
     .Cluster {
       background: var(--bg-glass); backdrop-filter: blur(14px);
       border: 1px solid var(--border-glass); padding: 14px 20px; border-radius: 16px;
-      min-width: 230px; text-align: right; box-shadow: 0 10px 35px rgba(0,0,0,0.6);
+      min-width: 240px; text-align: right; box-shadow: 0 10px 35px rgba(0,0,0,0.6);
     }
     .veh-name-hud { font-size: 12px; color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
     .speed-row { display: flex; justify-content: flex-end; align-items: baseline; gap: 8px; }
@@ -95,15 +109,15 @@
     .nitros-bar-bg { width: 100%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 99px; margin-top: 5px; overflow: hidden; }
     #nos-bar { height: 100%; width: 100%; background: #00f0ff; }
 
-    /* MODALS (GARAGE / TELEPORT / GLB LOADER / SETTINGS) */
+    /* MODALS */
     .modal-backdrop {
-      position: fixed; inset: 0; background: rgba(3, 6, 14, 0.82); backdrop-filter: blur(10px);
+      position: fixed; inset: 0; background: rgba(3, 6, 14, 0.84); backdrop-filter: blur(10px);
       z-index: 50; display: none; align-items: center; justify-content: center; padding: 16px;
     }
     .modal-backdrop.open { display: flex; }
     .modal-card {
       background: #0d1322; border: 1px solid var(--border-glass); border-radius: 16px;
-      max-width: 880px; width: 100%; max-height: 88vh; overflow-y: auto; padding: 22px;
+      max-width: 900px; width: 100%; max-height: 88vh; overflow-y: auto; padding: 22px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.8);
     }
     .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 16px; }
@@ -111,17 +125,17 @@
     .close-btn { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-weight: 800; }
     .close-btn:hover { background: var(--accent-2); border-color: var(--accent-2); }
 
-    .veh-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+    .veh-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 14px; }
     .veh-card {
       background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
       border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 8px;
       transition: all 0.2s ease;
     }
     .veh-card.active { border-color: var(--accent); box-shadow: 0 0 20px rgba(0,240,255,0.2); }
-    .veh-card h3 { font-size: 16px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; }
-    .glb-status { font-size: 10px; padding: 2px 7px; border-radius: 99px; font-weight: 800; }
+    .veh-card h3 { font-size: 15px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+    .glb-status { font-size: 10px; padding: 2px 7px; border-radius: 99px; font-weight: 800; white-space: nowrap; }
     .glb-status.loaded { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #34d399; }
-    .glb-status.proc { background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid #fbbf24; }
+    .glb-status.proc { background: rgba(0, 240, 255, 0.15); color: #00f0ff; border: 1px solid #00f0ff; }
     .stat-bar-line { font-size: 11px; color: #94a3b8; display: flex; justify-content: space-between; }
     .stat-track { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 99px; overflow: hidden; margin-top: 2px; }
     .stat-fill { height: 100%; background: var(--accent); }
@@ -129,15 +143,13 @@
     /* DROPZONE */
     .drop-zone {
       border: 2px dashed var(--accent); background: rgba(0, 240, 255, 0.06);
-      border-radius: 14px; padding: 24px; text-align: center; cursor: pointer;
-      transition: all 0.2s ease; margin-bottom: 16px;
+      border-radius: 14px; padding: 20px; text-align: center; cursor: pointer;
+      transition: all 0.2s ease; margin-bottom: 14px;
     }
-    .drop-zone:hover, .drop-zone.dragover { background: rgba(0, 240, 255, 0.16); box-shadow: 0 0 25px rgba(0,240,255,0.3); }
+    .drop-zone:hover { background: rgba(0, 240, 255, 0.16); box-shadow: 0 0 25px rgba(0,240,255,0.3); }
 
     /* MOBILE TOUCH CONTROLS */
-    #mobile-controls {
-      position: fixed; inset: 0; pointer-events: none; z-index: 15; display: none;
-    }
+    #mobile-controls { position: fixed; inset: 0; pointer-events: none; z-index: 15; display: none; }
     #mobile-controls.visible { display: block; }
     .touch-left { position: absolute; bottom: 26px; left: 24px; display: flex; gap: 14px; pointer-events: auto; }
     .touch-right { position: absolute; bottom: 26px; right: 24px; display: flex; gap: 12px; align-items: flex-end; pointer-events: auto; }
@@ -151,7 +163,6 @@
     .t-btn.gas { height: 86px; background: rgba(0, 240, 255, 0.2); border-color: var(--accent); }
     .t-btn.brake { background: rgba(255, 0, 85, 0.2); border-color: var(--accent-2); }
 
-    /* PROMPT BANNER */
     #prompt-toast {
       position: fixed; bottom: 130px; left: 50%; transform: translateX(-50%);
       background: rgba(10, 14, 24, 0.9); border: 1px solid var(--gold); color: var(--gold);
@@ -170,6 +181,14 @@
 </head>
 <body>
 
+<!-- STARTUP LOADING SCREEN -->
+<div id="loading-screen">
+  <div class="load-title">CODE DRIFT: ULTIMATE</div>
+  <div style="font-size:13px;color:#cbd5e1;letter-spacing:2px;">CREATED BY RYAN • INITIALIZING 3D ENGINE</div>
+  <div class="load-bar-wrap"><div id="load-bar-fill"></div></div>
+  <div id="load-status">Loading 3D Vehicles & World Assets...</div>
+</div>
+
 <canvas id="game-canvas"></canvas>
 
 <!-- MAIN HUD -->
@@ -177,13 +196,13 @@
   <div class="top-bar">
     <div class="brand-card interactive">
       <div class="brand-title">CODE DRIFT <span style="font-size:12px;color:var(--gold);">ULTIMATE</span></div>
-      <div class="brand-sub">CREATED BY RYAN • 6 GLTF/GLB NEXT-GEN ENGINE</div>
+      <div class="brand-sub">CREATED BY RYAN • WEB RELEASE EDITION</div>
     </div>
 
     <div class="stats-row interactive">
       <div class="stat-pill">💰 <span class="val" id="hud-cash">$125,000</span></div>
       <div class="stat-pill">⭐ LVL <span class="xp-val" id="hud-lvl">5</span></div>
-      <button class="btn-hud highlight" id="btn-open-glb">📦 LOAD 6 .GLB MODELS (<span id="glb-count">0/6</span>)</button>
+      <button class="btn-hud highlight" id="btn-open-glb">🛠️ PACK .GLBs FOR WEB (<span id="glb-count">0/6</span>)</button>
       <button class="btn-hud" id="btn-open-garage">🏎️ GARAGE & DEALERSHIP (G)</button>
       <button class="btn-hud" id="btn-open-map">📍 TELEPORT (M)</button>
       <button class="btn-hud" id="btn-cam">🎥 CAM: <span id="cam-label">CHASE</span> (C)</button>
@@ -218,7 +237,7 @@
       <div class="nitros-bar-bg"><div id="nos-bar"></div></div>
       <div style="display:flex;justify-content:space-between;font-size:10px;color:#94a3b8;margin-top:4px;">
         <span>WASD: Drive • SPACE: Drift • SHIFT: Nitro</span>
-        <span id="model-badge" style="color:var(--accent);">3D MESH ACTIVE</span>
+        <span id="model-badge" style="color:var(--accent);">3D MODEL READY</span>
       </div>
     </div>
   </div>
@@ -238,21 +257,32 @@
   </div>
 </div>
 
-<!-- GLB LOADER MODAL -->
+<!-- WEB BUNDLER & GLB MANAGER MODAL -->
 <div class="modal-backdrop" id="modal-glb">
   <div class="modal-card">
     <div class="modal-header">
-      <div class="modal-title">📦 GLTF / GLB 3D Vehicle Model Manager</div>
+      <div class="modal-title">🛠️ Web Publisher & 3D .GLB Auto-Bundler</div>
       <button class="close-btn" data-close="modal-glb">✕</button>
     </div>
-    <p style="font-size:13px;color:#cbd5e1;margin-bottom:14px;line-height:1.5;">
-      Select or drag-and-drop your 6 `.glb` vehicle files below. The engine automatically inspects the internal glTF node hierarchy and metadata to match each model (**BMW S1000 RR**, **BMW S1000RR 2019**, **2023 McLaren Solus GT**, **1986 BMW M3 E30**, **BMW M4 Widebody**, and **BMW M4 CSL**), strips out studio floor backdrops, rigs the wheels/handlebars, and caches them in **IndexedDB** so they stay loaded permanently!
-    </p>
-    <label class="drop-zone" id="glb-dropzone" style="display:block;">
-      <input type="file" id="glb-file-input" multiple accept=".glb,.gltf" style="display:none;" />
-      <div style="font-size:28px;margin-bottom:6px;">📂 Drag & Drop all 6 `.glb` files here (or Click to Browse)</div>
-      <div style="font-size:12px;color:#94a3b8;">Supports multi-file selection • Auto-detects vehicle type by internal glTF nodes • Saves to browser</div>
-    </label>
+    <div style="background:rgba(16,185,129,0.1);border:1px solid #10b981;border-radius:12px;padding:14px;margin-bottom:14px;">
+      <div style="font-weight:800;color:#34d399;font-size:14px;margin-bottom:6px;">🚀 How to Publish So Every Player Sees the 6 .GLB Models Automatically:</div>
+      <div style="font-size:12px;color:#cbd5e1;line-height:1.6;">
+        <b>Option 1 (1-Click Single HTML File):</b> Drop your 6 <code>.glb</code> files below, then click <b>"⚡ EXPORT BUNDLED SINGLE-FILE HTML"</b>. Your browser will bake all 6 <code>.glb</code> models directly inside the HTML code and download <code>Code_Drift_Web_Release.html</code>!<br>
+        <b>Option 2 (Same-Folder Web Host):</b> Upload <code>index.html</code> to GitHub Pages / Netlify / Vercel / itch.io and place your 6 <code>.glb</code> files in the same folder named: <code>bmw_m3_e30_1986.glb</code>, <code>bmw_s1000rr_2019.glb</code>, <code>bmw_m4csl.glb</code>, <code>bmw_m4_widebody.glb</code>, <code>bmw_s1000_rr.glb</code>, and <code>mclaren_solus_gt.glb</code>.
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+      <label class="drop-zone" id="glb-dropzone" style="flex:1;margin-bottom:0;">
+        <input type="file" id="glb-file-input" multiple accept=".glb,.gltf" style="display:none;" />
+        <div style="font-size:20px;font-weight:800;margin-bottom:4px;">📂 Step 1: Drop all 6 `.glb` files here (or Click to Browse)</div>
+        <div style="font-size:11px;color:#94a3b8;">Auto-detects each vehicle & strips studio floors automatically</div>
+      </label>
+      <button class="btn-hud success" id="btn-bake-html" style="padding:18px 22px;font-size:13px;">
+        ⚡ Step 2: EXPORT BUNDLED<br>SINGLE-FILE HTML
+      </button>
+    </div>
+
     <div id="glb-log" style="font-size:12px;color:#34d399;margin-bottom:12px;min-height:18px;"></div>
     <div class="veh-grid" id="glb-status-grid"></div>
   </div>
@@ -266,7 +296,7 @@
       <button class="close-btn" data-close="modal-garage">✕</button>
     </div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
-      <div style="font-size:13px;color:#cbd5e1;">Select any vehicle to drive, purchase, or tune performance & custom paint.</div>
+      <div style="font-size:13px;color:#cbd5e1;">All 6 Iconic Vehicles Included • Select any vehicle to drive or tune.</div>
       <div style="display:flex;gap:8px;align-items:center;">
         <span style="font-size:12px;color:#94a3b8;">Custom Paint:</span>
         <input type="color" id="paint-picker" value="#00f0ff" style="width:36px;height:28px;border:none;background:none;cursor:pointer;" />
@@ -299,21 +329,28 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
+// Capture clean HTML template before DOM mutations so the 1-Click Bundler can bake GLBs cleanly
+const CLEAN_HTML_TEMPLATE = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+
+// Embedded GLB Data Dictionary (Populated automatically when you click "EXPORT BUNDLED SINGLE-FILE HTML")
+const EMBEDDED_GLB_DATA = /*__EMBEDDED_GLBS_START__*/{}/*__EMBEDDED_GLBS_END__*/;
+
+// Store raw DataURLs in memory when user drops files so they can be baked
+const rawDataURLStore = { ...EMBEDDED_GLB_DATA };
+
 // ============================================================================
-// 1. VEHICLE CATALOG (MATCHING THE 6 UPLOADED .GLB MODELS)
+// 1. VEHICLE CATALOG (ALL 6 MODELS + AUTO-FETCH FILENAMES)
 // ============================================================================
 const VEHICLES = [
   {
     id: 'bmw_m3_e30',
     name: '1986 BMW M3 Coupe (E30)',
     type: 'car',
-    price: 0,
-    owned: true,
     topSpeed: 68,
     accel: 34,
     handling: 3.1,
     driftGrip: 0.92,
-    color: 0xc6000f,
+    color: 0xd90429,
     author: 'Lexyc16',
     matchKeys: ['m3 e30', 'e30', '1986', 'lexyc16', 'rubber.001'],
     defaultFilename: 'bmw_m3_e30_1986.glb',
@@ -323,13 +360,11 @@ const VEHICLES = [
     id: 'bmw_s1000rr_2019',
     name: '2019 BMW S1000RR',
     type: 'bike',
-    price: 25000,
-    owned: true,
     topSpeed: 86,
     accel: 48,
     handling: 3.8,
     driftGrip: 0.94,
-    color: 0xebeef2,
+    color: 0xf8fafc,
     author: 'VTX',
     matchKeys: ['bmws19', 's1000rr 2019', 'bmws_sign', 'lights_f'],
     defaultFilename: 'bmw_s1000rr_2019.glb',
@@ -339,13 +374,11 @@ const VEHICLES = [
     id: 'bmw_m4_csl',
     name: 'BMW M4 CSL',
     type: 'car',
-    price: 45000,
-    owned: true,
     topSpeed: 80,
     accel: 42,
     handling: 3.4,
     driftGrip: 0.91,
-    color: 0x1e2229,
+    color: 0x333942,
     author: 'Mpgs Studios',
     matchKeys: ['m4csl', 'bmwm8carsave', 'object442', 'line005', '2125684715'],
     defaultFilename: 'bmw_m4csl.glb',
@@ -355,13 +388,11 @@ const VEHICLES = [
     id: 'bmw_m4_widebody',
     name: 'BMW M4 Widebody (G82)',
     type: 'car',
-    price: 65000,
-    owned: true,
     topSpeed: 84,
     accel: 45,
     handling: 3.5,
     driftGrip: 0.89,
-    color: 0x1a1d24,
+    color: 0x10b981,
     author: 'vecarz',
     matchKeys: ['m4competitiong82', 'widebody', 'vecarz', 'kit0_paint'],
     defaultFilename: 'bmw_m4_widebody.glb',
@@ -371,13 +402,11 @@ const VEHICLES = [
     id: 'bmw_s1000rr_custom',
     name: 'BMW S1000 RR (M-Carbon)',
     type: 'bike',
-    price: 85000,
-    owned: true,
     topSpeed: 92,
     accel: 54,
     handling: 4.0,
     driftGrip: 0.93,
-    color: 0xb60000,
+    color: 0xe11d48,
     author: 'VTX',
     matchKeys: ['offlrds1000r', 'bmw_m1krr', 's1000 rr', 'bride_alcantara'],
     defaultFilename: 'bmw_s1000_rr.glb',
@@ -387,19 +416,22 @@ const VEHICLES = [
     id: 'mclaren_solus_gt',
     name: '2023 McLaren Solus GT',
     type: 'car',
-    price: 120000,
-    owned: true,
     topSpeed: 98,
     accel: 58,
     handling: 4.1,
     driftGrip: 0.95,
-    color: 0xff3b00,
+    color: 0xff5500,
     author: 'kevin',
     matchKeys: ['solus_gt', 'solus gt', 'mclaren', 'cifra_logo', 'csr2_interiora'],
     defaultFilename: 'mclaren_solus_gt.glb',
     targetLength: 4.95
   }
 ];
+
+// Hide developer packager button automatically if all 6 GLBs are already baked into the HTML!
+if (Object.keys(EMBEDDED_GLB_DATA).length >= 6) {
+  document.getElementById('btn-open-glb').style.display = 'none';
+}
 
 // ============================================================================
 // 2. THREE.JS SCENE, RENDERER & PROCEDURAL HDRI ENVIRONMENT
@@ -419,7 +451,6 @@ scene.fog = new THREE.FogExp2(0x0d1528, 0.0022);
 
 const camera = new THREE.PerspectiveCamera(62, window.innerWidth / window.innerHeight, 0.15, 900);
 
-// Generate Studio/City PMREM Environment Map so GLB PBR/Clearcoat materials shine
 const pmremGenerator = new THREE.PMREMGenerator(renderer);
 function buildProceduralEnvMap(mode = 'sunset') {
   const envScene = new THREE.Scene();
@@ -434,10 +465,8 @@ function buildProceduralEnvMap(mode = 'sunset') {
   });
   envScene.add(new THREE.Mesh(skyGeo, skyMat));
 
-  // Add bright neon reflection strips for glossy car paint highlights
   const stripGeo = new THREE.PlaneGeometry(30, 4);
-  const stripMat1 = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
-  const strip1 = new THREE.Mesh(stripGeo, stripMat1);
+  const strip1 = new THREE.Mesh(stripGeo, new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide }));
   strip1.position.set(0, 22, 0);
   strip1.rotation.x = Math.PI / 2;
   envScene.add(strip1);
@@ -447,12 +476,10 @@ function buildProceduralEnvMap(mode = 'sunset') {
   strip2.lookAt(0, 0, 0);
   envScene.add(strip2);
 
-  const rt = pmremGenerator.fromScene(envScene, 0.03);
-  scene.environment = rt.texture;
+  scene.environment = pmremGenerator.fromScene(envScene, 0.03).texture;
 }
 buildProceduralEnvMap('sunset');
 
-// Lighting
 const hemiLight = new THREE.HemisphereLight(0x9ec5ff, 0x1a1c29, 1.1);
 scene.add(hemiLight);
 
@@ -516,14 +543,13 @@ const worldGroup = new THREE.Group();
 scene.add(worldGroup);
 const colliders = [];
 
-// Asphalt texture generator
 function makeRoadTexture() {
   const c = document.createElement('canvas');
   c.width = 512; c.height = 512;
   const ctx = c.getContext('2d');
   ctx.fillStyle = '#181c26';
   ctx.fillRect(0, 0, 512, 512);
-  for (let i = 0; i < 6000; i++) {
+  for (let i = 0; i < 5000; i++) {
     const v = 20 + Math.floor(Math.random() * 20);
     ctx.fillStyle = `rgb(${v},${v+2},${v+6})`;
     ctx.fillRect(Math.random() * 512, Math.random() * 512, 2, 2);
@@ -545,7 +571,6 @@ ground.rotation.x = -Math.PI / 2;
 ground.receiveShadow = true;
 worldGroup.add(ground);
 
-// Road Network
 const roadMat = new THREE.MeshStandardMaterial({ map: roadTex, roughness: 0.45, metalness: 0.2 });
 function addRoadSegment(x, z, w, l, rotY = 0) {
   const m = roadMat.clone();
@@ -560,13 +585,11 @@ function addRoadSegment(x, z, w, l, rotY = 0) {
   worldGroup.add(mesh);
 }
 
-// Grid avenues
 for (let offset = -240; offset <= 240; offset += 80) {
   addRoadSegment(offset, 0, 18, 640, 0);
   addRoadSegment(0, offset, 18, 640, Math.PI / 2);
 }
 
-// Downtown Skyscrapers & Neon Billboards
 const bldgColors = [0x151e30, 0x1b2436, 0x101726, 0x222b40];
 const neonColors = [0x00f0ff, 0xff0055, 0xffcc00, 0xa855f7, 0x10b981];
 
@@ -592,7 +615,7 @@ const winTex = createWindowTexture();
 
 for (let gx = -200; gx <= 120; gx += 80) {
   for (let gz = -200; gz <= 40; gz += 80) {
-    if (Math.abs(gx) < 50 && Math.abs(gz) < 50) continue; // Keep spawn & dealership open
+    if (Math.abs(gx) < 50 && Math.abs(gz) < 50) continue;
     const bw = 26 + Math.random() * 18;
     const bd = 26 + Math.random() * 18;
     const bh = 28 + Math.random() * 65;
@@ -611,7 +634,6 @@ for (let gx = -200; gx <= 120; gx += 80) {
     worldGroup.add(bMesh);
     colliders.push({ x: bx, z: bz, hw: bw / 2 + 0.8, hd: bd / 2 + 0.8 });
 
-    // Neon roof trim
     const neonCol = neonColors[Math.floor(Math.random() * neonColors.length)];
     const trim = new THREE.Mesh(
       new THREE.BoxGeometry(bw + 0.4, 0.6, bd + 0.4),
@@ -622,7 +644,6 @@ for (let gx = -200; gx <= 120; gx += 80) {
   }
 }
 
-// Dealership & Garage Showroom at (45, -40)
 function buildDealership() {
   const dx = 45, dz = -40;
   const pad = new THREE.Mesh(
@@ -646,7 +667,6 @@ function buildDealership() {
   neonBorder.position.set(dx, 8.0, dz);
   worldGroup.add(neonBorder);
 
-  // Glowing Dealership Trigger Ring
   const ring = new THREE.Mesh(
     new THREE.RingGeometry(4.5, 5.2, 32),
     new THREE.MeshBasicMaterial({ color: 0xffcc00, side: THREE.DoubleSide })
@@ -657,7 +677,6 @@ function buildDealership() {
 }
 buildDealership();
 
-// Central Park Zone (-160, 120)
 function buildCentralPark() {
   const px = -160, pz = 120;
   const grass = new THREE.Mesh(
@@ -694,9 +713,7 @@ function buildCentralPark() {
 }
 buildCentralPark();
 
-// Apex Race Track (220, 180) & Drag Strip (-220, -240)
 function buildTracks() {
-  // Oval Drift Circuit at (220, 180)
   const trackRing = new THREE.Mesh(
     new THREE.RingGeometry(48, 68, 64),
     new THREE.MeshStandardMaterial({ color: 0x222634, roughness: 0.4, side: THREE.DoubleSide })
@@ -713,7 +730,6 @@ function buildTracks() {
   curbInner.position.set(220, 0.06, 180);
   worldGroup.add(curbInner);
 
-  // Drag Strip at (-220, -240)
   addRoadSegment(-220, -120, 24, 340, 0);
   const gantry = new THREE.Mesh(
     new THREE.BoxGeometry(26, 1.5, 1.5),
@@ -725,110 +741,205 @@ function buildTracks() {
 buildTracks();
 
 // ============================================================================
-// 5. PROCEDURAL FALLBACK MODELS + SMART GLTF/GLB LOADER & RIGGING
+// 5. BESPOKE SCULPTED 3D REPLICAS (INSTANT FALLBACK) + GLB RIGGING
 // ============================================================================
 const gltfLoader = new GLTFLoader();
-const loadedGLBModels = new Map(); // id -> { scene, wheels, steeringNode }
+const loadedGLBModels = new Map();
 
-function createProceduralVehicle(cfg) {
+function createCustomSculptedVehicle(cfg) {
   const root = new THREE.Group();
   const wheels = [];
   const paintMat = new THREE.MeshPhysicalMaterial({
-    color: cfg.color, metalness: 0.65, roughness: 0.18, clearcoat: 1.0, clearcoatRoughness: 0.06
+    color: cfg.color, metalness: 0.68, roughness: 0.16, clearcoat: 1.0, clearcoatRoughness: 0.05
   });
   paintMat.name = 'PrimaryPaint';
-  const darkMat = new THREE.MeshStandardMaterial({ color: 0x111318, roughness: 0.4, metalness: 0.5 });
-  const glassMat = new THREE.MeshPhysicalMaterial({ color: 0x09101d, metalness: 0.1, roughness: 0.05, transparent: true, opacity: 0.72, clearcoat: 1.0 });
+  const carbonMat = new THREE.MeshStandardMaterial({ color: 0x14171f, roughness: 0.32, metalness: 0.65 });
+  const darkMat = new THREE.MeshStandardMaterial({ color: 0x0f1117, roughness: 0.5, metalness: 0.4 });
+  const glassMat = new THREE.MeshPhysicalMaterial({ color: 0x060b16, metalness: 0.1, roughness: 0.04, transparent: true, opacity: 0.78, clearcoat: 1.0 });
   const headMat = new THREE.MeshBasicMaterial({ color: 0xe0f7ff });
+  const angelEyeMat = new THREE.MeshBasicMaterial({ color: 0xfffbeb });
   const tailMat = new THREE.MeshBasicMaterial({ color: 0xff0033 });
-  const rimMat = new THREE.MeshStandardMaterial({ color: 0xd4d4d8, metalness: 0.85, roughness: 0.2 });
+  const goldMat = new THREE.MeshStandardMaterial({ color: 0xeab308, metalness: 0.88, roughness: 0.2 });
+  const rimMat = new THREE.MeshStandardMaterial({ color: 0xd4d4d8, metalness: 0.88, roughness: 0.18 });
 
   if (cfg.type === 'bike') {
-    // Detailed Superbike (BMW S1000RR silhouette)
-    const frame = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.55, 1.25), paintMat);
-    frame.position.set(0, 0.65, 0);
-    frame.castShadow = true;
-    root.add(frame);
+    // Sculpted BMW S1000RR Superbike (Twin-spar frame, gold USD forks, aero winglets, asymmetrical nose)
+    const tank = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.45, 0.82), paintMat);
+    tank.position.set(0, 0.74, 0.08);
+    tank.castShadow = true;
+    root.add(tank);
 
-    const fairing = new THREE.Mesh(new THREE.ConeGeometry(0.32, 0.65, 6), paintMat);
-    fairing.rotation.x = Math.PI / 2;
-    fairing.position.set(0, 0.72, 0.72);
-    root.add(fairing);
+    const engineBlock = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.42, 0.55), carbonMat);
+    engineBlock.position.set(0, 0.46, 0.08);
+    root.add(engineBlock);
 
-    const windscreen = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.22, 0.35), glassMat);
-    windscreen.position.set(0, 0.92, 0.55);
-    windscreen.rotation.x = -0.5;
-    root.add(windscreen);
+    // Nose Cone & Aero Winglets (M-Carbon spec has prominent carbon winglets)
+    const nose = new THREE.Mesh(new THREE.ConeGeometry(0.30, 0.62, 6), paintMat);
+    nose.rotation.x = Math.PI / 2;
+    nose.position.set(0, 0.78, 0.68);
+    root.add(nose);
 
-    const tail = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.18, 0.55), paintMat);
-    tail.position.set(0, 0.82, -0.62);
-    tail.rotation.x = 0.25;
+    if (cfg.id === 'bmw_s1000rr_custom') {
+      const winglet = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.03, 0.18), carbonMat);
+      winglet.position.set(0, 0.72, 0.64);
+      root.add(winglet);
+    }
+
+    // Windscreen bubble
+    const screen = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.24, 0.42), glassMat);
+    screen.position.set(0, 0.96, 0.52);
+    screen.rotation.x = -0.55;
+    root.add(screen);
+
+    // Upside-Down Gold Front Forks
+    [-0.12, 0.12].forEach((fx) => {
+      const fork = new THREE.Mesh(new THREE.CylinderGeometry(0.028, 0.024, 0.68, 10), goldMat);
+      fork.position.set(fx, 0.56, 0.58);
+      fork.rotation.x = -0.35;
+      root.add(fork);
+    });
+
+    // Sculpted Tail Section & Exhaust Canister
+    const tail = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.18, 0.62), paintMat);
+    tail.position.set(0, 0.86, -0.58);
+    tail.rotation.x = 0.28;
     root.add(tail);
 
-    const handlebar = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.68, 8), rimMat);
-    handlebar.rotation.z = Math.PI / 2;
-    handlebar.position.set(0, 0.9, 0.38);
-    root.add(handlebar);
+    const exhaust = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.045, 0.52, 12), carbonMat);
+    exhaust.rotation.x = Math.PI / 2 - 0.35;
+    exhaust.position.set(0.18, 0.42, -0.45);
+    root.add(exhaust);
 
-    const tireGeo = new THREE.TorusGeometry(0.31, 0.09, 12, 24);
+    // Wheels + Brake Rotors
+    const tireGeo = new THREE.TorusGeometry(0.31, 0.095, 14, 28);
     [0.72, -0.72].forEach((zPos, idx) => {
       const wGroup = new THREE.Group();
       wGroup.position.set(0, 0.38, zPos);
       const tire = new THREE.Mesh(tireGeo, darkMat);
       tire.rotation.y = Math.PI / 2;
-      const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.08, 12), rimMat);
+      const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.08, 14), cfg.id === 'bmw_s1000rr_custom' ? carbonMat : rimMat);
       rim.rotation.z = Math.PI / 2;
-      wGroup.add(tire, rim);
+      const rotor = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.095, 16), goldMat);
+      rotor.rotation.z = Math.PI / 2;
+      wGroup.add(tire, rim, rotor);
       root.add(wGroup);
       wheels.push({ node: wGroup, isFront: idx === 0 });
     });
-  } else {
-    // Detailed Sports / Hypercar Silhouette
-    const isHyper = cfg.id === 'mclaren_solus_gt';
-    const bodyW = isHyper ? 2.05 : 1.92;
-    const bodyH = isHyper ? 0.44 : 0.54;
-    const bodyL = 4.55;
+  } else if (cfg.id === 'mclaren_solus_gt') {
+    // 2023 McLaren Solus GT (LMP Hypercar with Central Jet Canopy, Front Wheel Pods & Massive Rear Wing)
+    const tub = new THREE.Mesh(new THREE.BoxGeometry(1.35, 0.42, 4.65), paintMat);
+    tub.position.set(0, 0.42, 0);
+    tub.castShadow = true;
+    root.add(tub);
 
-    const chassis = new THREE.Mesh(new THREE.BoxGeometry(bodyW, bodyH, bodyL), paintMat);
-    chassis.position.set(0, 0.52, 0);
-    chassis.castShadow = true;
-    root.add(chassis);
+    // Side Venturi Pods & Wheel Fenders
+    [-0.78, 0.78].forEach((sx) => {
+      const pod = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.46, 4.35), paintMat);
+      pod.position.set(sx, 0.44, 0.05);
+      pod.castShadow = true;
+      root.add(pod);
+    });
 
-    const cabin = new THREE.Mesh(
-      new THREE.BoxGeometry(isHyper ? 1.15 : 1.56, isHyper ? 0.38 : 0.46, isHyper ? 2.1 : 1.95),
-      glassMat
-    );
-    cabin.position.set(0, 0.94, isHyper ? 0.1 : -0.15);
-    root.add(cabin);
+    // Teardrop Central Fighter-Jet Canopy
+    const canopy = new THREE.Mesh(new THREE.SphereGeometry(0.58, 20, 14), glassMat);
+    canopy.scale.set(0.95, 0.62, 2.25);
+    canopy.position.set(0, 0.74, 0.15);
+    root.add(canopy);
 
-    // Wing / Spoiler
-    if (cfg.id !== 'bmw_m3_e30') {
-      const wing = new THREE.Mesh(new THREE.BoxGeometry(bodyW + 0.1, 0.06, 0.34), darkMat);
-      wing.position.set(0, 1.02, -2.05);
-      root.add(wing);
-    }
+    // Roof Scoop Snorkel & LMP Shark Fin
+    const fin = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.42, 1.45), carbonMat);
+    fin.position.set(0, 0.92, -1.35);
+    root.add(fin);
 
-    // Headlights & Taillights
-    const hl = new THREE.Mesh(new THREE.BoxGeometry(bodyW * 0.82, 0.1, 0.08), headMat);
-    hl.position.set(0, 0.58, bodyL / 2 + 0.01);
-    const tl = new THREE.Mesh(new THREE.BoxGeometry(bodyW * 0.85, 0.1, 0.08), tailMat);
-    tl.position.set(0, 0.62, -bodyL / 2 - 0.01);
-    root.add(hl, tl);
+    // Dual-Element GT Wing
+    const wing = new THREE.Mesh(new THREE.BoxGeometry(2.12, 0.06, 0.42), carbonMat);
+    wing.position.set(0, 1.08, -2.18);
+    root.add(wing);
 
-    const wGeo = new THREE.CylinderGeometry(0.36, 0.36, 0.28, 20);
-    wGeo.rotateZ(Math.PI / 2);
-    const positions = [
-      [-bodyW / 2, 0.36, 1.42, true],
-      [bodyW / 2, 0.36, 1.42, true],
-      [-bodyW / 2, 0.36, -1.42, false],
-      [bodyW / 2, 0.36, -1.42, false]
-    ];
-    positions.forEach(([wx, wy, wz, isFront]) => {
+    const splitter = new THREE.Mesh(new THREE.BoxGeometry(2.14, 0.05, 0.65), carbonMat);
+    splitter.position.set(0, 0.18, 2.25);
+    root.add(splitter);
+
+    const wGeo = new THREE.CylinderGeometry(0.37, 0.37, 0.32, 22).rotateZ(Math.PI / 2);
+    [[-0.95, 0.37, 1.48, true], [0.95, 0.37, 1.48, true], [-0.95, 0.37, -1.48, false], [0.95, 0.37, -1.48, false]].forEach(([wx, wy, wz, isFront]) => {
       const wGroup = new THREE.Group();
       wGroup.position.set(wx, wy, wz);
-      const wMesh = new THREE.Mesh(wGeo, darkMat);
-      const rMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.3, 12).rotateZ(Math.PI / 2), rimMat);
-      wGroup.add(wMesh, rMesh);
+      wGroup.add(new THREE.Mesh(wGeo, darkMat), new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, 0.34, 14).rotateZ(Math.PI / 2), goldMat));
+      root.add(wGroup);
+      wheels.push({ node: wGroup, isFront });
+    });
+  } else {
+    // BMW M3 E30 / BMW M4 CSL / BMW M4 Widebody G82
+    const isE30 = cfg.id === 'bmw_m3_e30';
+    const isWide = cfg.id === 'bmw_m4_widebody';
+    const bodyW = isWide ? 2.04 : isE30 ? 1.78 : 1.92;
+    const bodyL = isE30 ? 4.38 : 4.72;
+
+    const lowerBody = new THREE.Mesh(new THREE.BoxGeometry(bodyW, 0.52, bodyL), paintMat);
+    lowerBody.position.set(0, 0.50, 0);
+    lowerBody.castShadow = true;
+    root.add(lowerBody);
+
+    // Widebody Boxy Fenders
+    if (isWide || isE30) {
+      [[-bodyW / 2, 1.38], [bodyW / 2, 1.38], [-bodyW / 2, -1.38], [bodyW / 2, -1.38]].forEach(([fx, fz]) => {
+        const flare = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.38, 0.92), paintMat);
+        flare.position.set(fx, 0.48, fz);
+        root.add(flare);
+      });
+    }
+
+    // Greenhouse Cabin
+    const cabin = new THREE.Mesh(new THREE.BoxGeometry(bodyW * 0.82, 0.46, isE30 ? 1.85 : 2.05), glassMat);
+    cabin.position.set(0, 0.94, -0.15);
+    root.add(cabin);
+
+    // Roof Panel (Carbon Roof for M4 CSL & Widebody)
+    const roofPanel = new THREE.Mesh(new THREE.BoxGeometry(bodyW * 0.78, 0.05, isE30 ? 1.45 : 1.65), isE30 ? paintMat : carbonMat);
+    roofPanel.position.set(0, 1.18, -0.15);
+    root.add(roofPanel);
+
+    // Iconic BMW Kidney Grille + Headlights
+    if (isE30) {
+      // Classic E30 Quad Round Headlights & Boxy Wing
+      [-0.62, -0.44, 0.44, 0.62].forEach((hx) => {
+        const lamp = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, 0.06, 16).rotateX(Math.PI / 2), angelEyeMat);
+        lamp.position.set(hx, 0.56, bodyL / 2 + 0.01);
+        root.add(lamp);
+      });
+      const e30Wing = new THREE.Mesh(new THREE.BoxGeometry(bodyW * 0.92, 0.06, 0.28), paintMat);
+      e30Wing.position.set(0, 0.92, -bodyL / 2 + 0.18);
+      root.add(e30Wing);
+    } else {
+      // G82 M4 Vertical Twin Kidney Grille & Yellow CSL Laser DRLs
+      [-0.18, 0.18].forEach((kx) => {
+        const grille = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.38, 0.06), carbonMat);
+        grille.position.set(kx, 0.48, bodyL / 2 + 0.01);
+        root.add(grille);
+      });
+      [-0.68, 0.68].forEach((hx) => {
+        const laser = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.09, 0.06), cfg.id === 'bmw_m4_csl' ? angelEyeMat : headMat);
+        laser.position.set(hx, 0.62, bodyL / 2 + 0.01);
+        root.add(laser);
+      });
+      // GT Wing & Front Carbon Splitter
+      const gtWing = new THREE.Mesh(new THREE.BoxGeometry(bodyW + 0.12, 0.05, 0.34), carbonMat);
+      gtWing.position.set(0, 1.02, -bodyL / 2 + 0.15);
+      const splitter = new THREE.Mesh(new THREE.BoxGeometry(bodyW + 0.06, 0.05, 0.35), carbonMat);
+      splitter.position.set(0, 0.22, bodyL / 2 - 0.05);
+      root.add(gtWing, splitter);
+    }
+
+    // Taillights
+    const tl = new THREE.Mesh(new THREE.BoxGeometry(bodyW * 0.86, 0.11, 0.06), tailMat);
+    tl.position.set(0, 0.60, -bodyL / 2 - 0.01);
+    root.add(tl);
+
+    const wGeo = new THREE.CylinderGeometry(0.35, 0.35, 0.28, 20).rotateZ(Math.PI / 2);
+    [[-bodyW / 2, 0.35, 1.38, true], [bodyW / 2, 0.35, 1.38, true], [-bodyW / 2, 0.35, -1.38, false], [bodyW / 2, 0.35, -1.38, false]].forEach(([wx, wy, wz, isFront]) => {
+      const wGroup = new THREE.Group();
+      wGroup.position.set(wx, wy, wz);
+      wGroup.add(new THREE.Mesh(wGeo, darkMat), new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.30, 12).rotateZ(Math.PI / 2), rimMat));
       root.add(wGroup);
       wheels.push({ node: wGroup, isFront });
     });
@@ -837,11 +948,9 @@ function createProceduralVehicle(cfg) {
   return { scene: root, wheels, isGLB: false };
 }
 
-// Normalize any loaded GLTF/GLB model, strip studio backdrops, and find wheels
+// Strip studio backdrops, normalize scale, and rig wheels for any .glb model
 function normalizeAndRigGLB(gltf, cfg) {
   const model = gltf.scene;
-
-  // 1. Strip out giant studio floors / backdrop planes (critical for M4 Widebody & M4 CSL)
   const meshesToRemove = [];
   model.updateMatrixWorld(true);
   model.traverse((child) => {
@@ -855,7 +964,6 @@ function normalizeAndRigGLB(gltf, cfg) {
       const size = new THREE.Vector3();
       worldBox.getSize(size);
 
-      // Studio backdrop / floor detection
       if (
         matNameL.includes('phong2') ||
         pNameL.includes('plane.025') ||
@@ -870,7 +978,6 @@ function normalizeAndRigGLB(gltf, cfg) {
   });
   meshesToRemove.forEach((m) => m.parent && m.parent.remove(m));
 
-  // 2. Measure cleaned vehicle bounding box
   model.updateMatrixWorld(true);
   const box = new THREE.Box3().setFromObject(model);
   const size = new THREE.Vector3();
@@ -882,20 +989,12 @@ function normalizeAndRigGLB(gltf, cfg) {
   const inner = new THREE.Group();
   inner.add(model);
 
-  // Center horizontally and place tires on ground (y = 0)
   model.position.set(-center.x, -box.min.y, -center.z);
+  if (size.x > size.z * 1.15) inner.rotation.y = Math.PI / 2;
 
-  // Align longest horizontal dimension with Z (forward axis)
-  if (size.x > size.z * 1.15) {
-    inner.rotation.y = Math.PI / 2;
-  }
-
-  // Scale to realistic target length
   const horizLength = Math.max(size.x, size.z) || 1;
-  const scaleFactor = cfg.targetLength / horizLength;
-  inner.scale.setScalar(scaleFactor);
+  inner.scale.setScalar(cfg.targetLength / horizLength);
 
-  // Enhance PBR materials and enable shadows
   const wheels = [];
   model.traverse((child) => {
     if (child.isMesh) {
@@ -904,23 +1003,13 @@ function normalizeAndRigGLB(gltf, cfg) {
       if (child.material) {
         child.material.envMapIntensity = 1.6;
         const mName = (child.material.name || '').toLowerCase();
-        if (
-          mName.includes('paint') ||
-          mName.includes('body') ||
-          mName.includes('livery') ||
-          mName.includes('material.001') ||
-          mName.includes('primary')
-        ) {
+        if (mName.includes('paint') || mName.includes('body') || mName.includes('livery') || mName.includes('material.001') || mName.includes('primary')) {
           child.material.userData.isBodyPaint = true;
         }
       }
     }
-    // Detect wheel nodes for rotation
     const nName = (child.name || '').toLowerCase();
-    if (
-      nName === 'wheel_lf' || nName === 'wheel_rf' || nName === 'wheel_lr' || nName === 'wheel_rr' ||
-      nName.includes('wheel_lf.child') || nName.includes('wheel_lr.child')
-    ) {
+    if (nName === 'wheel_lf' || nName === 'wheel_rf' || nName === 'wheel_lr' || nName === 'wheel_rr' || nName.includes('wheel_lf.child') || nName.includes('wheel_lr.child')) {
       wheels.push({ node: child, isFront: nName.includes('lf') || nName.includes('rf') });
     }
   });
@@ -929,7 +1018,6 @@ function normalizeAndRigGLB(gltf, cfg) {
   return { scene: wrapper, wheels, isGLB: true };
 }
 
-// Identify which of the 6 vehicles a dropped .glb file belongs to
 function identifyVehicleFromGLB(gltf, filename = '') {
   const fname = filename.toLowerCase();
   const title = (gltf.parser?.json?.asset?.extras?.title || '').toLowerCase();
@@ -939,18 +1027,14 @@ function identifyVehicleFromGLB(gltf, filename = '') {
     if (n.material?.name) nodeNames.push(n.material.name.toLowerCase());
   });
   const combined = [fname, title, ...nodeNames].join(' ');
-
   for (const v of VEHICLES) {
-    if (v.matchKeys.some((k) => combined.includes(k.toLowerCase()))) {
-      return v;
-    }
+    if (v.matchKeys.some((k) => combined.includes(k.toLowerCase()))) return v;
   }
-  // Fallback: assign to first vehicle without a loaded GLB
   return VEHICLES.find((v) => !loadedGLBModels.get(v.id)?.isGLB) || VEHICLES[0];
 }
 
 // ============================================================================
-// 6. INDEXEDDB PERSISTENCE FOR THE 6 .GLB FILES
+// 6. AUTOMATIC MULTI-SOURCE PRELOADER (EMBEDDED -> SERVER FOLDER -> INDEXEDDB)
 // ============================================================================
 function openModelDB() {
   return new Promise((resolve, reject) => {
@@ -967,57 +1051,140 @@ function openModelDB() {
 async function saveGLBToDB(vehId, arrayBuffer) {
   try {
     const db = await openModelDB();
-    const tx = db.transaction('models', 'readwrite');
-    tx.objectStore('models').put(arrayBuffer, vehId);
+    db.transaction('models', 'readwrite').objectStore('models').put(arrayBuffer, vehId);
   } catch (e) {}
 }
 
-async function loadCachedGLBsFromDB() {
-  try {
-    const db = await openModelDB();
-    for (const v of VEHICLES) {
-      const buf = await new Promise((res) => {
-        const req = db.transaction('models', 'readonly').objectStore('models').get(v.id);
-        req.onsuccess = () => res(req.result);
-        req.onerror = () => res(null);
-      });
-      if (buf) {
-        await parseAndApplyGLBBuffer(buf, v);
-      }
-    }
-  } catch (e) {}
+function arrayBufferToDataURL(buffer) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.readAsDataURL(new Blob([buffer], { type: 'model/gltf-binary' }));
+  });
 }
 
 async function parseAndApplyGLBBuffer(arrayBuffer, targetVeh = null, filename = '') {
   return new Promise((resolve) => {
-    gltfLoader.parse(arrayBuffer, '', (gltf) => {
+    gltfLoader.parse(arrayBuffer, '', async (gltf) => {
       const veh = targetVeh || identifyVehicleFromGLB(gltf, filename);
       const rigged = normalizeAndRigGLB(gltf, veh);
       loadedGLBModels.set(veh.id, rigged);
+      if (!rawDataURLStore[veh.id]) {
+        rawDataURLStore[veh.id] = await arrayBufferToDataURL(arrayBuffer);
+      }
       updateGLBCountUI();
       if (VEHICLES[currentVehIdx].id === veh.id) {
         spawnPlayerVehicle(currentVehIdx);
       }
-      refreshDealershipShowroom();
       resolve(veh);
     }, () => resolve(null));
   });
 }
 
-// Initialize procedural fallbacks first
+// Initialize custom sculpted 3D vehicles immediately so there's zero wait
 VEHICLES.forEach((v) => {
-  loadedGLBModels.set(v.id, createProceduralVehicle(v));
+  loadedGLBModels.set(v.id, createCustomSculptedVehicle(v));
+});
+
+async function autoPreloadAllModels() {
+  const barFill = document.getElementById('load-bar-fill');
+  const statusEl = document.getElementById('load-status');
+  let completed = 0;
+
+  for (const v of VEHICLES) {
+    statusEl.textContent = `Loading ${v.name}...`;
+    let loaded = false;
+
+    // 1. Check Embedded Single-File Base64 Data first
+    if (EMBEDDED_GLB_DATA[v.id]) {
+      try {
+        const res = await fetch(EMBEDDED_GLB_DATA[v.id]);
+        const buf = await res.arrayBuffer();
+        await parseAndApplyGLBBuffer(buf, v, v.defaultFilename);
+        loaded = true;
+      } catch (e) {}
+    }
+
+    // 2. Check Web Server Folder (./bmw_m3_e30_1986.glb or ./models/...)
+    if (!loaded) {
+      for (const path of [v.defaultFilename, `models/${v.defaultFilename}`]) {
+        try {
+          const res = await fetch(path);
+          if (res.ok) {
+            const buf = await res.arrayBuffer();
+            if (buf.byteLength > 1000) {
+              await parseAndApplyGLBBuffer(buf, v, v.defaultFilename);
+              loaded = true;
+              break;
+            }
+          }
+        } catch (e) {}
+      }
+    }
+
+    // 3. Check Browser IndexedDB Cache
+    if (!loaded) {
+      try {
+        const db = await openModelDB();
+        const buf = await new Promise((res) => {
+          const req = db.transaction('models', 'readonly').objectStore('models').get(v.id);
+          req.onsuccess = () => res(req.result);
+          req.onerror = () => res(null);
+        });
+        if (buf) await parseAndApplyGLBBuffer(buf, v, v.defaultFilename);
+      } catch (e) {}
+    }
+
+    completed++;
+    barFill.style.width = `${Math.round((completed / VEHICLES.length) * 100)}%`;
+  }
+
+  statusEl.textContent = 'Ready to Drift!';
+  setTimeout(() => {
+    document.getElementById('loading-screen').classList.add('hidden');
+  }, 300);
+}
+
+// ============================================================================
+// 7. 1-CLICK SINGLE-FILE HTML BUNDLER (BAKES ALL 6 .GLBs INTO ONE HTML FILE!)
+// ============================================================================
+document.getElementById('btn-bake-html').addEventListener('click', () => {
+  const keysLoaded = Object.keys(rawDataURLStore);
+  if (keysLoaded.length === 0) {
+    document.getElementById('glb-log').textContent = '⚠️ Please drop at least 1 (or all 6) .glb files into Step 1 first!';
+    return;
+  }
+  document.getElementById('glb-log').textContent = `⏳ Baking ${keysLoaded.length} .glb model(s) into a standalone HTML file...`;
+
+  setTimeout(() => {
+    const bakedJSON = JSON.stringify(rawDataURLStore);
+    const bundledHTML = CLEAN_HTML_TEMPLATE.replace(
+      /\/\*__EMBEDDED_GLBS_START__\*\/[\s\S]*?\/\*__EMBEDDED_GLBS_END__\*\//,
+      `/*__EMBEDDED_GLBS_START__*/${bakedJSON}/*__EMBEDDED_GLBS_END__*/`
+    );
+
+    const blob = new Blob([bundledHTML], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Code_Drift_Web_Release.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    document.getElementById('glb-log').textContent = `✅ Downloaded "Code_Drift_Web_Release.html" with ${keysLoaded.length} embedded 3D .GLB model(s)! Upload that file to the web!`;
+  }, 100);
 });
 
 // ============================================================================
-// 7. PLAYER VEHICLE, DEALERSHIP SHOWROOM & CHARACTER ("AIM & GO")
+// 8. PLAYER VEHICLE, DEALERSHIP SHOWROOM & CHARACTER ("AIM & GO")
 // ============================================================================
 let currentVehIdx = 0;
 let playerVehGroup = new THREE.Group();
 let currentVehRig = null;
 scene.add(playerVehGroup);
 
-// Headlight Spotlights
 const headLightL = new THREE.SpotLight(0xe0f7ff, 5, 65, Math.PI / 5, 0.5, 1.2);
 const headLightR = new THREE.SpotLight(0xe0f7ff, 5, 65, Math.PI / 5, 0.5, 1.2);
 playerVehGroup.add(headLightL, headLightR, headLightL.target, headLightR.target);
@@ -1026,7 +1193,6 @@ headLightR.position.set(0.6, 0.7, 1.8);
 headLightL.target.position.set(-0.6, 0.1, 16);
 headLightR.target.position.set(0.6, 0.1, 16);
 
-// Exhaust Backfire Flame Meshes
 const flameGeo = new THREE.ConeGeometry(0.14, 0.7, 8);
 flameGeo.rotateX(-Math.PI / 2);
 const flameMat = new THREE.MeshBasicMaterial({ color: 0xff6600, transparent: true, opacity: 0 });
@@ -1040,18 +1206,16 @@ function spawnPlayerVehicle(idx) {
   if (currentVehRig && currentVehRig.scene) {
     playerVehGroup.remove(currentVehRig.scene);
   }
-  const template = loadedGLBModels.get(cfg.id);
-  currentVehRig = template;
+  currentVehRig = loadedGLBModels.get(cfg.id);
   playerVehGroup.add(currentVehRig.scene);
 
   document.getElementById('hud-veh-name').textContent = cfg.name;
   const badge = document.getElementById('model-badge');
-  badge.textContent = currentVehRig.isGLB ? '✓ REAL .GLB MODEL ACTIVE' : 'PROCEDURAL 3D MESH (LOAD .GLB IN TOP BAR)';
-  badge.style.color = currentVehRig.isGLB ? '#34d399' : '#fbbf24';
+  badge.textContent = currentVehRig.isGLB ? '✓ REAL .GLB 3D ACTIVE' : '✓ 3D REPLICA ACTIVE';
+  badge.style.color = currentVehRig.isGLB ? '#34d399' : '#00f0ff';
   renderGarageModal();
 }
 
-// Dealership Display Showroom Pedestals
 const showroomGroup = new THREE.Group();
 scene.add(showroomGroup);
 function refreshDealershipShowroom() {
@@ -1068,7 +1232,6 @@ function refreshDealershipShowroom() {
   });
 }
 
-// On-Foot Player Character & "Aim and Go" Target
 let isOnFoot = false;
 const charGroup = new THREE.Group();
 const charBody = new THREE.Mesh(new THREE.CapsuleGeometry(0.32, 0.9, 8, 16), new THREE.MeshStandardMaterial({ color: 0x00f0ff, roughness: 0.3 }));
@@ -1079,7 +1242,6 @@ charGroup.add(charBody, charVisor);
 charGroup.visible = false;
 scene.add(charGroup);
 
-// "Aim & Go" Ground Marker
 const aimMarker = new THREE.Mesh(
   new THREE.RingGeometry(0.5, 0.75, 24),
   new THREE.MeshBasicMaterial({ color: 0x00f0ff, side: THREE.DoubleSide })
@@ -1105,7 +1267,7 @@ canvas.addEventListener('pointerdown', (e) => {
 });
 
 // ============================================================================
-// 8. DRIFT & DRIVING PHYSICS + TIRE SMOKE & SKIDMARKS
+// 9. DRIFT & DRIVING PHYSICS + TIRE SMOKE
 // ============================================================================
 const state = {
   cash: 125000,
@@ -1121,14 +1283,14 @@ const state = {
   driftMultiplier: 1.0,
   driftTimer: 0,
   nos: 100,
-  camMode: 0, // 0: Chase, 1: First-Person Cockpit/Helmet, 2: Hood, 3: Top-Down
+  camMode: 0,
   todIndex: 0
 };
 
 playerVehGroup.position.set(0, 0, 12);
 spawnPlayerVehicle(0);
 refreshDealershipShowroom();
-loadCachedGLBsFromDB();
+autoPreloadAllModels();
 
 const keys = {};
 window.addEventListener('keydown', (e) => {
@@ -1143,7 +1305,6 @@ window.addEventListener('keyup', (e) => {
   keys[e.key.toLowerCase()] = false;
 });
 
-// Tire Smoke Particles
 const smokeParticles = [];
 const smokeGeo = new THREE.SphereGeometry(0.35, 8, 8);
 const smokeMat = new THREE.MeshBasicMaterial({ color: 0xe2e8f0, transparent: true, opacity: 0.45 });
@@ -1156,7 +1317,7 @@ function spawnSmoke(x, z) {
 }
 
 // ============================================================================
-// 9. UI, MODALS & .GLB FILE HANDLERS
+// 10. UI, MODALS & .GLB FILE HANDLERS
 // ============================================================================
 function updateGLBCountUI() {
   let count = 0;
@@ -1177,12 +1338,12 @@ function renderGLBStatusGrid() {
     card.innerHTML = `
       <h3>
         <span>${v.name}</span>
-        <span class="glb-status ${isGLB ? 'loaded' : 'proc'}">${isGLB ? '✓ .GLB LOADED' : 'PROCEDURAL'}</span>
+        <span class="glb-status ${isGLB ? 'loaded' : 'proc'}">${isGLB ? '✓ .GLB LOADED' : '3D REPLICA'}</span>
       </h3>
-      <div style="font-size:11px;color:#94a3b8;">Type: ${v.type.toUpperCase()} • Author: ${v.author}</div>
+      <div style="font-size:11px;color:#94a3b8;">File: <code>${v.defaultFilename}</code></div>
       <div style="display:flex;gap:6px;margin-top:6px;">
         <label class="btn-hud" style="flex:1;justify-content:center;">
-          📂 Assign .GLB
+          📂 Load .GLB
           <input type="file" accept=".glb,.gltf" data-veh-idx="${idx}" style="display:none;" />
         </label>
         <button class="btn-hud" data-drive-idx="${idx}">Drive</button>
@@ -1242,7 +1403,6 @@ function renderGarageModal() {
   });
 }
 
-// Multi-file drag & drop anywhere on window or inside modal
 async function handleFilesList(fileList) {
   const files = Array.from(fileList).filter((f) => f.name.toLowerCase().endsWith('.glb') || f.name.toLowerCase().endsWith('.gltf'));
   if (!files.length) return;
@@ -1257,7 +1417,7 @@ async function handleFilesList(fileList) {
       loadedNames.push(matchedVeh.name);
     }
   }
-  logEl.textContent = `✓ Successfully loaded & cached: ${loadedNames.join(', ')}`;
+  logEl.textContent = `✓ Loaded: ${loadedNames.join(', ')} — Now click "Step 2: EXPORT BUNDLED SINGLE-FILE HTML" to bake them!`;
 }
 
 document.getElementById('glb-file-input').addEventListener('change', (e) => handleFilesList(e.target.files));
@@ -1267,15 +1427,6 @@ window.addEventListener('drop', (e) => {
   if (e.dataTransfer?.files?.length) handleFilesList(e.dataTransfer.files);
 });
 
-// Try auto-fetching default filenames if running on a local server
-VEHICLES.forEach((v) => {
-  fetch(v.defaultFilename)
-    .then((r) => (r.ok ? r.arrayBuffer() : null))
-    .then((buf) => { if (buf) parseAndApplyGLBBuffer(buf, v, v.defaultFilename); })
-    .catch(() => {});
-});
-
-// UI Buttons & Modals
 function toggleModal(id, force) {
   const el = document.getElementById(id);
   const open = force !== undefined ? force : !el.classList.contains('open');
@@ -1294,7 +1445,6 @@ document.querySelectorAll('[data-close]').forEach((btn) => {
   btn.addEventListener('click', () => toggleModal(btn.dataset.close, false));
 });
 
-// Teleport Buttons
 document.querySelectorAll('[data-tp]').forEach((btn) => {
   btn.addEventListener('click', () => {
     const [tx, tz, rot] = btn.dataset.tp.split(',').map(Number);
@@ -1307,7 +1457,6 @@ document.querySelectorAll('[data-tp]').forEach((btn) => {
   });
 });
 
-// Paint & Upgrades
 document.getElementById('paint-picker').addEventListener('input', (e) => {
   const col = new THREE.Color(e.target.value);
   VEHICLES[currentVehIdx].color = col.getHex();
@@ -1338,7 +1487,6 @@ document.getElementById('btn-upgrade-turbo').addEventListener('click', () => {
   }
 });
 
-// Camera, Walk, Time-of-Day, Controls & Fullscreen
 const camLabels = ['CHASE', 'COCKPIT', 'HOOD', 'TOP'];
 function cycleCamera() {
   state.camMode = (state.camMode + 1) % 4;
@@ -1392,7 +1540,6 @@ document.getElementById('btn-fullscreen').addEventListener('click', () => {
   else document.exitFullscreen().catch(() => {});
 });
 
-// Touch button bindings
 function bindTouch(id, keyName) {
   const el = document.getElementById(id);
   const start = (e) => { e.preventDefault(); keys[keyName] = true; el.classList.add('pressed'); initAudio(); };
@@ -1415,7 +1562,7 @@ function updateHUDStats() {
 updateGLBCountUI();
 
 // ============================================================================
-// 10. MINIMAP RADAR RENDERER
+// 11. MINIMAP RADAR & MAIN GAME LOOP
 // ============================================================================
 const mmCanvas = document.getElementById('minimap');
 const mmCtx = mmCanvas.getContext('2d');
@@ -1425,7 +1572,6 @@ function drawMinimap(px, pz, heading) {
   mmCtx.translate(75, 75);
   mmCtx.rotate(heading);
 
-  // Roads on radar
   mmCtx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
   mmCtx.lineWidth = 4;
   for (let o = -240; o <= 240; o += 80) {
@@ -1435,15 +1581,12 @@ function drawMinimap(px, pz, heading) {
     mmCtx.beginPath(); mmCtx.moveTo(-160, rz); mmCtx.lineTo(160, rz); mmCtx.stroke();
   }
 
-  // Dealership marker
   const dx = (45 - px) * 0.25;
   const dz = (-40 - pz) * 0.25;
   mmCtx.fillStyle = '#ffcc00';
   mmCtx.beginPath(); mmCtx.arc(dx, dz, 5, 0, Math.PI * 2); mmCtx.fill();
-
   mmCtx.restore();
 
-  // Player arrow
   mmCtx.fillStyle = '#00f0ff';
   mmCtx.beginPath();
   mmCtx.moveTo(75, 67);
@@ -1454,9 +1597,6 @@ function drawMinimap(px, pz, heading) {
   mmCtx.fill();
 }
 
-// ============================================================================
-// 11. MAIN GAME LOOP
-// ============================================================================
 let lastTime = performance.now();
 const camTarget = new THREE.Vector3();
 
@@ -1468,7 +1608,6 @@ function animate(now) {
   const cfg = VEHICLES[currentVehIdx];
 
   if (isOnFoot) {
-    // ON-FOOT CHARACTER MOVEMENT ("AIM AND GO" + WASD)
     const moveSpeed = 12;
     let mx = (keys['d'] || keys['arrowright'] ? 1 : 0) - (keys['a'] || keys['arrowleft'] ? 1 : 0);
     let mz = (keys['s'] || keys['arrowdown'] ? 1 : 0) - (keys['w'] || keys['arrowup'] ? 1 : 0);
@@ -1495,7 +1634,6 @@ function animate(now) {
     camera.position.lerp(targetCamPos, 8 * dt);
     camera.lookAt(charGroup.position.x, charGroup.position.y + 1.2, charGroup.position.z);
   } else {
-    // VEHICLE DRIVING & DRIFT PHYSICS
     const throttle = (keys['w'] || keys['arrowup'] ? 1 : 0) - (keys['s'] || keys['arrowdown'] ? 1 : 0);
     const steerInput = (keys['a'] || keys['arrowleft'] ? 1 : 0) - (keys['d'] || keys['arrowright'] ? 1 : 0);
     const handbrake = keys[' '];
@@ -1516,11 +1654,8 @@ function animate(now) {
       state.speed *= Math.pow(0.985, dt * 60);
     }
 
-    if (handbrake) {
-      state.speed *= Math.pow(0.965, dt * 60);
-    }
+    if (handbrake) state.speed *= Math.pow(0.965, dt * 60);
 
-    // Steering & Drift Slip Angle
     const speedFactor = Math.min(1, Math.abs(state.speed) / 12);
     const steerDir = state.speed >= -0.5 ? 1 : -1;
     state.steerAngle = THREE.MathUtils.lerp(state.steerAngle, steerInput * 0.55, 10 * dt);
@@ -1531,13 +1666,11 @@ function animate(now) {
     const grip = handbrake ? 0.035 : (1 - cfg.driftGrip) * 0.12 + 0.09;
     state.velAngle = THREE.MathUtils.lerp(state.velAngle, state.heading, Math.min(1, grip * 60 * dt));
 
-    // Move Vehicle
     const vx = Math.sin(state.velAngle) * state.speed;
     const vz = Math.cos(state.velAngle) * state.speed;
     const nextX = playerVehGroup.position.x + vx * dt;
     const nextZ = playerVehGroup.position.z + vz * dt;
 
-    // Building Collider Check
     let hit = false;
     for (const c of colliders) {
       if (Math.abs(nextX - c.x) < c.hw && Math.abs(nextZ - c.z) < c.hd) {
@@ -1554,14 +1687,12 @@ function animate(now) {
 
     playerVehGroup.rotation.y = state.heading;
 
-    // Bike lean / Car body roll
     const slipAngle = state.heading - state.velAngle;
     const targetRoll = cfg.type === 'bike'
       ? -state.steerAngle * speedFactor * 0.65
       : state.steerAngle * speedFactor * 0.08 + slipAngle * 0.12;
     playerVehGroup.rotation.z = THREE.MathUtils.lerp(playerVehGroup.rotation.z, targetRoll, 8 * dt);
 
-    // Animate Wheels
     if (currentVehRig && currentVehRig.wheels) {
       currentVehRig.wheels.forEach((w) => {
         w.node.rotation.x += (state.speed / 0.36) * dt;
@@ -1569,7 +1700,6 @@ function animate(now) {
       });
     }
 
-    // Drift Detection, Smoke & Scoring
     const isDrifting = Math.abs(state.speed) > 16 && (Math.abs(slipAngle) > 0.16 || (handbrake && Math.abs(steerInput) > 0.1));
     const banner = document.getElementById('drift-banner');
     if (isDrifting) {
@@ -1594,7 +1724,6 @@ function animate(now) {
       }
     }
 
-    // Speedometer, Gear, RPM & Backfire Flame
     const kmh = Math.round(Math.abs(state.speed) * 3.2);
     document.getElementById('hud-speed').textContent = kmh;
     const gear = state.speed < -1 ? 'R' : Math.min(6, Math.max(1, Math.floor(kmh / 45) + 1));
@@ -1607,10 +1736,8 @@ function animate(now) {
 
     updateAudio(Math.min(1, kmh / 260), rpmRatio, isDrifting, cfg.type);
 
-    // Camera Modes
     const fwd = new THREE.Vector3(Math.sin(state.heading), 0, Math.cos(state.heading));
     if (state.camMode === 0) {
-      // Dynamic Chase Camera
       const camDist = cfg.type === 'bike' ? 5.8 : 7.2;
       const camHeight = cfg.type === 'bike' ? 2.2 : 2.6;
       const desiredPos = playerVehGroup.position.clone()
@@ -1622,22 +1749,18 @@ function animate(now) {
       camera.fov = THREE.MathUtils.lerp(camera.fov, 60 + Math.min(18, kmh * 0.06), 5 * dt);
       camera.updateProjectionMatrix();
     } else if (state.camMode === 1) {
-      // First-Person Cockpit / Helmet View
       const fpHeight = cfg.type === 'bike' ? 1.32 : 1.12;
       camera.position.copy(playerVehGroup.position).addScaledVector(fwd, 0.2).add(new THREE.Vector3(0, fpHeight, 0));
       camera.lookAt(playerVehGroup.position.clone().addScaledVector(fwd, 20).add(new THREE.Vector3(0, fpHeight - 0.2, 0)));
     } else if (state.camMode === 2) {
-      // Hood View
       camera.position.copy(playerVehGroup.position).addScaledVector(fwd, 1.2).add(new THREE.Vector3(0, 0.95, 0));
       camera.lookAt(playerVehGroup.position.clone().addScaledVector(fwd, 25));
     } else {
-      // Top-Down Drift View
       camera.position.set(playerVehGroup.position.x, 38, playerVehGroup.position.z - 12);
       camera.lookAt(playerVehGroup.position);
     }
   }
 
-  // Update Smoke Particles
   for (let i = smokeParticles.length - 1; i >= 0; i--) {
     const p = smokeParticles[i];
     p.life -= dt * 1.4;
@@ -1650,11 +1773,9 @@ function animate(now) {
     }
   }
 
-  // Dealership Proximity Toast
   const distToDealer = playerVehGroup.position.distanceTo(new THREE.Vector3(45, 0, -32));
   document.getElementById('prompt-toast').style.display = distToDealer < 12 ? 'block' : 'none';
 
-  // Zone Label & Minimap
   const px = playerVehGroup.position.x, pz = playerVehGroup.position.z;
   let zName = 'DOWNTOWN NEON';
   if (distToDealer < 25) zName = 'DEALERSHIP & GARAGE';
